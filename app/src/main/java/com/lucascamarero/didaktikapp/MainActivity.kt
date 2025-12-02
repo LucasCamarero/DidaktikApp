@@ -10,9 +10,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.lucascamarero.didaktikapp.ui.theme.DidaktikAppTheme
 import com.lucascamarero.didaktikapp.screens.SplashScreen
 import com.lucascamarero.didaktikapp.screens.IntroScreen
-import com.lucascamarero.didaktikapp.ui.theme.DidaktikAppTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
