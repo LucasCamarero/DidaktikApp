@@ -8,14 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.lucascamarero.didaktikapp.ScreenManager
 
 @Composable
-fun IntroScreen(navController: NavController) {
+fun IntroScreen() {
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Ventana de informacion")
+
+        // se abre ScreenManager al pulsar el botón (lo hace Niko)
+        ScreenManager()
     }
 }
