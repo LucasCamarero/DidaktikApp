@@ -3,13 +3,16 @@ package com.lucascamarero.didaktikapp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -44,7 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ScreenManager() {
 
-    val navController = rememberNavController()
+    var navController = rememberNavController()
     val counterViewModel: CounterViewModel = viewModel()
 
     // Estado del drawer y scope para abrir/cerrar
@@ -54,85 +57,50 @@ fun ScreenManager() {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
-                Column(Modifier.padding(16.dp)) {
-                    Text("Menú")
+            ModalDrawerSheet (
+                modifier = Modifier.width(280.dp),
+                drawerContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                drawerContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            ){
+                Column(Modifier
+                    .padding(16.dp)
+                ) {
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
-                    NavigationDrawerItem(
-                        label = { Text("Mapa", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
+                    Text("Menú",
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        style = MaterialTheme.typography.bodyMedium)
+
+                    Spacer(modifier = Modifier.padding(vertical = 15.dp))
+
+                    CreateNavigationDrawerItem(
+                        text = "Mapa",
                         onClick = {
                             scope.launch { drawerState.close() }
                             navController.navigate("map")
                         }
                     )
-                    NavigationDrawerItem(
-                        label = { Text("Juego 1", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            navController.navigate("startactivity/1")
-                        }
-                    )
-                    NavigationDrawerItem(
-                        label = { Text("Juego 2", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            navController.navigate("startactivity/2")
-                        }
-                    )
-                    NavigationDrawerItem(
-                        label = { Text("Juego 3", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            navController.navigate("startactivity/3")
-                        }
-                    )
-                    NavigationDrawerItem(
-                        label = { Text("Juego 4", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            navController.navigate("startactivity/4")
-                        }
-                    )
-                    NavigationDrawerItem(
-                        label = { Text("Juego 5", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            navController.navigate("startactivity/5")
-                        }
-                    )
-                    NavigationDrawerItem(
-                        label = { Text("Juego 6", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            navController.navigate("startactivity/6")
-                        }
-                    )
-                    NavigationDrawerItem(
-                        label = { Text("Juego 7", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            navController.navigate("startactivity/7")
-                        }
-                    )
-                    NavigationDrawerItem(
-                        label = { Text("Juego final", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
+
+                    for (i in 1..7) {
+                        CreateNavigationDrawerItem(
+                            text = "Juego $i",
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                navController.navigate("startactivity/$i")
+                            }
+                        )
+                    }
+
+                    CreateNavigationDrawerItem(
+                        text = "Juego final",
                         onClick = {
                             scope.launch { drawerState.close() }
                             navController.navigate("jointhephotos")
                         }
                     )
-                    NavigationDrawerItem(
-                        label = { Text("Diploma", style = MaterialTheme.typography.labelLarge) },
-                        selected = false,
+
+                    CreateNavigationDrawerItem(
+                        text = "Diploma",
                         onClick = {
                             scope.launch { drawerState.close() }
                             navController.navigate("diploma")
@@ -145,6 +113,7 @@ fun ScreenManager() {
         Scaffold(
             topBar = {
                 TopBar(
+                    navController = navController,
                     onMenuClick = {
                         scope.launch {
                             if (drawerState.isClosed) drawerState.open()
@@ -158,7 +127,7 @@ fun ScreenManager() {
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .background(MaterialTheme.colorScheme.background),
+                    .background(MaterialTheme.colorScheme.primaryContainer),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 NavHost(
@@ -198,4 +167,25 @@ fun ScreenManager() {
             }
         }
     }
+}
+
+@Composable
+fun CreateNavigationDrawerItem(
+    text: String,
+    selected: Boolean = false,
+    onClick: () -> Unit
+) {
+    NavigationDrawerItem(
+        label = {
+            Text(
+                text,
+                style = MaterialTheme.typography.labelMedium
+            )
+        },
+        selected = selected,
+        onClick = onClick,
+        colors = NavigationDrawerItemDefaults.colors(
+            unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    )
 }
