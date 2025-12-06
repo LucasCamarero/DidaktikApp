@@ -6,8 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.VideogameAsset
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -17,8 +23,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -75,6 +87,7 @@ fun ScreenManager() {
 
                     CreateNavigationDrawerItem(
                         text = "Mapa",
+                        icon = Icons.Filled.Map,
                         onClick = {
                             scope.launch { drawerState.close() }
                             navController.navigate("map")
@@ -84,6 +97,7 @@ fun ScreenManager() {
                     for (i in 1..7) {
                         CreateNavigationDrawerItem(
                             text = "Juego $i",
+                            icon = Icons.Filled.VideogameAsset,
                             onClick = {
                                 scope.launch { drawerState.close() }
                                 navController.navigate("startactivity/$i")
@@ -93,6 +107,7 @@ fun ScreenManager() {
 
                     CreateNavigationDrawerItem(
                         text = "Juego final",
+                        icon = Icons.Filled.Star,
                         onClick = {
                             scope.launch { drawerState.close() }
                             navController.navigate("jointhephotos")
@@ -101,6 +116,7 @@ fun ScreenManager() {
 
                     CreateNavigationDrawerItem(
                         text = "Diploma",
+                        icon = Icons.Filled.School,
                         onClick = {
                             scope.launch { drawerState.close() }
                             navController.navigate("diploma")
@@ -114,6 +130,7 @@ fun ScreenManager() {
             topBar = {
                 TopBar(
                     navController = navController,
+                    counterViewModel,
                     onMenuClick = {
                         scope.launch {
                             if (drawerState.isClosed) drawerState.open()
@@ -172,10 +189,18 @@ fun ScreenManager() {
 @Composable
 fun CreateNavigationDrawerItem(
     text: String,
+    icon: ImageVector,          // ⬅️ nuevo parámetro
     selected: Boolean = false,
     onClick: () -> Unit
 ) {
     NavigationDrawerItem(
+        icon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = text,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        },
         label = {
             Text(
                 text,

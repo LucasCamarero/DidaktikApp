@@ -7,9 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.navigation.compose.rememberNavController
 import com.lucascamarero.didaktikapp.ui.theme.DidaktikAppTheme
 import com.lucascamarero.didaktikapp.screens.SplashScreen
 import com.lucascamarero.didaktikapp.screens.IntroScreen
@@ -22,15 +21,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             DidaktikAppTheme(dynamicColor = false) {
                 Surface {
-                    /*
-                    var showSplash by remember { mutableStateOf(true) }
+                    var showSplash by rememberSaveable { mutableStateOf(true) }
+                    var showApp by rememberSaveable { mutableStateOf(false) }
 
-                    if (showSplash) {
-                        SplashScreen(onTimeout = { showSplash = false })
-                    } else {
-                        IntroScreen()
-                    }*/
-                    ScreenManager()
+                    when {
+                        showSplash -> { SplashScreen(onTimeout = { showSplash = false }) }
+                        !showApp -> { IntroScreen(onStartClick = { showApp = true }) }
+                        else -> { ScreenManager() }
+                    }
                 }
             }
         }

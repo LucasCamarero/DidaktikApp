@@ -14,13 +14,4 @@ import androidx.navigation.NavController
 @Composable
 fun Activity7Screen(navController: NavController){
 
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .padding(20.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        item {
-            Text("Ventana 7")
-        }
-    }
 }
