@@ -1,12 +1,45 @@
 package com.lucascamarero.didaktikapp
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.VideogameAsset
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.lucascamarero.didaktikapp.screens.IntroScreen
+import androidx.navigation.navArgument
+import com.lucascamarero.didaktikapp.components.TopBar
+import com.lucascamarero.didaktikapp.screens.MapScreen
 import com.lucascamarero.didaktikapp.screens.activities.Activity1Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity2Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity3Screen
@@ -14,30 +47,170 @@ import com.lucascamarero.didaktikapp.screens.activities.Activity4Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity5Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity6Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity7Screen
+import com.lucascamarero.didaktikapp.screens.activities.commons.EndOfActivityScreen
+import com.lucascamarero.didaktikapp.screens.activities.commons.StartOfActivityScreen
 import com.lucascamarero.didaktikapp.screens.activities.finalactivity.Diploma
 import com.lucascamarero.didaktikapp.screens.activities.finalactivity.JoinThePhotos
 import com.lucascamarero.didaktikapp.screens.activities.finalactivity.WriteSentence
 import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenManager() {
-    val navController = rememberNavController()
-    // instancias de view models
+
+    var navController = rememberNavController()
     val counterViewModel: CounterViewModel = viewModel()
-    NavHost(navController = navController,
-        startDestination = "Intro")
-    {
-        composable("Intro") { IntroScreen(navController) }
-        composable("Activity1") { Activity1Screen(navController) }
-        composable("Activity2") { Activity2Screen(navController) }
-        composable("Activity3") { Activity3Screen(navController) }
-        composable("Activity4") { Activity4Screen(navController) }
-        composable("Activity5") { Activity5Screen(navController) }
-        composable("Activity6") { Activity6Screen(navController) }
-        composable("Activity7") { Activity7Screen(navController) }
-        composable("dimpola") { Diploma(navController) }
-        composable("ActivityFinal") { WriteSentence(navController) }
-        composable("jolinFinal") { JoinThePhotos(navController) }
+
+    // Estado del drawer y scope para abrir/cerrar
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet (
+                modifier = Modifier.width(280.dp),
+                drawerContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                drawerContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            ){
+                Column(Modifier
+                    .padding(16.dp)
+                ) {
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
+                    Text("Menú",
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        style = MaterialTheme.typography.bodyMedium)
+
+                    Spacer(modifier = Modifier.padding(vertical = 15.dp))
+
+                    CreateNavigationDrawerItem(
+                        text = "Mapa",
+                        icon = Icons.Filled.Map,
+                        onClick = {
+                            scope.launch { drawerState.close() }
+                            navController.navigate("map")
+                        }
+                    )
+
+                    for (i in 1..7) {
+                        CreateNavigationDrawerItem(
+                            text = "Juego $i",
+                            icon = Icons.Filled.VideogameAsset,
+                            onClick = {
+                                scope.launch { drawerState.close() }
+                                navController.navigate("startactivity/$i")
+                            }
+                        )
+                    }
+
+                    CreateNavigationDrawerItem(
+                        text = "Juego final",
+                        icon = Icons.Filled.Star,
+                        onClick = {
+                            scope.launch { drawerState.close() }
+                            navController.navigate("jointhephotos")
+                        }
+                    )
+
+                    CreateNavigationDrawerItem(
+                        text = "Diploma",
+                        icon = Icons.Filled.School,
+                        onClick = {
+                            scope.launch { drawerState.close() }
+                            navController.navigate("diploma")
+                        }
+                    )
+                }
+            }
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                TopBar(
+                    navController = navController,
+                    counterViewModel,
+                    onMenuClick = {
+                        scope.launch {
+                            if (drawerState.isClosed) drawerState.open()
+                            else drawerState.close()
+                        }
+                    }
+                )
+            }
+        ) { innerPadding ->
+
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                NavHost(
+                    navController = navController,
+                    startDestination = "map"
+                ) {
+                    composable("map") { MapScreen(navController) }
+                    composable(
+                        route = "startactivity/{number}",
+                        arguments = listOf(
+                            navArgument("number") { type = NavType.IntType }
+                        )
+                    ) { backStackEntry ->
+                        val number = backStackEntry.arguments?.getInt("number") ?: 0
+                        StartOfActivityScreen(navController, number)
+                    }
+                    composable(
+                        route = "endactivity/{number}",
+                        arguments = listOf(
+                            navArgument("number") { type = NavType.IntType }
+                        )
+                    ) { backStackEntry ->
+                        val number = backStackEntry.arguments?.getInt("number") ?: 0
+                        EndOfActivityScreen(navController, number)
+                    }
+                    composable("activity1") { Activity1Screen(navController) }
+                    composable("activity2") { Activity2Screen(navController) }
+                    composable("activity3") { Activity3Screen(navController) }
+                    composable("activity4") { Activity4Screen(navController) }
+                    composable("activity5") { Activity5Screen(navController) }
+                    composable("activity6") { Activity6Screen(navController) }
+                    composable("activity7") { Activity7Screen(navController) }
+                    composable("diploma") { Diploma(navController) }
+                    composable("writesentence") { WriteSentence(navController) }
+                    composable("jointhephotos") { JoinThePhotos(navController) }
+                }
+            }
+        }
     }
+}
+
+@Composable
+fun CreateNavigationDrawerItem(
+    text: String,
+    icon: ImageVector,          // ⬅️ nuevo parámetro
+    selected: Boolean = false,
+    onClick: () -> Unit
+) {
+    NavigationDrawerItem(
+        icon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = text,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        },
+        label = {
+            Text(
+                text,
+                style = MaterialTheme.typography.labelMedium
+            )
+        },
+        selected = selected,
+        onClick = onClick,
+        colors = NavigationDrawerItemDefaults.colors(
+            unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    )
 }

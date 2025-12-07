@@ -1,9 +1,10 @@
-package com.lucascamarero.didaktikapp.screens
+package com.lucascamarero.didaktikapp.screens.activities.commons
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun MapScreen(navController: NavController){
+fun StartOfActivityScreen(navController: NavController, number: Number){
 
     // SE PUEDE BORRAR (Codigo para probar que funciona el menu)
     LazyColumn(modifier = Modifier
@@ -23,7 +24,7 @@ fun MapScreen(navController: NavController){
         horizontalAlignment = Alignment.CenterHorizontally) {
         item {
             Spacer(modifier = Modifier.padding(vertical = 20.dp))
-            Text("Ventana Map")
+            Text("Start of activity $number")
         }
     }
 }
