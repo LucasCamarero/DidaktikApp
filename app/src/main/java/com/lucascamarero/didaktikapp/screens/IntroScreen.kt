@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,8 +32,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
@@ -56,26 +60,38 @@ fun IntroScreen(onStartClick: () -> Unit) {
                 "una prueba, ¡desbloquearéis fotos antiguas y actuales de Barakaldo! Al final del viaje… " +
                 "¡os espera una sorpresa y un diploma por convertiros en verdaderos exploradores barakaldeses!\n\n" +
                 "¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!"
+
+    // estado para controlar si el texto ha terminado de mostrarse
+    var isTextComplete by remember { mutableStateOf(false) }
     Column(
         Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer),
+
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         SpeechBubbleWithTypewriterText(
             text = textoJolin,
             fondoTexto = R.drawable.bocadillo3,
-            velocidadTexto = 85L
+            velocidadTexto = 85L,
+            onTextComplete = { isTextComplete = true } // Callback cuando termina
         )
         Row{
-            LottieInfinite(R.raw.jolin)
-            IconButton(onStartClick) {
-                Icon(
-                    imageVector = Icons.Filled.PlayArrow,
-                    contentDescription = "Abrir menu",
-                    tint = MaterialTheme.colorScheme.secondaryContainer,
-                    modifier = Modifier.size(680.dp))
+            LottieInfinite(R.raw.jolin,
+                modifier = Modifier.size(1000.dp))
+            if (isTextComplete){
+                IconButton(onStartClick) {
+                    Icon(
+                        imageVector = Icons.Filled.PlayArrow,
+                        contentDescription = "Abrir menu",
+                        tint = MaterialTheme.colorScheme.secondaryContainer,
+                        modifier = Modifier.size(68.dp))
+                }
+            }else{
+                Spacer(modifier = Modifier.size(68.dp))
             }
+
+
         }
 
     }
@@ -86,7 +102,8 @@ fun IntroScreen(onStartClick: () -> Unit) {
 fun SpeechBubbleWithTypewriterText(
     text: String,
     @RawRes fondoTexto: Int,
-    velocidadTexto: Long = 40L //milisegundos entre las letras
+    velocidadTexto: Long = 40L, //milisegundos entre las letras
+    onTextComplete: () -> Unit = {} // callback opcional cuando termina
 ){
 // Texto parcial (efecto máquina de escribir)
     var displeyedText by remember{ mutableStateOf("") }
@@ -100,6 +117,8 @@ fun SpeechBubbleWithTypewriterText(
             // Scroll automático hacia abajo a medida que entra el texto
             scrollState.animateScrollTo(scrollState.maxValue)
         }
+        // Cuando termina la animación, llamamos al callback
+        onTextComplete()
     }
     Box(Modifier.size(400.dp)
 
@@ -110,20 +129,26 @@ fun SpeechBubbleWithTypewriterText(
             Modifier.matchParentSize()
         )
         Box(Modifier.size(400.dp)
-            .padding(vertical = 85.dp)
+            .padding(vertical = 75.dp)
             .verticalScroll(scrollState)) {
             Text(
                 text = displeyedText,
                 Modifier.fillMaxSize()
                     .padding(24.dp),
-                style = MaterialTheme.typography.labelSmall
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Bold,  // Texto en negrita
+                    color = Color.Black         // Texto negro
+                )
 
             )
         }
     }
 }
 @Composable
-fun LottieInfinite(@RawRes resId: Int){
+fun LottieInfinite(
+    @RawRes resId: Int,
+    modifier: Modifier = Modifier
+){
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(resId))
     val progreso by animateLottieCompositionAsState(
         composition,
@@ -131,6 +156,7 @@ fun LottieInfinite(@RawRes resId: Int){
     )
     LottieAnimation(
         composition = composition,
-        progress = progreso
+        progress = progreso,
+        modifier = modifier
     )
 }
