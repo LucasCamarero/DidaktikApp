@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">DidaktikApp</string>
+    <string name="choose_language">Choose a language</string>
+    <string name="language_eu">Basque</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_en">English</string>
+    <string name="menu_change_language">Change lenguage</string>
+    <string name="menu_name">Settings</string>
+</resources>
