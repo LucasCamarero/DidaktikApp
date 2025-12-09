@@ -20,18 +20,31 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DidaktikAppTheme(dynamicColor = false) {
-                Surface {
-                    var showSplash by rememberSaveable { mutableStateOf(true) }
-                    var showApp by rememberSaveable { mutableStateOf(false) }
+                    Surface {
+                        var showSplash by rememberSaveable { mutableStateOf(true) }
+                        var showApp by rememberSaveable { mutableStateOf(false) }
 
-                    when {
-                        showSplash -> { SplashScreen(onTimeout = { showSplash = false }) }
-                        !showApp -> { IntroScreen(onStartClick = { showApp = true }) }
-                        else -> { ScreenManager() }
+                        when {
+                            showSplash -> {
+                                SplashScreen(
+                                    onTimeout = { showSplash = false }
+                                )
+                            }
+
+                            !showApp -> {
+                                IntroScreen(
+                                    onStartClick = { showApp = true }
+                                )
+                            }
+
+                            else -> {
+                                ScreenManager()
+                            }
+                        }
                     }
                 }
             }
         }
     }
-}
+
 
