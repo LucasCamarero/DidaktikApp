@@ -62,7 +62,7 @@ fun IntroScreen(onStartClick: () -> Unit) {
                 "¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!"
 
     // estado para controlar si el texto ha terminado de mostrarse
-    var isTextComplete by remember { mutableStateOf(false) }
+    var TextCompleto by remember { mutableStateOf(false) }
     Column(
         Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer),
@@ -74,12 +74,12 @@ fun IntroScreen(onStartClick: () -> Unit) {
             text = textoJolin,
             fondoTexto = R.drawable.bocadillo3,
             velocidadTexto = 85L,
-            onTextComplete = { isTextComplete = true } // Callback cuando termina
+            onTextoCompleto = { TextCompleto = true } // Callback cuando termina
         )
         Row{
             LottieInfinite(R.raw.jolin,
                 modifier = Modifier.size(1000.dp))
-            if (isTextComplete){
+            if (TextCompleto){
                 IconButton(onStartClick) {
                     Icon(
                         imageVector = Icons.Filled.PlayArrow,
@@ -103,7 +103,7 @@ fun SpeechBubbleWithTypewriterText(
     text: String,
     @RawRes fondoTexto: Int,
     velocidadTexto: Long = 40L, //milisegundos entre las letras
-    onTextComplete: () -> Unit = {} // callback opcional cuando termina
+    onTextoCompleto: () -> Unit = {} // callback opcional cuando termina
 ){
 // Texto parcial (efecto máquina de escribir)
     var displeyedText by remember{ mutableStateOf("") }
@@ -118,7 +118,7 @@ fun SpeechBubbleWithTypewriterText(
             scrollState.animateScrollTo(scrollState.maxValue)
         }
         // Cuando termina la animación, llamamos al callback
-        onTextComplete()
+        onTextoCompleto()
     }
     Box(Modifier.size(400.dp)
 
