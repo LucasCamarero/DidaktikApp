@@ -1,17 +1,25 @@
 package com.lucascamarero.didaktikapp.screens
 
+import android.annotation.SuppressLint
 import androidx.annotation.RawRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,8 +43,9 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lucascamarero.didaktikapp.R
 import kotlinx.coroutines.delay
 
+@SuppressLint("ResourceType")
 @Composable
-fun IntroScreen(navController: NavController) {
+fun IntroScreen(onStartClick: () -> Unit, navController: NavController) {
     val textoJolin =
         "¡Hola, chicas y chicos! ¡Soy Jolín, el personaje más fiestero de Barakaldo! " +
                 "Me encanta que estéis aquí, porque juntos vamos a descubrir cómo este lugar tan bonito " +
@@ -48,19 +57,33 @@ fun IntroScreen(navController: NavController) {
                 "¡os espera una sorpresa y un diploma por convertiros en verdaderos exploradores barakaldeses!\n\n" +
                 "¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!"
     Column(
-        Modifier.fillMaxSize(),
+        Modifier.fillMaxSize()
+            .background(MaterialTheme.colorScheme.primaryContainer),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         SpeechBubbleWithTypewriterText(
             text = textoJolin,
-            fondoTexto = R.drawable.bocadillo_transparente,
+            fondoTexto = R.drawable.bocadillo3,
             velocidadTexto = 85L
         )
-        LottieInfinite(R.raw.jolin)
+        Row() {
+            LottieInfinite(R.raw.jolin)
+            IconButton({
+                onStartClick
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.PlayArrow,
+                    contentDescription = "Abrir menu",
+                    tint = MaterialTheme.colorScheme.secondaryContainer,
+                    modifier = Modifier.size(680.dp))
+            }
+        }
+
     }
 
 }
+@SuppressLint("ResourceType")
 @Composable
 fun SpeechBubbleWithTypewriterText(
     text: String,
@@ -89,9 +112,7 @@ fun SpeechBubbleWithTypewriterText(
             Modifier.matchParentSize()
         )
         Box(Modifier.size(400.dp)
-            .padding(vertical = 75.dp)
-            .padding(horizontal = 75.dp)
-            .clip(CircleShape)
+            .padding(vertical = 85.dp)
             .verticalScroll(scrollState)) {
             Text(
                 text = displeyedText,
