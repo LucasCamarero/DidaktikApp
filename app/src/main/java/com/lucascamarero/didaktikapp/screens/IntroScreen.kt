@@ -51,15 +51,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun IntroScreen(onStartClick: () -> Unit) {
     val textoJolin =
-        "¡Hola, chicas y chicos! ¡Soy Jolín, el personaje más fiestero de Barakaldo! " +
-                "Me encanta que estéis aquí, porque juntos vamos a descubrir cómo este lugar tan bonito " +
-                "ha pasado de ser un pueblo rural lleno de caseríos a una ciudad moderna y llena de vida. " +
-                "A lo largo del camino visitaremos lugares muy especiales, resolveremos juegos y retos, y " +
-                "conoceremos historias sorprendentes de nuestro pueblo.\n\n" +
-                "¡Preparad vuestros ojos curiosos y vuestras ganas de aprender! Cada vez que superéis " +
-                "una prueba, ¡desbloquearéis fotos antiguas y actuales de Barakaldo! Al final del viaje… " +
-                "¡os espera una sorpresa y un diploma por convertiros en verdaderos exploradores barakaldeses!\n\n" +
-                "¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!"
+        "¡Hola, chicas y chicos!"
 
     // estado para controlar si el texto ha terminado de mostrarse
     var isTextComplete  by remember { mutableStateOf(false) }

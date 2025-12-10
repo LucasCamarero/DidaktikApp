@@ -189,7 +189,7 @@ fun ScreenManager() {
 @Composable
 fun CreateNavigationDrawerItem(
     text: String,
-    icon: ImageVector,          // ⬅️ nuevo parámetro
+    icon: ImageVector,          //  nuevo parámetro
     selected: Boolean = false,
     onClick: () -> Unit
 ) {
