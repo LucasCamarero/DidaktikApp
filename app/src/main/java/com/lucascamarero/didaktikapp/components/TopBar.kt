@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,12 +57,12 @@ fun TopBar(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
-                IconButton(onMenuClick) {
+                IconButton(onClick = { navController.navigate("map") }) {
                     Icon(
-                        imageVector = Icons.Filled.Menu,
-                        contentDescription = "Abrir menú",
+                        imageVector = Icons.Filled.ChevronLeft,
+                        contentDescription = "Volver atrás",
                         tint = MaterialTheme.colorScheme.secondaryContainer,
-                        modifier = Modifier.size(35.dp)
+                        modifier = Modifier.size(40.dp)
                     )
                 }
 
@@ -81,12 +82,12 @@ fun TopBar(
                         .background(Color.White)
                 ) }
 
-                IconButton(onClick = { navController.navigate("map") }) {
+                IconButton(onMenuClick) {
                     Icon(
-                        imageVector = Icons.Filled.ChevronLeft,
-                        contentDescription = "Volver atrás",
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = "Abrir menú",
                         tint = MaterialTheme.colorScheme.secondaryContainer,
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(35.dp)
                     )
                 }
             }

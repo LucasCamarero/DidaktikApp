@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">DidaktikApp</string>
+    <string name="choose_language">Aukeratu hizkuntza bat</string>
+    <string name="language_eu">Euskara</string>
+    <string name="language_es">Gaztelania</string>
+    <string name="language_en">Ingelesa</string>
+    <string name="menu_change_language">Hizkuntza aldatu</string>
+    <string name="menu_name">Ezarpenak</string>
 </resources>

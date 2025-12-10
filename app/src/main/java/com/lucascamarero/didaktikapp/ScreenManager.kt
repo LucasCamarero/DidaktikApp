@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AllInclusive
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Star
@@ -23,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -38,7 +40,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.lucascamarero.didaktikapp.components.LanguageCard
 import com.lucascamarero.didaktikapp.components.TopBar
+import com.lucascamarero.didaktikapp.models.AppLanguage
 import com.lucascamarero.didaktikapp.screens.MapScreen
 import com.lucascamarero.didaktikapp.screens.activities.Activity1Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity2Screen
@@ -53,18 +57,23 @@ import com.lucascamarero.didaktikapp.screens.activities.finalactivity.Diploma
 import com.lucascamarero.didaktikapp.screens.activities.finalactivity.JoinThePhotos
 import com.lucascamarero.didaktikapp.screens.activities.finalactivity.WriteSentence
 import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
+import com.lucascamarero.didaktikapp.viewmodels.LanguageViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenManager() {
+fun ScreenManager(languageViewModel: LanguageViewModel) {
 
     var navController = rememberNavController()
+
+    // instancias de view models
     val counterViewModel: CounterViewModel = viewModel()
 
     // Estado del drawer y scope para abrir/cerrar
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    var showLanguageCard by remember { mutableStateOf(false) }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -79,11 +88,34 @@ fun ScreenManager() {
                 ) {
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
-                    Text("Menú",
+                    Text(stringResource(id = R.string.menu_name),
                         modifier = Modifier.padding(horizontal = 12.dp),
                         style = MaterialTheme.typography.bodyMedium)
 
                     Spacer(modifier = Modifier.padding(vertical = 15.dp))
+
+                    CreateNavigationDrawerItem(
+                        text = stringResource(id = R.string.menu_change_language),
+                        icon = Icons.Filled.Language,
+                        onClick = {
+                            showLanguageCard = !showLanguageCard
+                        }
+                    )
+
+                    if (showLanguageCard) {
+                        Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
+                        LanguageCard { lang ->
+                            when (lang) {
+                                "eu" -> languageViewModel.changeLanguage(AppLanguage.EUSKERA)
+                                "es" -> languageViewModel.changeLanguage(AppLanguage.CASTELLANO)
+                                "en" -> languageViewModel.changeLanguage(AppLanguage.INGLES)
+                            }
+                            // Si quieres ocultarla después:
+                            showLanguageCard = false
+                            scope.launch { drawerState.close() }
+                        }
+                    }
 
                     CreateNavigationDrawerItem(
                         text = "Mapa",
@@ -189,7 +221,7 @@ fun ScreenManager() {
 @Composable
 fun CreateNavigationDrawerItem(
     text: String,
-    icon: ImageVector,          // ⬅️ nuevo parámetro
+    icon: ImageVector,
     selected: Boolean = false,
     onClick: () -> Unit
 ) {
