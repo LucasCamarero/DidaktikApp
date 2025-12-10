@@ -1,5 +1,6 @@
 package com.lucascamarero.didaktikapp
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,7 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AllInclusive
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.School
@@ -32,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -59,7 +61,6 @@ import com.lucascamarero.didaktikapp.screens.activities.finalactivity.WriteSente
 import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
 import com.lucascamarero.didaktikapp.viewmodels.LanguageViewModel
 import kotlinx.coroutines.launch
-import com.lucascamarero.didaktikapp.screens.IntroScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,6 +76,8 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
     val scope = rememberCoroutineScope()
 
     var showLanguageCard by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -100,6 +103,20 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         icon = Icons.Filled.Language,
                         onClick = {
                             showLanguageCard = !showLanguageCard
+                        }
+                    )
+
+                    // Sale a Home, sin matar el proceso
+                    CreateNavigationDrawerItem(
+                        text = stringResource(id = R.string.exit),
+                        icon = Icons.Filled.ExitToApp,
+                        onClick = {
+                            context.startActivity(
+                                Intent(Intent.ACTION_MAIN).apply {
+                                    addCategory(Intent.CATEGORY_HOME)
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                }
+                            )
                         }
                     )
 

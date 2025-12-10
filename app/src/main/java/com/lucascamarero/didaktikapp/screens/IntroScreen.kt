@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -58,10 +60,10 @@ fun IntroScreen(
     onStartClick: () -> Unit
 ) {
     var languageIsSelected by rememberSaveable { mutableStateOf(false) }
-    val textoJolin = "¡Hola, chicas y chicos! "
 
     // estado para controlar si el texto ha terminado de mostrarse
     var isTextComplete  by remember { mutableStateOf(false) }
+
     Column(
         Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer),
@@ -80,7 +82,7 @@ fun IntroScreen(
             }
         } else {
             SpeechBubbleWithTypewriterText(
-                text = textoJolin,
+                text = stringResource(id = R.string.intro),
                 fondoTexto = R.drawable.bocadillo3,
                 velocidadTexto = 45L,
                 onTextComplete  = { isTextComplete  = true } // Callback cuando termina
@@ -108,7 +110,7 @@ fun IntroScreen(
 fun SpeechBubbleWithTypewriterText(
     text: String,
     @RawRes fondoTexto: Int,
-    velocidadTexto: Long = 40L, //milisegundos entre las letras
+    velocidadTexto: Long = 60L, //milisegundos entre las letras
     onTextComplete: () -> Unit = {} // callback opcional cuando termina
 ){
 // Texto parcial (efecto máquina de escribir)
@@ -150,6 +152,7 @@ fun SpeechBubbleWithTypewriterText(
         }
     }
 }
+
 @Composable
 fun LottieInfinite(
     @RawRes resId: Int
