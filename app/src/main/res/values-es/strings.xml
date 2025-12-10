@@ -1,4 +1,5 @@
 <resources>
+    <!-- App general -->
     <string name="app_name">DidaktikApp</string>
     <string name="choose_language">Elige un idioma</string>
     <string name="language_eu">Euskera</string>
@@ -6,4 +7,81 @@
     <string name="language_en">Inglés</string>
     <string name="menu_change_language">Cambiar idioma</string>
     <string name="menu_name">Ajustes</string>
+    <!-- Introducción -->
+    <string name="intro">¡Hola, chicas y chicos! ¡Soy Jolín, el personaje más fiestero de
+        Barakaldo! Me encanta que estéis aquí, porque juntos vamos a descubrir cómo este lugar
+        tan bonito ha pasado de ser un pueblo rural lleno de caseríos a una ciudad moderna y llena
+        de vida. A lo largo del camino visitaremos lugares muy especiales, resolveremos juegos y
+        retos, y conoceremos historias sorprendentes de nuestro pueblo.
+
+        ¡Preparad vuestros ojos curiosos y vuestras ganas de aprender! Cada vez que superéis una
+        prueba, ¡desbloquearéis fotos antiguas y actuales de Barakaldo! Al final del viaje…¡os
+        espera una sorpresa y un diploma por convertiros en verdaderos exploradores barakaldeses!
+
+        ¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!</string>
+    <!-- Juego 1 -->
+    <string name="texto1_intro">Hace muchos años, Barakaldo era un pueblo rodeado de campos,
+        caseríos y montes. Las familias se ayudaban entre sí, cultivaban sus alimentos y acudían a
+        la ermita de Santa Águeda para celebrar fiestas y pedir protección. La ermita era un lugar
+        muy importante para la gente del pueblo, porque allí se reunían para cantar, comer y
+        compartir momentos juntos. Con el tiempo, Barakaldo fue cambiando, pero la ermita todavía
+        nos recuerda cómo empezó todo.</string>
+    <string name="pregunta1">¿Qué cosas crees que todavía siguen igual?</string>
+    <string name="respuesta1_a">a) La ermita sigue en pie</string>
+    <string name="respuesta1_b">b) Ya no hay montes</string>
+    <string name="respuesta1_c">c) No hay fiestas</string>
+    <!-- Juego 2 -->
+    <string name="texto2_intro">La iglesia de San Vicente ha sido el corazón del pueblo durante
+        muchos años. Aquí se reunía la gente para rezar, celebrar fiestas y encontrarse con sus
+        vecinos. Observa con atención la foto de la iglesia y fíjate en los elementos que la
+        forman: el Coro, el Altar, el Vía Crucis, el Sagrario, la Puerta Principal, la Nave
+        Central… Cada uno tiene su función y nos ayuda a conocer cómo era la vida en aquel
+        tiempo.</string>
+    <!-- Juego 3 -->
+    <string name="texto3_intro">En el mercado de Barakaldo la gente compraba alimentos y se
+        encontraba con sus vecinos. Aquí se vendían productos muy típicos: las alubias de
+        Barakaldo, los talos, el bacalao al pil-pil y dulces caseros. El mercado era un lugar lleno
+        de olores, colores y sonidos. Observa las pistas de la sopa de letras y encuentra las
+        palabras que corresponden a estos alimentos.</string>
+    <string name="pista3_1">Legumbre muy típica de Barakaldo, se come en guisos</string>
+    <string name="pista3_2">Se come en fiestas y se hace de maíz</string>
+    <string name="pista3_3">Pescado que se cocina al pil-pil</string>
+    <string name="pista3_4">Dulce típico de repostería de Barakaldo</string>
+    <string name="respuesta3_1">ALUBIAS</string>
+    <string name="respuesta3_2">TALOS</string>
+    <string name="respuesta3_3">BACALAO</string>
+    <string name="respuesta3_4">PASTEL</string>
+    <!-- Juego 4 -->
+    <string name="texto4_intro">El edificio Ilgner fue muy importante para Barakaldo. Aquí se
+        producía electricidad para las fábricas y talleres. Gracias a la energía, las máquinas
+        podían funcionar y la ciudad creció mucho. En este lugar trabajaban ingenieros, mecánicos
+        y electricistas. El edificio sigue en pie y nos recuerda cómo empezó la industria
+        moderna.</string>
+    <!-- Juego 5 -->
+    <string name="texto5_intro">Hace muchos años, Barakaldo era un lugar lleno de fábricas y
+        trenes. Desde las montañas cercanas se sacaba hierro, y los cargaderos eran construcciones
+        enormes que servían para cargar el mineral en los barcos. Los trenes traían el hierro y
+        los estibadores lo movían hasta los barcos que lo llevaban a otras ciudades. Gracias a
+        este trabajo, Barakaldo se hizo muy importante en la industria.</string>
+    <string name="mensaje5_1">Por aquí llegaban los trenes con el hierro.</string>
+    <string name="mensaje5_2">El hierro se cargaba en los barcos que iban a otros países.</string>
+    <string name="mensaje5_3">Los cargaderos ayudaron a que Barakaldo creciera mucho.</string>
+    <!-- Juego 6 -->
+    <string name="texto6_intro">En el Barakaldo industrial, los trenes transportaban el hierro
+        desde las minas hasta los cargaderos, donde se subía a los barcos. Gracias al ferrocarril,
+        muchas fábricas podían trabajar sin parar, y los trabajadores viajaban cada día en estos
+        trenes. El tren fue uno de los motores que hizo crecer a Barakaldo.</string>
+    <!-- Juego 7 -->
+    <string name="texto7_intro">El Palacio Munoa fue la casa de una familia muy rica. Mientras
+        muchas personas trabajaban en las fábricas, aquí se celebraban fiestas y bailes. Tenía
+        jardines, cuadros y muebles elegantes. Hoy el Palacio Munoa es un parque abierto para
+        todos, donde podemos pasear y disfrutar de la historia de Barakaldo.</string>
+    <string name="titulo5_columna1">Obreros</string>
+    <string name="titulo5_columna2">Burgueses</string>
+    <!-- Juego final -->
+    <string name="textofinal_intro">Barakaldo ha cambiado mucho desde sus orígenes rurales hasta
+        hoy. Tenemos fábricas antiguas, iglesias, palacios y parques que nos cuentan su historia.
+        Todos estos lugares forman parte de nuestro patrimonio, y debemos cuidarlos para que las
+        futuras generaciones también los conozcan.</string>
+    <string name="reflexionfinal">Yo cuidaría ___ porque...</string>
 </resources>
