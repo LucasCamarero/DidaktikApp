@@ -1,4 +1,5 @@
 <resources>
+    <!-- App general -->
     <string name="app_name">DidaktikApp</string>
     <string name="choose_language">Aukeratu hizkuntza bat</string>
     <string name="language_eu">Euskara</string>
@@ -6,4 +7,81 @@
     <string name="language_en">Ingelesa</string>
     <string name="menu_change_language">Hizkuntza aldatu</string>
     <string name="menu_name">Ezarpenak</string>
+    <string name="exit">Itxi app</string>
+    <!-- Introducción -->
+    <string name="intro">Kaixo guztioi! Jolín naiz, Barakaldoko pertsonaiarik dibertigarriena! Oso
+        pozik nago hemen zaudela, elkarrekin ezagutuko baitugu nola eraldatu den leku eder hau
+        baserriz betetako landa-herrixka batetik hiri moderno eta bizigarri batera. Bidean zehar,
+        leku oso bereziak bisitatuko ditugu, jokoak eta erronkak konponduko ditugu, eta gure
+        herriari buruzko istorio harrigarriak ikasiko ditugu.
+
+        Prestatu zure begi jakin-minak eta ikasteko gogoa! Erronka bat gainditzen duzun bakoitzean,
+        Barakaldoko argazki zahar eta berriak desblokeatuko dituzu! Bidaiaren amaieran... sorpresa
+        bat eta diploma bat zain dituzu benetako Barakaldoko esploratzaile bihurtzeagatik!
+
+        Prest? Goazen! Ezagutu dezagun Barakaldo, landa-eremutik modernora!</string>
+    <!-- Juego 1 -->
+    <string name="texto1_intro">Duela urte asko, Barakaldo zelai, baserri eta mendiz inguratutako
+        herria zen. Familiek elkarri laguntzen zioten, beren janaria hazten zuten eta Santa Agedako
+        ermitara joaten ziren jaiak ospatzera eta babesa eskatzera. Ermita oso leku garrantzitsua
+        zen herritarrentzat, bertan biltzen baitziren abesteko, jateko eta uneak elkarrekin
+        partekatzeko. Denborarekin, Barakaldo aldatu egin zen, baina ermitak oraindik ere
+        gogorarazten digu nola hasi zen dena.</string>
+    <string name="pregunta1">Zein gauza uste duzu berdin jarraitzen dutela?</string>
+    <string name="respuesta1_a">a) Ermita zutik dago oraindik</string>
+    <string name="respuesta1_b">b) Ez dago mendi gehiago</string>
+    <string name="respuesta1_c">c) Ez dago alderdirik</string>
+    <!-- Juego 2 -->
+    <string name="texto2_intro">San Bizente eliza herriaren bihotza izan da urte askotan. Bertan
+        biltzen zen jendea otoitz egiteko, jaiak ospatzeko eta bizilagunekin biltzeko. Begiratu
+        arretaz elizaren argazkiari eta erreparatu hura osatzen duten elementuei: Korua, Aldarea,
+        Gurutz-bidea, Sagrarioa, Ate Nagusia, Nabe Nagusia… Bakoitzak bere funtzioa du eta garai
+        hartako bizitza nolakoa zen ulertzen laguntzen digu.</string>
+    <!-- Juego 3 -->
+    <string name="texto3_intro">Barakaldoko merkatuan, jendeak janaria erosten zuen eta
+        bizilagunekin elkartzen zen. Produktu tipikoak saltzen ziren bertan: Barakaldoko
+        babarrunak, taloak (arto tortillak), pil-pil saltsan egindako bakailaoa eta etxeko gozoak.
+        Merkatua usain, kolore eta soinuz betetako lekua zen. Begiratu hitz-bilaketako pistak eta
+        aurkitu janari hauei dagozkien hitzak.</string>
+    <string name="pista3_1">Barakaldoko lekale tipikoa da, gisatuetan jaten dena.</string>
+    <string name="pista3_2">Festetan jaten da eta artoz egiten da.</string>
+    <string name="pista3_3">Arraina pil-pil saltsan prestatua</string>
+    <string name="pista3_4">Barakaldoko gozo tipikoa</string>
+    <string name="respuesta3_1">BABARRUNAK</string>
+    <string name="respuesta3_2">TALOAK</string>
+    <string name="respuesta3_3">BAKAILAOA</string>
+    <string name="respuesta3_4">TARTA</string>
+    <!-- Juego 4 -->
+    <string name="texto4_intro">Ilgner eraikina oso garrantzitsua izan zen Barakaldorentzat.
+        Bertan, elektrizitatea ekoizten zen lantegi eta tailerretarako. Energiari esker, makinak
+        funtziona zezaketen, eta hiria nabarmen hazi zen. Ingeniariek, mekanikariek eta
+        elektrizistek lan egin zuten hemen. Eraikinak zutik dirau oraindik eta gogorarazten digu
+        nola hasi zen industria modernoa.</string>
+    <!-- Juego 5 -->
+    <string name="texto5_intro">Duela urte asko, Barakaldo fabrika eta trenez betetako lekua zen.
+        Burdina inguruko mendietatik ateratzen zen, eta kargatzeko kaiak mea itsasontzietan
+        kargatzeko erabiltzen ziren egitura erraldoiak ziren. Trenek ekartzen zuten burdina, eta
+        portuko langileek beste hiri batzuetara eramaten zuten itsasontzietara eramaten zuten.
+        Lan horri esker, Barakaldo oso garrantzitsua bihurtu zen industrian.</string>
+    <string name="mensaje5_1">Hona iristen ziren burdina zeramaten trenak.</string>
+    <string name="mensaje5_2">Burdina beste herrialde batzuetara zihoazen itsasontzietan kargatzen zen.</string>
+    <string name="mensaje5_3">Kargalekuek Barakaldo asko hazten lagundu zuten.</string>
+    <!-- Juego 6 -->
+    <string name="texto6_intro">Barakaldo industrialaren erdigunean, trenek burdin mea meategietatik
+        kargalekuetara garraiatzen zuten, eta handik itsasontzietan kargatzen zuten. Trenbideari
+        esker, fabrika askok etengabe funtziona zezaketen, eta langileak egunero bidaiatzen zuten
+        tren horietan. Trenbidea izan zen Barakaldoren hazkundearen eragile nagusietako bat.</string>
+    <!-- Juego 7 -->
+    <string name="texto7_intro">Munoa Jauregia familia oso aberats baten etxea izan zen. Jende
+        askok lan egiten zuen bitartean lantegietan, festak eta dantzaldiak egiten ziren bertan.
+        Lorategiak, margolanak eta altzari dotoreak zituen. Gaur egun, Munoa Jauregia guztiontzat
+        irekitako parke bat da, non paseatu eta Barakaldoko historiaz gozatu dezakegun.</string>
+    <string name="titulo5_columna1">Langileak</string>
+    <string name="titulo5_columna2">Burgesa</string>
+    <!-- Juego final -->
+    <string name="textofinal_intro">Barakaldo asko aldatu da bere landa-jatorritik gaur egunera
+        arte. Bere istorioa kontatzen duten fabrika, eliza, jauregi eta parke zaharrak ditugu.
+        Leku horiek guztiak gure ondarearen parte dira, eta zaindu egin behar ditugu etorkizuneko
+        belaunaldiek ere ezagutu ditzaten.</string>
+    <string name="reflexionfinal">___ zainduko nuke zeren eta...</string>
 </resources>

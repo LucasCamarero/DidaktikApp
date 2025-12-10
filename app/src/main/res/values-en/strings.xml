@@ -1,4 +1,5 @@
 <resources>
+    <!-- App general -->
     <string name="app_name">DidaktikApp</string>
     <string name="choose_language">Choose a language</string>
     <string name="language_eu">Basque</string>
@@ -6,4 +7,82 @@
     <string name="language_en">English</string>
     <string name="menu_change_language">Change lenguage</string>
     <string name="menu_name">Settings</string>
+    <string name="exit">Close app</string>
+    <!-- Introducción -->
+    <string name="intro">Hi everyone! I´m Jolín, the most fun-loving character in Barakaldo! I´m
+        so glad you´re here, because together we´re going to discover how this beautiful place
+        has transformed from a rural village full of farmhouses into a modern, vibrant city. Along
+        the way, we´ll visit some very special places, solve games and challenges, and learn
+        amazing stories about our town.
+
+        Get your curious eyes and your eagerness to learn ready! Each time you complete a
+        challenge, you´ll unlock old and new photos of Barakaldo! At the end of the journey… a
+        surprise and a diploma await you for becoming true Barakaldo explorers!
+
+        Ready? Let´s go! Let´s discover Barakaldo, from rural to modern!</string>
+    <!-- Juego 1 -->
+    <string name="texto1_intro">Many years ago, Barakaldo was a town surrounded by fields,
+        farmhouses, and mountains. Families helped each other, grew their own food, and went to
+        the hermitage of Santa Águeda to celebrate festivals and ask for protection. The hermitage
+        was a very important place for the townspeople, because they gathered there to sing, eat,
+        and share moments together. Over time, Barakaldo changed, but the hermitage still reminds
+        us how it all began.</string>
+    <string name="pregunta1">What things do you think are still the same?</string>
+    <string name="respuesta1_a">a) The hermitage is still standing</string>
+    <string name="respuesta1_b">b) There are no more mountains</string>
+    <string name="respuesta1_c">c) There are no parties</string>
+    <!-- Juego 2 -->
+    <string name="texto2_intro">The Church of San Vicente has been the heart of the village for
+        many years. Here people gathered to pray, celebrate festivals, and meet with their
+        neighbors. Look closely at the photo of the church and notice the elements that make
+        it up: the Choir, the Altar, the Stations of the Cross, the Tabernacle, the Main Door,
+        the Central Nave… Each one has its function and helps us understand what life was like
+        in that time.</string>
+    <!-- Juego 3 -->
+    <string name="texto3_intro">In the Barakaldo market, people bought food and met their
+        neighbors. Typical products were sold here: Barakaldo beans, talos (corn tortillas), cod
+        in pil-pil sauce, and homemade sweets. The market was a place full of smells, colors, and
+        sounds. Look at the clues in the word search and find the words that correspond to these
+        foods.</string>
+    <string name="pista3_1">A very typical legume from Barakaldo, it is eaten in stews</string>
+    <string name="pista3_2">It is eaten at parties and is made from corn.</string>
+    <string name="pista3_3">Fish cooked in pil-pil sauce</string>
+    <string name="pista3_4">Typical sweet pastry from Barakaldo</string>
+    <string name="respuesta3_1">BEANS</string>
+    <string name="respuesta3_2">TALOS</string>
+    <string name="respuesta3_3">COD</string>
+    <string name="respuesta3_4">CAKE</string>
+    <!-- Juego 4 -->
+    <string name="texto4_intro">The Ilgner building was very important for Barakaldo. Here,
+        electricity was produced for the factories and workshops. Thanks to the energy, the
+        machines could operate, and the city grew considerably. Engineers, mechanics, and
+        electricians worked here. The building still stands and reminds us how modern industry
+        began.</string>
+    <!-- Juego 5 -->
+    <string name="texto5_intro">Many years ago, Barakaldo was a place full of factories and
+        trains. Iron was extracted from the nearby mountains, and the loading docks were enormous
+        structures used to load the ore onto ships. Trains brought the iron, and dockworkers moved
+        it to the ships that carried it to other cities. Thanks to this work, Barakaldo became
+        very important in industry.</string>
+    <string name="mensaje5_1">This is where the trains carrying the iron arrived.</string>
+    <string name="mensaje5_2">The iron was loaded onto ships that went to other countries.</string>
+    <string name="mensaje5_3">The loading docks helped Barakaldo to grow a lot.</string>
+    <!-- Juego 6 -->
+    <string name="texto6_intro">In industrial Barakaldo, trains transported iron ore from the
+        mines to the loading docks, where it was loaded onto ships. Thanks to the railway, many
+        factories could operate continuously, and workers traveled daily on these trains.
+        The railway was one of the driving forces behind Barakaldo´s growth.</string>
+    <!-- Juego 7 -->
+    <string name="texto7_intro">The Munoa Palace was the home of a very wealthy family. While many
+        people worked in the factories, parties and dances were held here. It had gardens,
+        paintings, and elegant furniture. Today, the Munoa Palace is a park open to everyone,
+        where we can stroll and enjoy the history of Barakaldo.</string>
+    <string name="titulo5_columna1">Workers</string>
+    <string name="titulo5_columna2">Bourgeois</string>
+    <!-- Juego final -->
+    <string name="textofinal_intro">Barakaldo has changed a lot from its rural origins to the
+        present day. We have old factories, churches, palaces, and parks that tell its story. All
+        these places are part of our heritage, and we must take care of them so that future
+        generations can also know them.</string>
+    <string name="reflexionfinal">I would take care of ___ because...</string>
 </resources>
