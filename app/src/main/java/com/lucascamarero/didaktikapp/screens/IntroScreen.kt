@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,24 +46,22 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.components.LanguageCard
+import com.lucascamarero.didaktikapp.models.AppLanguage
+import com.lucascamarero.didaktikapp.viewmodels.LanguageViewModel
 import kotlinx.coroutines.delay
 
 @SuppressLint("ResourceType")
 @Composable
-fun IntroScreen(onStartClick: () -> Unit) {
-    val textoJolin =
-        "¡Hola, chicas y chicos! ¡Soy Jolín, el personaje más fiestero de Barakaldo! " +
-                "Me encanta que estéis aquí, porque juntos vamos a descubrir cómo este lugar tan bonito " +
-                "ha pasado de ser un pueblo rural lleno de caseríos a una ciudad moderna y llena de vida. " +
-                "A lo largo del camino visitaremos lugares muy especiales, resolveremos juegos y retos, y " +
-                "conoceremos historias sorprendentes de nuestro pueblo.\n\n" +
-                "¡Preparad vuestros ojos curiosos y vuestras ganas de aprender! Cada vez que superéis " +
-                "una prueba, ¡desbloquearéis fotos antiguas y actuales de Barakaldo! Al final del viaje… " +
-                "¡os espera una sorpresa y un diploma por convertiros en verdaderos exploradores barakaldeses!\n\n" +
-                "¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!"
+fun IntroScreen(
+    languageViewModel: LanguageViewModel,
+    onStartClick: () -> Unit
+) {
+    var languageIsSelected by rememberSaveable { mutableStateOf(false) }
+    val textoJolin = "¡Hola, chicas y chicos! "
 
     // estado para controlar si el texto ha terminado de mostrarse
-    var TextCompleto by remember { mutableStateOf(false) }
+    var isTextComplete  by remember { mutableStateOf(false) }
     Column(
         Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer),
@@ -70,40 +69,47 @@ fun IntroScreen(onStartClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        SpeechBubbleWithTypewriterText(
-            text = textoJolin,
-            fondoTexto = R.drawable.bocadillo3,
-            velocidadTexto = 85L,
-            onTextoCompleto = { TextCompleto = true } // Callback cuando termina
-        )
-        Row{
-            LottieInfinite(R.raw.jolin,
-                modifier = Modifier.size(1000.dp))
-            if (TextCompleto){
-                IconButton(onStartClick) {
-                    Icon(
-                        imageVector = Icons.Filled.PlayArrow,
-                        contentDescription = "Abrir menu",
-                        tint = MaterialTheme.colorScheme.secondaryContainer,
-                        modifier = Modifier.size(68.dp))
+        if(languageIsSelected == false) {
+            LanguageCard { lang ->
+                when (lang) {
+                    "eu" -> languageViewModel.changeLanguage(AppLanguage.EUSKERA)
+                    "es" -> languageViewModel.changeLanguage(AppLanguage.CASTELLANO)
+                    "en" -> languageViewModel.changeLanguage(AppLanguage.INGLES)
                 }
-            }else{
-                Spacer(modifier = Modifier.size(68.dp))
+                languageIsSelected = true
             }
-
-
+        } else {
+            SpeechBubbleWithTypewriterText(
+                text = textoJolin,
+                fondoTexto = R.drawable.bocadillo3,
+                velocidadTexto = 45L,
+                onTextComplete  = { isTextComplete  = true } // Callback cuando termina
+            )
+            Row{
+                LottieInfinite(R.raw.jolin)
+                if (isTextComplete){
+                    IconButton(onStartClick) {
+                        Icon(
+                            imageVector = Icons.Filled.PlayArrow,
+                            contentDescription = "Abrir menu",
+                            tint = MaterialTheme.colorScheme.secondaryContainer,
+                            modifier = Modifier.size(68.dp))
+                    }
+                }else{
+                    Spacer(modifier = Modifier.size(68.dp))
+                }
+            }
         }
-
     }
-
 }
+
 @SuppressLint("ResourceType")
 @Composable
 fun SpeechBubbleWithTypewriterText(
     text: String,
     @RawRes fondoTexto: Int,
     velocidadTexto: Long = 40L, //milisegundos entre las letras
-    onTextoCompleto: () -> Unit = {} // callback opcional cuando termina
+    onTextComplete: () -> Unit = {} // callback opcional cuando termina
 ){
 // Texto parcial (efecto máquina de escribir)
     var displeyedText by remember{ mutableStateOf("") }
@@ -118,7 +124,7 @@ fun SpeechBubbleWithTypewriterText(
             scrollState.animateScrollTo(scrollState.maxValue)
         }
         // Cuando termina la animación, llamamos al callback
-        onTextoCompleto()
+        onTextComplete()
     }
     Box(Modifier.size(400.dp)
 
@@ -146,8 +152,7 @@ fun SpeechBubbleWithTypewriterText(
 }
 @Composable
 fun LottieInfinite(
-    @RawRes resId: Int,
-    modifier: Modifier = Modifier
+    @RawRes resId: Int
 ){
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(resId))
     val progreso by animateLottieCompositionAsState(
@@ -156,7 +161,6 @@ fun LottieInfinite(
     )
     LottieAnimation(
         composition = composition,
-        progress = progreso,
-        modifier = modifier
+        progress = progreso
     )
 }

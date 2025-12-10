@@ -59,6 +59,7 @@ import com.lucascamarero.didaktikapp.screens.activities.finalactivity.WriteSente
 import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
 import com.lucascamarero.didaktikapp.viewmodels.LanguageViewModel
 import kotlinx.coroutines.launch
+import com.lucascamarero.didaktikapp.screens.IntroScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -202,7 +203,19 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         val number = backStackEntry.arguments?.getInt("number") ?: 0
                         EndOfActivityScreen(navController, number)
                     }
-                    composable("activity1") { Activity1Screen(navController) }
+                    composable("activity1") {
+                        Acitivity1Screen(
+                            onNavigateBack = {
+                                // Esto saca la Actividad 1 de la pila y vuelve a la anterior (Mapa o Intro)
+                                navController.popBackStack()
+
+                                // O si quieres ir a una pantalla específica (ej. Mapa):
+                                // navController.navigate("ruta_mapa") {
+                                //     popUpTo("actividad1") { inclusive = true }
+                                // }
+                            }
+                        )
+                    }
                     composable("activity2") { Activity2Screen(navController) }
                     composable("activity3") { Activity3Screen(navController) }
                     composable("activity4") { Activity4Screen(navController) }
@@ -216,6 +229,11 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
             }
         }
     }
+}
+
+@Composable
+fun Acitivity1Screen(onNavigateBack: () -> Boolean) {
+    TODO("Not yet implemented")
 }
 
 @Composable
