@@ -62,7 +62,7 @@ fun IntroScreen(onStartClick: () -> Unit) {
                 "¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!"
 
     // estado para controlar si el texto ha terminado de mostrarse
-    var TextCompleto by remember { mutableStateOf(false) }
+    var isTextComplete  by remember { mutableStateOf(false) }
     Column(
         Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer),
@@ -73,13 +73,12 @@ fun IntroScreen(onStartClick: () -> Unit) {
         SpeechBubbleWithTypewriterText(
             text = textoJolin,
             fondoTexto = R.drawable.bocadillo3,
-            velocidadTexto = 85L,
-            onTextoCompleto = { TextCompleto = true } // Callback cuando termina
+            velocidadTexto = 45L,
+            onTextComplete  = { isTextComplete  = true } // Callback cuando termina
         )
         Row{
-            LottieInfinite(R.raw.jolin,
-                modifier = Modifier.size(1000.dp))
-            if (TextCompleto){
+            LottieInfinite(R.raw.jolin)
+            if (isTextComplete){
                 IconButton(onStartClick) {
                     Icon(
                         imageVector = Icons.Filled.PlayArrow,
@@ -103,7 +102,7 @@ fun SpeechBubbleWithTypewriterText(
     text: String,
     @RawRes fondoTexto: Int,
     velocidadTexto: Long = 40L, //milisegundos entre las letras
-    onTextoCompleto: () -> Unit = {} // callback opcional cuando termina
+    onTextComplete: () -> Unit = {} // callback opcional cuando termina
 ){
 // Texto parcial (efecto máquina de escribir)
     var displeyedText by remember{ mutableStateOf("") }
@@ -118,7 +117,7 @@ fun SpeechBubbleWithTypewriterText(
             scrollState.animateScrollTo(scrollState.maxValue)
         }
         // Cuando termina la animación, llamamos al callback
-        onTextoCompleto()
+        onTextComplete()
     }
     Box(Modifier.size(400.dp)
 
@@ -146,8 +145,7 @@ fun SpeechBubbleWithTypewriterText(
 }
 @Composable
 fun LottieInfinite(
-    @RawRes resId: Int,
-    modifier: Modifier = Modifier
+    @RawRes resId: Int
 ){
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(resId))
     val progreso by animateLottieCompositionAsState(
@@ -156,7 +154,6 @@ fun LottieInfinite(
     )
     LottieAnimation(
         composition = composition,
-        progress = progreso,
-        modifier = modifier
+        progress = progreso
     )
 }
