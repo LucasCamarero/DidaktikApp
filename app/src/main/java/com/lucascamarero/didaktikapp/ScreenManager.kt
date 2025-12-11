@@ -195,13 +195,18 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         StartOfActivityScreen(navController, number)
                     }
                     composable(
-                        route = "endactivity/{number}",
+                        route = "startactivity/{number}",
                         arguments = listOf(
                             navArgument("number") { type = NavType.IntType }
                         )
                     ) { backStackEntry ->
                         val number = backStackEntry.arguments?.getInt("number") ?: 0
-                        EndOfActivityScreen(navController, number)
+
+                        // ¡Usamos el número para buscar la data y la ruta de destino!
+                        StartOfActivityScreen(
+                            navController = navController,
+                            activityNumber = number // Le pasamos el número
+                        )
                     }
                     composable("activity1") {
                         Acitivity1Screen(
