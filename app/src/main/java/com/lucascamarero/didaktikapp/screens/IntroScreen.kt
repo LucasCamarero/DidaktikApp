@@ -71,13 +71,14 @@ fun IntroScreen(
         } else {
             // Muestra la bienvenida de Jolín, optimizada en una sola función
             JolinWelcomeMessage(
+                //message = "",
                 message = stringResource(id = R.string.intro),
                 onTextComplete = {  isJolinTextComplete = it },
                 onStartClick = onStartClick
             )
 
             // Botón de Inicio (solo es visible si el texto de Jolín terminó)
-            if (isJolinTextComplete) {
+            //if (isJolinTextComplete) {
                 Spacer(modifier = Modifier.height(40.dp))
 
                 CustomGameButton(
@@ -94,7 +95,7 @@ fun IntroScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-            }
+            //}
         }
     }
 }

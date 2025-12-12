@@ -46,15 +46,15 @@ class GameViewModel @Inject constructor(
 
     init {
         // ... (Tu init con las coordenadas se queda igual) ...
-        items.add(GameItem(id = 1, imageRes = R.drawable.activ1_cruz, targetPosition = Offset(280f, 750f)))
-        items.add(GameItem(id = 2, imageRes = R.drawable.activ1_vaca, targetPosition = Offset(150f, 1200f)))
-        items.add(GameItem(id = 3, imageRes = R.drawable.activ1_campesino, targetPosition = Offset(700f, 1200f)))
+        items.add(GameItem(id = 1, imageRes = R.drawable.activ1_cruz, targetPosition = Offset(280f, 550f)))
+        items.add(GameItem(id = 2, imageRes = R.drawable.activ1_vaca, targetPosition = Offset(150f, 1000f)))
+        items.add(GameItem(id = 3, imageRes = R.drawable.activ1_campesino, targetPosition = Offset(700f, 1000f)))
         distributeItemsInBottomRow()
     }
 
     private fun distributeItemsInBottomRow() {
         val totalWidth = 1000f
-        val startY = 1800f
+        val startY = 1500f
         val itemCount = items.size
         val segmentWidth = totalWidth / itemCount
         items.forEachIndexed { index, item ->

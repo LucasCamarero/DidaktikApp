@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -45,7 +46,8 @@ fun TopBar(
     counterViewModel: CounterViewModel,
     onMenuClick: () -> Unit
 ) {
-    val counter by counterViewModel.count.observeAsState(0)
+    //val counter by counterViewModel.count.observeAsState(0)
+    val currentCount by counterViewModel.count.collectAsState()
 
     TopAppBar(
         title = {},
@@ -71,7 +73,7 @@ fun TopBar(
                         Badge(modifier = Modifier.size(30.dp),
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                        ) { Text(counter.toString()) }
+                        ) { Text(currentCount.toString()) }
                     }
                 ) { Image(
                     painter = painterResource(id = R.drawable.rostrojolin),
