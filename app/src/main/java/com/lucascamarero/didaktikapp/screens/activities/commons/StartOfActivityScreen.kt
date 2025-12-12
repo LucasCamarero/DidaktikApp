@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.components.CustomGameButton
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage // ¡Importa Jolín!
 import com.lucascamarero.didaktikapp.models.ActivityDataSource
 import com.lucascamarero.didaktikapp.models.ActivityData
@@ -47,31 +48,30 @@ fun PolaroidImage(
 ) {
     Box(
         modifier = Modifier
-            .size(340.dp, 335.dp) // Tamaño de la polaroid
+            .size(340.dp, 350.dp) // Tamaño de la polaroid
             .clip(RoundedCornerShape(4.dp))
             .background(Color.White) // Fondo blanco de la polaroid
             .padding(15.dp), // Espacio para el marco
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(horizontalAlignment = Alignment.Start) {
             Image(
                 painter = painterResource(id = data.imageResId),
                 contentDescription = data.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(230.dp)
+                    .height(260.dp)
                     .clip(RoundedCornerShape(2.dp))
             )
             // Espacio inferior para el título o descripción de la polaroid
-            //Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = data.title,
+                text = data.imageDescription,
                 style = MaterialTheme.typography.titleMedium,
-                fontSize = 30.sp,
-                lineHeight = 32.sp, // Aumenta el espacio entre salto de linea,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Black
+                fontSize = 20.sp,
+                color = Color.DarkGray
             )
         }
     }
@@ -107,6 +107,7 @@ fun StartOfActivityScreen(
                 fontWeight = FontWeight.ExtraBold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Center,
+                fontSize = 20.sp,
                 // Reducimos el padding superior
                 modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
             )
@@ -118,20 +119,20 @@ fun StartOfActivityScreen(
             if (isJolinTextComplete) {
                 Spacer(modifier = Modifier.height(30.dp))
                 //Spacer(modifier = Modifier.height(40.dp))
-                Button(
+
+                CustomGameButton(
+                    text = "¡Empezar Juego!",
+                    backgroundResId = R.drawable.boton_verde,
                     onClick = {
-                        // Navegar a la ruta del juego (Ej: "activity1", "activity2", etc.)
-                        navController.navigate(data.gameRoute)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(60.dp)
-                ) {
-                    Text("¡Empezar Juego!",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontSize = 24.sp,
-                        )
-                }
+                        navController.navigate(data.gameRoute) },
+                    modifier = Modifier.fillMaxWidth(0.9f).padding(vertical = 8.dp)
+                        .height(68.dp),
+                    textStyle = MaterialTheme.typography.titleLarge.copy(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+
                 //Spacer(modifier = Modifier.height(24.dp))
             }
 

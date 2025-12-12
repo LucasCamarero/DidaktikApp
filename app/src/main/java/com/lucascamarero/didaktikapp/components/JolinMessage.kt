@@ -77,9 +77,9 @@ fun JolinWelcomeMessage(
             LottieInfinite(
                 resId = R.raw.jolin,
                 modifier = Modifier
-                    .size(200.dp) // Tamaño original de Jolín
+                    .size(300.dp) // Tamaño original de Jolín
                     .align(Alignment.BottomCenter) // Alinea al fondo del Box
-                    .offset(x = (-80).dp, y = 100.dp) // Mueve a la izquierda y ligeramente hacia abajo
+                    .offset(x = (-80).dp, y = 180.dp) // Mueve a la izquierda y ligeramente hacia abajo
             )
         }
 
@@ -119,7 +119,7 @@ fun SpeechBubbleWithTypewriterText(
         onTextComplete()
     }
     Box(
-        Modifier.size(300.dp),
+        Modifier.size(350.dp),
                 contentAlignment = Alignment.Center // Centra el contenido (texto) sobre la imagen
     ){
         Image(
