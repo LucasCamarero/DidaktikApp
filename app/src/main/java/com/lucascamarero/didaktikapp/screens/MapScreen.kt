@@ -15,7 +15,6 @@ import androidx.navigation.NavController
 @Composable
 fun MapScreen(navController: NavController){
 
-    // SE PUEDE BORRAR (Codigo para probar que funciona el menu)
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp),

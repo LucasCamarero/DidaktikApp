@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -35,6 +36,8 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.ui.theme.Typography2
+import com.lucascamarero.didaktikapp.ui.theme.Typography3
 import kotlinx.coroutines.delay
 
 /**
@@ -48,13 +51,17 @@ import kotlinx.coroutines.delay
 fun JolinWelcomeMessage(
     message: String,
     onTextComplete: (Boolean) -> Unit,
-    onStartClick: () -> Unit
+    onStartClick: () -> Unit,
+    jolinSize: Dp = 200.dp,
+    bubbleSize: Dp = 300.dp,
+    jolinOffsetX: Dp = (-80).dp,
+    jolinOffsetY: Dp = 100.dp
 ) {
     var isTextComplete  by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         // 1. Contenedor BOX para superponer el bocadillo y Jolín
         Box(
@@ -66,6 +73,7 @@ fun JolinWelcomeMessage(
                 text = message,
                 fondoTexto = R.drawable.bocadillo3,
                 velocidadTexto = 45L,
+                bubbleSiz = bubbleSize,
                 onTextComplete  = {
                     isTextComplete  = true
                     onTextComplete(true)
@@ -77,9 +85,9 @@ fun JolinWelcomeMessage(
             LottieInfinite(
                 resId = R.raw.jolin,
                 modifier = Modifier
-                    .size(200.dp) // Tamaño original de Jolín
+                    .size(jolinSize) // Tamaño original de Jolín
                     .align(Alignment.BottomCenter) // Alinea al fondo del Box
-                    .offset(x = (-80).dp, y = 100.dp) // Mueve a la izquierda y ligeramente hacia abajo
+                    .offset(x = jolinOffsetX, y = jolinOffsetY) // Mueve a la izquierda y ligeramente hacia abajo
             )
         }
 
@@ -105,6 +113,7 @@ fun SpeechBubbleWithTypewriterText(
     text: String,
     @RawRes fondoTexto: Int,
     velocidadTexto: Long = 40L, //milisegundos entre las letras
+    bubbleSiz: Dp = 300.dp,
     onTextComplete: () -> Unit = {} // callback opcional cuando termina
 ){
     var displayedText by remember{ mutableStateOf("") }
@@ -119,7 +128,7 @@ fun SpeechBubbleWithTypewriterText(
         onTextComplete()
     }
     Box(
-        Modifier.size(300.dp),
+        Modifier.size(bubbleSiz),
                 contentAlignment = Alignment.Center // Centra el contenido (texto) sobre la imagen
     ){
         Image(
@@ -134,12 +143,13 @@ fun SpeechBubbleWithTypewriterText(
                 //.size(400.dp)
                 .padding(vertical = 75.dp)
                 .verticalScroll(scrollState)
+
         ) {
             Text(
                 text = displayedText,
                 Modifier.fillMaxSize()
                     .padding(24.dp),
-                style = MaterialTheme.typography.labelSmall.copy(
+                style = Typography3.labelMedium.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )

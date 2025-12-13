@@ -61,7 +61,7 @@ fun TopBar(
                     Icon(
                         imageVector = Icons.Filled.ChevronLeft,
                         contentDescription = "Volver atrás",
-                        tint = MaterialTheme.colorScheme.secondaryContainer,
+                        tint = MaterialTheme.colorScheme.scrim,
                         modifier = Modifier.size(40.dp)
                     )
                 }
@@ -69,8 +69,8 @@ fun TopBar(
                 BadgedBox(
                     badge = {
                         Badge(modifier = Modifier.size(30.dp),
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            containerColor = MaterialTheme.colorScheme.scrim,
+                            contentColor = MaterialTheme.colorScheme.secondaryContainer
                         ) { Text(counter.toString()) }
                     }
                 ) { Image(
@@ -86,16 +86,16 @@ fun TopBar(
                     Icon(
                         imageVector = Icons.Filled.Settings,
                         contentDescription = "Abrir menú",
-                        tint = MaterialTheme.colorScheme.secondaryContainer,
+                        tint = MaterialTheme.colorScheme.scrim,
                         modifier = Modifier.size(35.dp)
                     )
                 }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            navigationIconContentColor = MaterialTheme.colorScheme.secondaryContainer,
+            titleContentColor = MaterialTheme.colorScheme.secondaryContainer
         )
     )
 }

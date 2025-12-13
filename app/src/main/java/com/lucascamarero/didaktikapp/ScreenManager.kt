@@ -85,7 +85,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
             ModalDrawerSheet (
                 modifier = Modifier.width(280.dp),
                 drawerContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                drawerContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                drawerContentColor = MaterialTheme.colorScheme.scrim
             ){
                 Column(Modifier
                     .padding(16.dp)
@@ -270,7 +270,7 @@ fun CreateNavigationDrawerItem(
             Icon(
                 imageVector = icon,
                 contentDescription = text,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                tint = MaterialTheme.colorScheme.scrim
             )
         },
         label = {
@@ -282,7 +282,7 @@ fun CreateNavigationDrawerItem(
         selected = selected,
         onClick = onClick,
         colors = NavigationDrawerItemDefaults.colors(
-            unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer
+            unselectedTextColor = MaterialTheme.colorScheme.scrim
         )
     )
 }
