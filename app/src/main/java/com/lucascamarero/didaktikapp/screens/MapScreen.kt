@@ -11,18 +11,56 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.lucascamarero.didaktikapp.models.MapPoint
 
 @Composable
-fun MapScreen(navController: NavController){
+fun MapScreen(navController: NavController) {
 
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .padding(20.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        item {
-            Spacer(modifier = Modifier.padding(vertical = 20.dp))
-            Text("Ventana Map")
+    // Datos hardcodeados de momento
+    val mapPoints = listOf(
+        MapPoint(1, 43.257611, -2.979528, "Ermita Santa Águeda"),
+        MapPoint(2, 43.295750, -2.996722, "Iglesia de San Vicente"),
+        MapPoint(3, 43.296902, -2.987188, "Mercado de Abastos"),
+        MapPoint(4, 43.302592, -2.985833, "Edificio Ilgner"),
+        MapPoint(5, 43.315600, -3.010764, "Cargadero de minas"),
+        MapPoint(6, 43.305550, -2.982158, "Ferrocarril"),
+        MapPoint(7, 43.295125, -2.978303, "Palacio Munoa")
+    )
+
+    // Cámara centrada en la zona de los puntos
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(
+            LatLng(43.30, -2.99),
+            14f
+        )
+    }
+
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState,
+        properties = MapProperties(
+            mapType = MapType.NORMAL
+        )
+    ) {
+        mapPoints.forEach { point ->
+            Marker(
+                state = MarkerState(
+                    position = LatLng(point.lat, point.lng)
+                ),
+                title = point.name,
+                snippet = "Punto ${point.id}",
+                onClick = {
+                    true
+                }
+            )
         }
     }
 }

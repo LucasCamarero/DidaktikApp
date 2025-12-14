@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                     var showSplash by rememberSaveable { mutableStateOf(true) }
                     var showApp by rememberSaveable { mutableStateOf(false) }
                     val languageViewModel: LanguageViewModel = viewModel()
-
+                    /*
                     when {
                         showSplash -> {
                             SplashScreen(
@@ -56,7 +56,10 @@ class MainActivity : AppCompatActivity() {
                                 languageViewModel = languageViewModel
                             )
                         }
-                    }
+                    }*/
+                    ScreenManager(
+                        languageViewModel = languageViewModel
+                    )
                 }
             }
         }

@@ -21,6 +21,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders["MAPS_API_KEY"] =
+            project.findProperty("MAPS_API_KEY")?.toString() ?: ""
+
     }
 
     buildTypes {
@@ -66,8 +70,9 @@ dependencies {
     // 3. Integración con Compose Navigation
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-
-
+    // 4. Para funcionar con google maps
+    implementation("com.google.maps.android:maps-compose:4.4.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     implementation("com.airbnb.android:lottie-compose:6.4.0")
     implementation(libs.androidx.core.ktx)
