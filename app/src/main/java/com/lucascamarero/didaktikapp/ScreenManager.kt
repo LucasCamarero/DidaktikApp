@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -69,8 +70,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
     var navController = rememberNavController()
 
     // instancias de view models
-    val counterViewModel: CounterViewModel = viewModel()
-
+    val counterViewModel: CounterViewModel = hiltViewModel() // Usa hiltViewModel()
     // Estado del drawer y scope para abrir/cerrar
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -202,50 +202,25 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     startDestination = "map"
                 ) {
                     composable("map") { MapScreen(navController) }
+
+                    // RUTA DE INTRODUCCIÓN (Genérica para todos los juegos)
                     composable(
                         route = "startactivity/{number}",
-                        arguments = listOf(
-                            navArgument("number") { type = NavType.IntType }
-                        )
+                        arguments = listOf(navArgument("number") { type = NavType.IntType })
                     ) { backStackEntry ->
-                        val number = backStackEntry.arguments?.getInt("number") ?: 0
+                        val number = backStackEntry.arguments?.getInt("number") ?: 1
                         StartOfActivityScreen(navController, number)
                     }
-                    composable(
-                        route = "startactivity/{number}",
-                        arguments = listOf(
-                            navArgument("number") { type = NavType.IntType }
-                        )
-                    ) { backStackEntry ->
-                        val number = backStackEntry.arguments?.getInt("number") ?: 0
 
-                        // ¡Usamos el número para buscar la data y la ruta de destino!
-                        StartOfActivityScreen(
-                            navController = navController,
-                            activityNumber = number // Le pasamos el número
-                        )
-                    }
+                    // RUTAS DE LOS JUEGOS REALES
                     composable("activity1") {
-                        Acitivity1Screen(
-                            onNavigateBack = {
-                                // Esto saca la Actividad 1 de la pila y vuelve a la anterior (Mapa o Intro)
-                                navController.popBackStack()
-
-                                // O si quieres ir a una pantalla específica (ej. Mapa):
-                                // navController.navigate("ruta_mapa") {
-                                //     popUpTo("actividad1") { inclusive = true }
-                                // }
-                            }
-                        )
+                        Activity1Screen(onNavigateBack = { navController.popBackStack() })
                     }
-                    composable("activity2") { Activity2Screen(navController) }
+
+                    // El resto de actividades...
                     composable("activity3") { Activity3Screen(navController) }
-                    composable("activity4") { Activity4Screen(navController) }
-                    composable("activity5") { Activity5Screen(navController) }
-                    composable("activity6") { Activity6Screen(navController) }
-                    composable("activity7") { Activity7Screen(navController) }
+                    // ...
                     composable("diploma") { Diploma(navController) }
-                    composable("writesentence") { WriteSentence(navController) }
                     composable("jointhephotos") { JoinThePhotos(navController) }
                 }
             }

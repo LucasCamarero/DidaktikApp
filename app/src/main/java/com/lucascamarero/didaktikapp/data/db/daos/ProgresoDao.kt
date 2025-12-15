@@ -11,12 +11,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProgresoDao {
 
-    // --- Consulta Compleja (Requisito RA6 50%) ---
-
-    /** * Obtiene el estado completo de la ruta para un usuario, incluyendo el nombre del lugar,
-     * el estado de finalización y los premios desbloqueados.
-     */
-// ProgresoDao.kt (CONSULTA CORREGIDA PARA ASEGURAR NOMBRES DE TABLA)
 
     @Query("""
     SELECT 
@@ -33,11 +27,7 @@ interface ProgresoDao {
     ORDER BY T1.lugar_id ASC
 """)
     fun getRutaProgresoCompleto(personaId: Int): Flow<List<ProgresoRutaJoin>>
-    // Nota: ProgresoRutaJoin debe ser una clase de datos simple para mapear estos resultados JOIN.
 
-    // --- Operaciones de UPDATE (DML) ---
-
-    /** Marca una actividad como completada (requisito DML). */
     @Query("""
         UPDATE progreso_usuario 
         SET completada = 1, fecha_completado = :date
@@ -45,9 +35,10 @@ interface ProgresoDao {
     """)
     suspend fun updateProgresoCompletado(actividadId: Int, personaId: Int, date: String)
 
-    // --- Operaciones de SETUP ---
 
-    /** Inserta los 7 registros iniciales (ProgresoUsuario) para un nuevo alumno. */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertInitialProgreso(progreso: List<ProgresoUsuarioEntity>)
+
+    @Query("SELECT COUNT(*) FROM progreso_usuario WHERE persona_fk = :personaId AND completada = 1")
+    fun getCountCompletados(personaId: Int): Flow<Int>
 }
