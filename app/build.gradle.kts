@@ -65,7 +65,8 @@ dependencies {
     // 3. Integración con Compose Navigation
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-
+    // Open maps
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
 
 
     implementation("com.airbnb.android:lottie-compose:6.4.0")

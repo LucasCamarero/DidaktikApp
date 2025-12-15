@@ -29,6 +29,10 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.DONUT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        org.osmdroid.config.Configuration.getInstance().userAgentValue =
+            packageName
+
         enableEdgeToEdge()
         setContent {
             DidaktikAppTheme(dynamicColor = false) {
