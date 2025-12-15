@@ -10,6 +10,7 @@
     <string name="exit">Cerrar app</string>
     <!-- Botones -->
     <string name="intro_button">Comenzar</string>
+    <string name="intro_play_button">Empezar juego</string>
     <!-- Introducción -->
     <string name="intro">¡Hola, chicas y chicos! ¡Soy Jolín, el personaje más fiestero de
         Barakaldo! Me encanta que estéis aquí, porque juntos vamos a descubrir cómo este lugar
@@ -23,6 +24,7 @@
 
         ¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!</string>
     <!-- Juego 1 -->
+    <string name="title1">La Ermita de Santa Agueda</string>
     <string name="texto1_intro">Hace muchos años, Barakaldo era un pueblo rodeado de campos,
         caseríos y montes. Las familias se ayudaban entre sí, cultivaban sus alimentos y acudían a
         la ermita de Santa Águeda para celebrar fiestas y pedir protección. La ermita era un lugar

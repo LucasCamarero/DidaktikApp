@@ -135,6 +135,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         }
                     }
 
+                    /*
                     CreateNavigationDrawerItem(
                         text = "Mapa",
                         icon = Icons.Filled.Map,
@@ -172,6 +173,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                             navController.navigate("diploma")
                         }
                     )
+                     */
                 }
             }
         }

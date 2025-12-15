@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -195,7 +196,7 @@ fun StartOfActivityScreen(
         if (isJolinTextComplete) {
 
             CustomGameButton(
-                text = "¡Empezar Juego!",
+                text = stringResource(id = R.string.intro_play_button),
                 backgroundResId = R.drawable.boton_verde,
                 onClick = {// NAVEGACIÓN DINÁMICA SEGÚN LA DATA
                     navController.navigate(data.gameRoute)},
