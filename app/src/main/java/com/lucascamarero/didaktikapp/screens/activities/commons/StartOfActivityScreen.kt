@@ -3,11 +3,9 @@ package com.lucascamarero.didaktikapp.screens.activities.commons
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,12 +17,18 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +46,7 @@ import com.lucascamarero.didaktikapp.components.CustomGameButton
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
 import com.lucascamarero.didaktikapp.models.ActivityDataSource
 import com.lucascamarero.didaktikapp.models.ActivityData
+import kotlinx.coroutines.launch
 
 // --- Componente de Imagen con Estilo Polaroid y Carrusel ---
 @OptIn(ExperimentalFoundationApi::class)
@@ -51,63 +56,87 @@ fun PolaroidImage(
     imageResIds: List<Int> // Lista de imágenes para el carrusel
 ) {
     val pageCount = imageResIds.size
+    val scope = rememberCoroutineScope() // Necesario para cambiar de página programáticamente
+
     val pagerState = rememberPagerState(initialPage = 0) {
         pageCount
     }
 
     Box(
         modifier = Modifier
-            .size(340.dp, 350.dp)
+            // 💡 1. REDUCIMOS EL TAMAÑO TOTAL DEL POLAROID
+            .size(280.dp, 250.dp) // Ejemplo: Reducido de 340x315 a 300x280
             .clip(RoundedCornerShape(4.dp))
             .background(Color.White)
-            .padding(15.dp),
+            .padding(10.dp), // Reducimos el padding general
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.Start) {
-            // 1. Horizontal Pager (Carrusel de Imágenes)
-            HorizontalPager(
-                state = pagerState,
+        Column(horizontalAlignment = Alignment.CenterHorizontally) { // Centramos la columna para el carrusel
+
+            // 1. Carrusel de Imágenes con Flechas de Navegación Superpuestas
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(260.dp)
-                    .clip(RoundedCornerShape(2.dp))
-            ) { page ->
-                Image(
-                    painter = painterResource(id = imageResIds[page]),
-                    contentDescription = "Imagen ${page + 1} de ${data.title}",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-
-            // 2. Indicador de Página (Debajo del Carrusel)
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.Center
+                    .height(260.dp) // Mantenemos una altura decente para la imagen
             ) {
-                repeat(pageCount) { iteration ->
-                    val color = if (pagerState.currentPage == iteration) Color.Black else Color.LightGray
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 4.dp)
-                            .clip(RoundedCornerShape(50))
-                            .background(color)
-                            .size(8.dp)
+                // A. Horizontal Pager (Carrusel)
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(2.dp))
+                ) { page ->
+                    Image(
+                        painter = painterResource(id = imageResIds[page]),
+                        contentDescription = "Imagen ${page + 1} de ${data.title}",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                // 2. FLECHA IZQUIERDA
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            // Calcula la página anterior o vuelve a la última si está en la primera
+                            val prevPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else pageCount - 1
+                            pagerState.animateScrollToPage(prevPage)
+                        }
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBackIos,
+                        contentDescription = "Anterior",
+                        tint = Color.White.copy(alpha = 0.8f), // Tono para que destaque sobre la imagen
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
+                // 3. FLECHA DERECHA
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            // Calcula la página siguiente o vuelve a la primera si está en la última
+                            val nextPage = if (pagerState.currentPage < pageCount - 1) pagerState.currentPage + 1 else 0
+                            pagerState.animateScrollToPage(nextPage)
+                        }
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForwardIos,
+                        contentDescription = "Siguiente",
+                        tint = Color.White.copy(alpha = 0.8f), // Tono para que destaque sobre la imagen
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
 
-            // 3. Descripción
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Imagen ${pagerState.currentPage + 1}", // Puedes personalizar esto
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp, // Tamaño ajustado para encajar
-                color = Color.DarkGray
-            )
         }
     }
 }
@@ -130,7 +159,7 @@ fun StartOfActivityScreen(
     // Debes tener estos drawables en tu carpeta res/drawable
     val images = when (activityNumber) {
         1 -> listOf(R.drawable.act1_img1, R.drawable.act1_img2) // EJEMPLO
-        2 -> listOf(R.drawable.activ1_bg_fondo)
+        2 -> listOf(R.drawable.activ3_img1)
         // ... define el resto de las 7 actividades
         else -> listOf(data.imageResId)
     }
@@ -163,7 +192,7 @@ fun StartOfActivityScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // 4. Botón de Empezar Juego (Debajo de Jolín)
-        //if (isJolinTextComplete) {
+        if (isJolinTextComplete) {
 
             CustomGameButton(
                 text = "¡Empezar Juego!",
@@ -177,7 +206,7 @@ fun StartOfActivityScreen(
                     fontWeight = FontWeight.Bold
                 )
             )
-        //}
+        }
 
         // 3. Jolín explicando el juego (Contiene el bocadillo y el ícono de Play)
         JolinWelcomeMessage(

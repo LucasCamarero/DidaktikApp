@@ -78,7 +78,7 @@ fun IntroScreen(
             )
 
             // Botón de Inicio (solo es visible si el texto de Jolín terminó)
-            //if (isJolinTextComplete) {
+            if (isJolinTextComplete) {
                 Spacer(modifier = Modifier.height(40.dp))
 
                 CustomGameButton(
@@ -95,7 +95,7 @@ fun IntroScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-            //}
+            }
         }
     }
 }

@@ -218,7 +218,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     }
 
                     // El resto de actividades...
-                    composable("activity2") { Activity2Screen(navController) }
+                    composable("activity3") { Activity3Screen(navController) }
                     // ...
                     composable("diploma") { Diploma(navController) }
                     composable("jointhephotos") { JoinThePhotos(navController) }
