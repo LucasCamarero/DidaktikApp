@@ -36,6 +36,14 @@ object ActivityDataSource {
                 imageDescription = "",
                 gameRoute = "activity3"
             )
+            6 -> ActivityData(
+                id = 6,
+                title = "El ferrocarril",
+                description = stringResource(id = R.string.texto3_intro),
+                imageResId = R.drawable.activ3_img1, // Reemplaza con tu imagen
+                imageDescription = "",
+                gameRoute = "activity6"
+            )
             // ... define el resto de las 7 actividades
             else -> throw IllegalArgumentException("Actividad $number no encontrada")
         }

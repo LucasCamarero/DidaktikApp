@@ -8,6 +8,8 @@
     <string name="menu_change_language">Cambiar idioma</string>
     <string name="menu_name">Ajustes</string>
     <string name="exit">Cerrar app</string>
+    <!-- Botones -->
+    <string name="intro_button">Comenzar</string>
     <!-- Introducción -->
     <string name="intro">¡Hola, chicas y chicos! ¡Soy Jolín, el personaje más fiestero de
         Barakaldo! Me encanta que estéis aquí, porque juntos vamos a descubrir cómo este lugar

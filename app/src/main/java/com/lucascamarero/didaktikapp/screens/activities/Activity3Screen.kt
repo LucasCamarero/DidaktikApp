@@ -80,7 +80,7 @@ fun Activity3Screen(
                 text = "¡NIVEL COMPLETADO!",
                 backgroundResId = R.drawable.boton_azul,
                 onClick = {
-                    navController.popBackStack()
+                    navController.navigate("map")
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.9f)

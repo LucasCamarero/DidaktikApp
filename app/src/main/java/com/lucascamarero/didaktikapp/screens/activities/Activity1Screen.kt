@@ -29,14 +29,16 @@ import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.viewmodels.GameViewModel
 import kotlin.math.roundToInt
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.components.CustomGameButton
 import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
 
 @Composable
 fun Activity1Screen(
+    navController: NavController,
     viewModel: GameViewModel = hiltViewModel(),
     counterViewModel: CounterViewModel = hiltViewModel(), // Asegúrate de compartir la instancia
-    onNavigateBack: () -> Unit
+    //onNavigateBack: () -> Unit
 ) {
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF0F2F5))) {
@@ -120,7 +122,8 @@ fun Activity1Screen(
 
                     onClick = {
                         counterViewModel.marcarActividadComoCompletada(actividadId = 1)
-                        onNavigateBack()
+                        //onNavigateBack()
+                        navController.navigate("map")
                     },
                     modifier = Modifier.fillMaxWidth(0.9f).padding(vertical = 8.dp)
                         .height(68.dp),

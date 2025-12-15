@@ -214,11 +214,13 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
 
                     // RUTAS DE LOS JUEGOS REALES
                     composable("activity1") {
-                        Activity1Screen(onNavigateBack = { navController.popBackStack() })
+                        //Activity1Screen(onNavigateBack = { navController.popBackStack() })
+                        Activity1Screen(navController)
                     }
 
                     // El resto de actividades...
                     composable("activity3") { Activity3Screen(navController) }
+                    composable("activity6") { Activity6Screen(navController) }
                     // ...
                     composable("diploma") { Diploma(navController) }
                     composable("jointhephotos") { JoinThePhotos(navController) }

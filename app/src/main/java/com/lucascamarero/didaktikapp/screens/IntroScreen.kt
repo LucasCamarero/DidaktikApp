@@ -82,7 +82,7 @@ fun IntroScreen(
                 Spacer(modifier = Modifier.height(40.dp))
 
                 CustomGameButton(
-                    text = "¡COMENZAR!",
+                    text = stringResource(id = R.string.intro_button),
                     backgroundResId = R.drawable.boton_amarillo,
                     onClick = onStartClick,
                     modifier = Modifier.fillMaxWidth(0.9f).padding(vertical = 8.dp)

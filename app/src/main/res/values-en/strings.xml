@@ -8,6 +8,8 @@
     <string name="menu_change_language">Change lenguage</string>
     <string name="menu_name">Settings</string>
     <string name="exit">Close app</string>
+    <!-- Botones -->
+    <string name="intro_button">Start</string>
     <!-- Introducción -->
     <string name="intro">Hi everyone! I´m Jolín, the most fun-loving character in Barakaldo! I´m
         so glad you´re here, because together we´re going to discover how this beautiful place
