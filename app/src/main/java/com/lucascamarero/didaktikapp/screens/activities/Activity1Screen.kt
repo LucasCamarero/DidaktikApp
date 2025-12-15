@@ -29,10 +29,13 @@ import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.viewmodels.GameViewModel
 import kotlin.math.roundToInt
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.lucascamarero.didaktikapp.components.CustomGameButton
+import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
 
 @Composable
 fun Activity1Screen(
     viewModel: GameViewModel = hiltViewModel(),
+    counterViewModel: CounterViewModel = hiltViewModel(), // Asegúrate de compartir la instancia
     onNavigateBack: () -> Unit
 ) {
 
@@ -111,16 +114,21 @@ fun Activity1Screen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Button(
+                CustomGameButton(
+                    text = "FINALIZAR RUTA",
+                    backgroundResId = R.drawable.boton_azul,
+
                     onClick = {
-                        // 2. LLAMAR A LA NAVEGACIÓN AQUÍ
+                        counterViewModel.marcarActividadComoCompletada(actividadId = 1)
                         onNavigateBack()
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0088CC)),
-                    modifier = Modifier.fillMaxWidth().height(50.dp)
-                ) {
-                    Text("FINALIZAR RUTA")
-                }
+                    modifier = Modifier.fillMaxWidth(0.9f).padding(vertical = 8.dp)
+                        .height(68.dp),
+                    textStyle = MaterialTheme.typography.titleLarge.copy(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
             }
         }
 
@@ -133,12 +141,12 @@ fun Activity1Screen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // HEADER
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp).height(50.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "Barakaldo App", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A3B5D))
-                }
+                //Box(
+                //    modifier = Modifier.fillMaxWidth().padding(top = 16.dp).height(50.dp),
+                //    contentAlignment = Alignment.Center
+                //) {
+                //    Text(text = "Barakaldo App", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A3B5D))
+                //}
 
                 // IMAGEN ESCENARIO
                 Image(
@@ -147,7 +155,7 @@ fun Activity1Screen(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(16.dp, 16.dp, 16.dp, 0.dp)
                         .weight(2f) // Ajustar altura aquí si quieres
                         .clip(RoundedCornerShape(12.dp))
                 )
@@ -156,7 +164,7 @@ fun Activity1Screen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .padding(horizontal = 16.dp, vertical = 0.dp)
                         .height(60.dp),
                     contentAlignment = Alignment.Center
                 ) {

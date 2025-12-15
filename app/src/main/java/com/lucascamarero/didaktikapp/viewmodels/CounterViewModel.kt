@@ -3,26 +3,37 @@ package com.lucascamarero.didaktikapp.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lucascamarero.didaktikapp.data.db.daos.ProgresoDao
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CounterViewModel: ViewModel() {
+@HiltViewModel // 1. Añade esta anotación
+class CounterViewModel @Inject constructor( // 2. Añade @Inject constructor
+    private val progresoDao: com.lucascamarero.didaktikapp.data.db.daos.ProgresoDao
+) : ViewModel() {
 
-    // LiveData mutable interna que almacena el valor del contador
-    private val _counter = MutableLiveData<Int>()
-    // LiveData pública y de solo lectura para exponer el contador
-    val count: LiveData<Int> = _counter
 
-    // Incrementa el contador en 1
-    fun upCount() {
-        _counter.value = (_counter.value ?: 0) + 1
-    }
+    private val personaId = 1 // TEMPORAL DE PRUEBA, LUEGO REEMPLAZAR POR EL DEL LOGIN
 
-    // Decrementa el contador en 1
-    fun downCount() {
-        _counter.value = (_counter.value ?: 0) - 1
-    }
+    // Observamos el Flow de la DB y lo convertimos a StateFlow para la UI de Compose
+    // Esto calculará el valor automáticamente siempre desde la DB
+    val count: StateFlow<Int> = progresoDao.getCountCompletados(personaId)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0
+        )
 
-    // Inicializa el valor del contador a 0 cuando se crea el ViewModel
-    init {
-        _counter.value = 0
+    // Función para marcar como completado en la DB
+    fun marcarActividadComoCompletada(actividadId: Int) {
+        viewModelScope.launch {
+            val fechaActual = System.currentTimeMillis().toString()
+            progresoDao.updateProgresoCompletado(actividadId, personaId, fechaActual)
+        }
     }
 }

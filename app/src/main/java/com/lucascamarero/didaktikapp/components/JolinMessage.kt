@@ -65,7 +65,8 @@ fun JolinWelcomeMessage(
             SpeechBubbleWithTypewriterText(
                 text = message,
                 fondoTexto = R.drawable.bocadillo3,
-                velocidadTexto = 45L,
+                velocidadTexto = 0L,
+                //velocidadTexto = 45L,
                 onTextComplete  = {
                     isTextComplete  = true
                     onTextComplete(true)
@@ -77,9 +78,9 @@ fun JolinWelcomeMessage(
             LottieInfinite(
                 resId = R.raw.jolin,
                 modifier = Modifier
-                    .size(200.dp) // Tamaño original de Jolín
+                    .size(280.dp) // Tamaño original de Jolín
                     .align(Alignment.BottomCenter) // Alinea al fondo del Box
-                    .offset(x = (-80).dp, y = 100.dp) // Mueve a la izquierda y ligeramente hacia abajo
+                    .offset(x = (-80).dp, y = 190.dp) // Mueve a la izquierda y ligeramente hacia abajo
             )
         }
 
@@ -119,26 +120,26 @@ fun SpeechBubbleWithTypewriterText(
         onTextComplete()
     }
     Box(
-        Modifier.size(300.dp),
+        Modifier.size(width = 350.dp, height = 230.dp),
                 contentAlignment = Alignment.Center // Centra el contenido (texto) sobre la imagen
     ){
         Image(
             painter = painterResource(fondoTexto),
             contentDescription = "Fondo del texto",
             contentScale = ContentScale.Fit, // Asegura que la imagen se vea bien
-            modifier = Modifier.matchParentSize()
+            //modifier = Modifier.matchParentSize()
         )
         Box(
             Modifier
                 .matchParentSize()
                 //.size(400.dp)
-                .padding(vertical = 75.dp)
+                .padding(vertical = 15.dp)
                 .verticalScroll(scrollState)
         ) {
             Text(
                 text = displayedText,
                 Modifier.fillMaxSize()
-                    .padding(24.dp),
+                    .padding(14.dp),
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color.Black

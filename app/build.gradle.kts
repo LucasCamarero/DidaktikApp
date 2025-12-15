@@ -48,6 +48,7 @@ dependencies {
 
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.runtime.saveable)
+    implementation(libs.androidx.material3)
 // --- ROOM (Con KSP, esto está bien) ---
     val room_version = "2.6.1" // Nota: 2.8.4 no es estable aún o es muy reciente, 2.6.1 es la estable actual de AndroidX
     implementation("androidx.room:room-runtime:$room_version")
