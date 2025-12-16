@@ -10,35 +10,43 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.*
 import com.lucascamarero.didaktikapp.components.LogoLottie
 import kotlinx.coroutines.delay
 
 /**
- * Pantalla de presentación (SplashScreen) que muestra dos animaciones Lottie
- * con un efecto de escala progresiva.
+ * Pantalla de presentación de la aplicación (SplashScreen).
  *
- * La pantalla se muestra durante unos segundos mientras las animaciones
- * se reproducen, y después ejecuta la función [onTimeout].
+ * Muestra dos animaciones Lottie con un efecto de escala progresiva
+ * y un layout adaptable a la orientación del dispositivo:
+ * - En orientación vertical, los logotipos se disponen en columna.
+ * - En orientación horizontal, los logotipos se disponen en fila.
  *
- * El flujo es el siguiente:
- * 1. Se inicializa una animación de escala desde 0.01f hasta 1.5f.
- * 2. Se reproducen dos animaciones Lottie en secuencia.
- * 3. Tras finalizar la animación principal y esperar 1 segundo,
- *    se invoca [onTimeout] para continuar la navegación.
+ * La pantalla se mantiene visible durante la ejecución de la animación
+ * principal y, tras un breve retardo adicional, invoca el callback
+ * [onTimeout] para continuar el flujo de navegación.
  *
- * @param onTimeout Función callback que se ejecuta cuando el Splash termina.
+ * Flujo de ejecución:
+ * 1. Se inicializa una animación de escala desde un valor mínimo.
+ * 2. Se cargan y reproducen dos composiciones Lottie.
+ * 3. Se adapta el layout según las dimensiones disponibles.
+ * 4. Tras finalizar la animación y el retardo, se ejecuta [onTimeout].
+ *
+ * @param onTimeout Función callback que se ejecuta al finalizar
+ * el tiempo de visualización del SplashScreen.
  */
-
 @Composable
 fun SplashScreen(onTimeout: () -> Unit) {
 
-    // Animación de escala inicial
+    /**
+     * Animación de escala aplicada a los logotipos.
+     */
     val scale = remember { Animatable(0.01f) }
 
-    // Animaciones Lottie
+    /**
+     * Primera composición Lottie (Txurdinaga).
+     */
     val composition1 by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
             com.lucascamarero.didaktikapp.R.raw.logo_txurdinaga
@@ -49,6 +57,9 @@ fun SplashScreen(onTimeout: () -> Unit) {
         iterations = 1
     )
 
+    /**
+     * Segunda composición Lottie (UPV/EHU).
+     */
     val composition2 by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
             com.lucascamarero.didaktikapp.R.raw.logo_upv
@@ -59,7 +70,10 @@ fun SplashScreen(onTimeout: () -> Unit) {
         iterations = 1
     )
 
-    // Control de animación + navegación
+    /**
+     * Controla la animación de escala y el tiempo de espera
+     * antes de continuar la navegación.
+     */
     LaunchedEffect(Unit) {
         scale.animateTo(
             targetValue = 1.5f,
@@ -72,17 +86,23 @@ fun SplashScreen(onTimeout: () -> Unit) {
         onTimeout()
     }
 
+    /**
+     * Contenedor principal que permite adaptar el layout
+     * según el tamaño disponible.
+     */
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center
     ) {
-
+        /**
+         * Determina si la pantalla está en orientación horizontal.
+         */
         val isLandscape = maxWidth > maxHeight
 
         if (isLandscape) {
-            // 📱 Horizontal → logos en fila
+            // Horizontal → logos en fila
             Row(
                 horizontalArrangement = Arrangement.spacedBy(32.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -91,7 +111,7 @@ fun SplashScreen(onTimeout: () -> Unit) {
                 LogoLottie(composition2, progress2, scale.value)
             }
         } else {
-            // 📱 Vertical → logos en columna
+            // Vertical → logos en columna
             Column(
                 verticalArrangement = Arrangement.spacedBy(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -102,79 +122,3 @@ fun SplashScreen(onTimeout: () -> Unit) {
         }
     }
 }
-/*
-@Composable
-fun SplashScreen(onTimeout: () -> Unit) {
-
-    Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        // Animación de escala inicial
-        val scale = remember { Animatable(0.01f) }
-
-        // Primera animación Lottie (Txurdinaga)
-        val composition by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(
-                com.lucascamarero.didaktikapp.R.raw.logo_txurdinaga
-            )
-        )
-        val progress by animateLottieCompositionAsState(
-            composition,
-            iterations = 1
-        )
-
-        // Segunda animación Lottie (UPV/EHU)
-        val composition2 by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(
-                com.lucascamarero.didaktikapp.R.raw.logo_upv
-            )
-        )
-        val progress2 by animateLottieCompositionAsState(
-            composition2,
-            iterations = 1
-        )
-
-        // Control de animaciones + tiempo antes de navegar
-        LaunchedEffect(Unit) {
-            scale.animateTo(
-                targetValue = 1.5f,
-                animationSpec = tween(
-                    durationMillis = 4000, // cuatro segundos
-                    easing = LinearOutSlowInEasing
-                )
-            )
-            delay(1500)
-            onTimeout()
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            // Animación del logo txurdinaga
-            LottieAnimation(
-                composition = composition,
-                progress = { progress },
-                modifier = Modifier
-                    .size(250.dp)
-                    .scale(scale.value)
-            )
-
-            // Animación del logo de la UPV/EHU
-            LottieAnimation(
-                composition = composition2,
-                progress = { progress2 },
-                modifier = Modifier
-                    .size(250.dp)
-                    .scale(scale.value)
-            )
-        }
-    }
-}*/

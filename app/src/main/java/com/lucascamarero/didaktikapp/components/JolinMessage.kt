@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -48,7 +49,11 @@ import kotlinx.coroutines.delay
 fun JolinWelcomeMessage(
     message: String,
     onTextComplete: (Boolean) -> Unit,
-    onStartClick: () -> Unit
+    onStartClick: () -> Unit,
+    jolinSize: Dp = 200.dp,
+    bubbleSize: Dp = 300.dp,
+    jolinOffsetX: Dp = (-80).dp,
+    jolinOffsetY: Dp = 100.dp
 ) {
     var isTextComplete  by remember { mutableStateOf(false) }
 
@@ -65,8 +70,7 @@ fun JolinWelcomeMessage(
             SpeechBubbleWithTypewriterText(
                 text = message,
                 fondoTexto = R.drawable.bocadillo3,
-                velocidadTexto = 0L,
-                //velocidadTexto = 45L,
+                velocidadTexto = 45L,
                 onTextComplete  = {
                     isTextComplete  = true
                     onTextComplete(true)

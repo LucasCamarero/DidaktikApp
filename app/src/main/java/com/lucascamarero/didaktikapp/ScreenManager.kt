@@ -3,6 +3,7 @@ package com.lucascamarero.didaktikapp
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -123,15 +124,24 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     if (showLanguageCard) {
                         Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                        LanguageCard { lang ->
-                            when (lang) {
-                                "eu" -> languageViewModel.changeLanguage(AppLanguage.EUSKERA)
-                                "es" -> languageViewModel.changeLanguage(AppLanguage.CASTELLANO)
-                                "en" -> languageViewModel.changeLanguage(AppLanguage.INGLES)
-                            }
-                            // Si quieres ocultarla después:
-                            showLanguageCard = false
-                            scope.launch { drawerState.close() }
+                        BoxWithConstraints {
+
+                            val isLandscape = maxWidth > maxHeight
+
+                            LanguageCard(
+                                isLandscape = isLandscape,
+                                onLanguageSelected = { lang ->
+                                    when (lang) {
+                                        "eu" -> languageViewModel.changeLanguage(AppLanguage.EUSKERA)
+                                        "es" -> languageViewModel.changeLanguage(AppLanguage.CASTELLANO)
+                                        "en" -> languageViewModel.changeLanguage(AppLanguage.INGLES)
+                                    }
+
+                                    // Ocultar selector y cerrar drawer
+                                    showLanguageCard = false
+                                    scope.launch { drawerState.close() }
+                                }
+                            )
                         }
                     }
 
