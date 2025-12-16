@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -19,12 +18,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.components.CreateTitle
-import com.lucascamarero.didaktikapp.components.CustomGameButton
 import com.lucascamarero.didaktikapp.components.LanguageCard
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
 import com.lucascamarero.didaktikapp.models.AppLanguage
@@ -140,17 +137,9 @@ private fun IntroContent(
         if (isJolinTextComplete) {
             Spacer(modifier = Modifier.height(40.dp))
 
-            CustomGameButton(
-                text = stringResource(id = R.string.intro_button),
-                backgroundResId = R.drawable.boton_amarillo,
-                onClick = onStartClick,
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .height(68.dp),
-                textStyle = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+            CreateButton(
+                texto = stringResource(id = R.string.intro_button),
+                onClick = onStartClick
             )
         }
     }

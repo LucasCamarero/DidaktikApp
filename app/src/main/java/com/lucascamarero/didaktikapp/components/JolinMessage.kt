@@ -89,16 +89,6 @@ fun JolinWelcomeMessage(
                     .offset(x = jolinOffsetX, y = jolinOffsetY)
             )
         }
-/*
-        // Botón de inicio
-        Row(
-            modifier = Modifier.fillMaxWidth(0.9f).padding(top = 16.dp), // Añadimos padding superior
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ){
-            // Espacio de relleno para alinear el botón con la derecha de Jolín o el bocadillo
-            Spacer(modifier = Modifier.size(100.dp))
-        }*/
     }
 }
 
