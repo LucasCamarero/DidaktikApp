@@ -1,5 +1,8 @@
 package com.lucascamarero.didaktikapp.screens
 
+import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.android.gms.maps.model.CameraPosition
@@ -23,6 +27,9 @@ import com.lucascamarero.didaktikapp.models.MapPoint
 
 @Composable
 fun MapScreen(navController: NavController) {
+    val context = LocalContext.current
+    val key : String = getMapsApiKey(context)
+    Log.d("pruebas","la key es::"+key)
 
     // Datos hardcodeados de momento
     val mapPoints = listOf(
@@ -62,5 +69,24 @@ fun MapScreen(navController: NavController) {
                 }
             )
         }
+    }
+}
+
+fun getMapsApiKey(context: Context): String {
+    val resultado : String?
+    try {
+        val appInfo = context.packageManager.getApplicationInfo(
+            context.packageName,
+            PackageManager.GET_META_DATA
+        )
+        val bundle = appInfo.metaData
+        resultado =  bundle.getString("com.google.android.geo.API_KEY")
+    } catch (e: Exception) {
+        return "Error"
+    }
+    if(resultado==null) {
+        return "Error"
+    } else {
+        return resultado
     }
 }
