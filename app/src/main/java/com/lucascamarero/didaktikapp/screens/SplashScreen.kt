@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.*
+import com.lucascamarero.didaktikapp.components.LogoLottie
 import kotlinx.coroutines.delay
 
 /**
@@ -30,6 +31,78 @@ import kotlinx.coroutines.delay
  *
  * @param onTimeout Función callback que se ejecuta cuando el Splash termina.
  */
+
+@Composable
+fun SplashScreen(onTimeout: () -> Unit) {
+
+    // Animación de escala inicial
+    val scale = remember { Animatable(0.01f) }
+
+    // Animaciones Lottie
+    val composition1 by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(
+            com.lucascamarero.didaktikapp.R.raw.logo_txurdinaga
+        )
+    )
+    val progress1 by animateLottieCompositionAsState(
+        composition1,
+        iterations = 1
+    )
+
+    val composition2 by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(
+            com.lucascamarero.didaktikapp.R.raw.logo_upv
+        )
+    )
+    val progress2 by animateLottieCompositionAsState(
+        composition2,
+        iterations = 1
+    )
+
+    // Control de animación + navegación
+    LaunchedEffect(Unit) {
+        scale.animateTo(
+            targetValue = 1.5f,
+            animationSpec = tween(
+                durationMillis = 4000,
+                easing = LinearOutSlowInEasing
+            )
+        )
+        delay(1500)
+        onTimeout()
+    }
+
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primaryContainer),
+        contentAlignment = Alignment.Center
+    ) {
+
+        val isLandscape = maxWidth > maxHeight
+
+        if (isLandscape) {
+            // 📱 Horizontal → logos en fila
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(32.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                LogoLottie(composition1, progress1, scale.value)
+                LogoLottie(composition2, progress2, scale.value)
+            }
+        } else {
+            // 📱 Vertical → logos en columna
+            Column(
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LogoLottie(composition1, progress1, scale.value)
+                LogoLottie(composition2, progress2, scale.value)
+            }
+        }
+    }
+}
+/*
 @Composable
 fun SplashScreen(onTimeout: () -> Unit) {
 
@@ -104,4 +177,4 @@ fun SplashScreen(onTimeout: () -> Unit) {
             )
         }
     }
-}
+}*/
