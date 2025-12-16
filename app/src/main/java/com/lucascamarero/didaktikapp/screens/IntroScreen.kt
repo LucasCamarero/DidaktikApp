@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 // ... otras importaciones
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,10 +27,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CustomGameButton
 import com.lucascamarero.didaktikapp.components.LanguageCard
@@ -44,7 +49,6 @@ fun IntroScreen(
     onStartClick: () -> Unit
 ) {
     var languageIsSelected by rememberSaveable { mutableStateOf(false) }
-    val textoJolin = "¡Hola, chicas y chicos! "
 
     // 2. Estado para el texto completo (necesario para mostrar el botón)
     var isJolinTextComplete by remember { mutableStateOf(false) }
@@ -52,9 +56,18 @@ fun IntroScreen(
     // estado para controlar si el texto ha terminado de mostrarse
     var isTextComplete by rememberSaveable { mutableStateOf(false) }
 
+    Box(Modifier.fillMaxSize()){
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(R.drawable.fondoprincipal)
+                .build(),
+            contentDescription = "Fonde Baracaldo",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+    }
     Column(
-        Modifier.fillMaxSize()
-            .background(MaterialTheme.colorScheme.primaryContainer),
+        Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

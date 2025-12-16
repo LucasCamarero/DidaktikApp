@@ -69,6 +69,10 @@ dependencies {
     // Open maps
     implementation("org.osmdroid:osmdroid-android:6.1.18")
 
+    //para poder usar gif
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("io.coil-kt:coil-gif:2.5.0")
+
 
     implementation("com.airbnb.android:lottie-compose:6.4.0")
     implementation(libs.androidx.core.ktx)

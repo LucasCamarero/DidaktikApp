@@ -160,6 +160,7 @@ fun StartOfActivityScreen(
     val images = when (activityNumber) {
         1 -> listOf(R.drawable.act1_img1, R.drawable.act1_img2) // EJEMPLO
         2 -> listOf(R.drawable.activ3_img1)
+        6 -> listOf(R.drawable.act6_ferrocarril)
         // ... define el resto de las 7 actividades
         else -> listOf(data.imageResId)
     }
