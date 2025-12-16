@@ -18,7 +18,7 @@ fun CreateTitle(
         Text(
             text = stringResource(id = R.string.intro_title),
             style = Typography3.titleLarge.copy(
-                color = MaterialTheme.colorScheme.tertiaryContainer,
+                color = MaterialTheme.colorScheme.scrim,
                 drawStyle = Stroke(width = 20f),
                 lineHeight = Typography3.titleLarge.fontSize * 1.3
             )

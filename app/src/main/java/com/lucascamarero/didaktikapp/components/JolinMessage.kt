@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,6 +36,8 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.ui.theme.Typography2
+import com.lucascamarero.didaktikapp.ui.theme.Typography3
 import kotlinx.coroutines.delay
 
 /**
@@ -59,45 +61,44 @@ fun JolinWelcomeMessage(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-        // 1. Contenedor BOX para superponer el bocadillo y Jolín
+        // Contenedor BOX para superponer el bocadillo y Jolín
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            // A. Bocadillo y Texto (componente tal cual)
+            // Bocadillo y Texto
             SpeechBubbleWithTypewriterText(
                 text = message,
                 fondoTexto = R.drawable.bocadillo3,
-                velocidadTexto = 45L,
+                velocidadTexto = 4L,
+                bubbleSiz = bubbleSize,
                 onTextComplete  = {
                     isTextComplete  = true
                     onTextComplete(true)
                 }
             )
 
-            // B. Jolín (Personaje)
-            // Usamos .align() y .offset() para moverlo al extremo inferior del bocadillo
+            // Jolín (Personaje)
             LottieInfinite(
                 resId = R.raw.jolin,
                 modifier = Modifier
-                    .size(280.dp) // Tamaño original de Jolín
-                    .align(Alignment.BottomCenter) // Alinea al fondo del Box
-                    .offset(x = (-80).dp, y = 190.dp) // Mueve a la izquierda y ligeramente hacia abajo
+                    .size(jolinSize)
+                    .align(Alignment.BottomCenter)
+                    .offset(x = jolinOffsetX, y = jolinOffsetY)
             )
         }
-
-        // 2. Botón de inicio
-        // Colocamos el botón en una Row aparte para alinearlo con Jolín y el centro del layout
+/*
+        // Botón de inicio
         Row(
             modifier = Modifier.fillMaxWidth(0.9f).padding(top = 16.dp), // Añadimos padding superior
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center // Centramos la fila
+            horizontalArrangement = Arrangement.Center
         ){
             // Espacio de relleno para alinear el botón con la derecha de Jolín o el bocadillo
             Spacer(modifier = Modifier.size(100.dp))
-        }
+        }*/
     }
 }
 
@@ -109,7 +110,8 @@ fun JolinWelcomeMessage(
 fun SpeechBubbleWithTypewriterText(
     text: String,
     @RawRes fondoTexto: Int,
-    velocidadTexto: Long = 40L, //milisegundos entre las letras
+    velocidadTexto: Long = 4L, //milisegundos entre las letras
+    bubbleSiz: Dp = 300.dp,
     onTextComplete: () -> Unit = {} // callback opcional cuando termina
 ){
     var displayedText by remember{ mutableStateOf("") }
@@ -124,27 +126,27 @@ fun SpeechBubbleWithTypewriterText(
         onTextComplete()
     }
     Box(
-        Modifier.size(width = 350.dp, height = 230.dp),
-                contentAlignment = Alignment.Center // Centra el contenido (texto) sobre la imagen
+        Modifier.size(bubbleSiz),
+        contentAlignment = Alignment.Center // Centra el contenido (texto) sobre la imagen
     ){
         Image(
             painter = painterResource(fondoTexto),
             contentDescription = "Fondo del texto",
             contentScale = ContentScale.Fit, // Asegura que la imagen se vea bien
-            //modifier = Modifier.matchParentSize()
+            modifier = Modifier.matchParentSize()
         )
         Box(
             Modifier
                 .matchParentSize()
-                //.size(400.dp)
-                .padding(vertical = 15.dp)
+                .padding(vertical = 75.dp)
                 .verticalScroll(scrollState)
+
         ) {
             Text(
                 text = displayedText,
                 Modifier.fillMaxSize()
-                    .padding(14.dp),
-                style = MaterialTheme.typography.labelSmall.copy(
+                    .padding(24.dp),
+                style = Typography3.labelMedium.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
@@ -159,7 +161,6 @@ fun SpeechBubbleWithTypewriterText(
 @Composable
 fun LottieInfinite(
     @RawRes resId: Int,
-    // AÑADIMOS ESTE PARÁMETRO
     modifier: Modifier = Modifier
 ){
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(resId))

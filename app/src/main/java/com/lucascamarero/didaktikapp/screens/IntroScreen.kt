@@ -101,49 +101,6 @@ private fun LanguageSelection(
     }
 }
 
-@Composable
-private fun IntroContent(
-    isJolinTextComplete: Boolean,
-    onTextComplete: (Boolean) -> Unit,
-    onStartClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        CreateTitle(stringResource(id = R.string.intro_title))
-
-        JolinWelcomeMessage(
-            message = stringResource(id = R.string.intro),
-            onTextComplete = onTextComplete,
-            onStartClick = onStartClick,
-            jolinSize = 360.dp,
-            bubbleSize = 380.dp,
-            jolinOffsetY = 250.dp
-        )
-
-        if (isJolinTextComplete) {
-            Spacer(modifier = Modifier.height(40.dp))
-
-            CustomGameButton(
-                text = stringResource(id = R.string.intro_button),
-                backgroundResId = R.drawable.boton_amarillo,
-                onClick = onStartClick,
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .height(68.dp),
-                textStyle = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-        }
-    }
-}
-
 private fun selectLanguage(
     lang: String,
     languageViewModel: LanguageViewModel
@@ -154,48 +111,32 @@ private fun selectLanguage(
         "en" -> languageViewModel.changeLanguage(AppLanguage.INGLES)
     }
 }
-/*
-@SuppressLint("ResourceType")
+
 @Composable
-fun IntroScreen(
-    languageViewModel: LanguageViewModel,
+private fun IntroContent(
+    isJolinTextComplete: Boolean,
+    onTextComplete: (Boolean) -> Unit,
     onStartClick: () -> Unit
 ) {
-    var languageIsSelected by rememberSaveable { mutableStateOf(false) }
-
-    // Estado para el texto completo
-    var isJolinTextComplete by remember { mutableStateOf(false) }
-
-    if (languageIsSelected == false) {
-
-        /**
-         * Determina si la pantalla está en orientación horizontal.
-         */
-        val isLandscape = maxWidth > maxHeight
-
-        if (isLandscape)
-} else {
     Column(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp)
+            .padding(top = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-        CreateTitle(
-            stringResource(id = R.string.intro_title)
-        )
+        CreateTitle(stringResource(id = R.string.intro_title))
 
-        // Muestra la bienvenida de Jolín, optimizada en una sola función
         JolinWelcomeMessage(
-            //message = "",
             message = stringResource(id = R.string.intro),
-            onTextComplete = { isJolinTextComplete = it },
-            onStartClick = onStartClick
+            onTextComplete = onTextComplete,
+            onStartClick = onStartClick,
+            jolinSize = 340.dp,
+            bubbleSize = 380.dp,
+            jolinOffsetY = 240.dp
         )
 
-        // Botón de Inicio (solo es visible si el texto de Jolín terminó)
         if (isJolinTextComplete) {
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -205,32 +146,12 @@ fun IntroScreen(
                 onClick = onStartClick,
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .padding(vertical = 8.dp)
                     .height(68.dp),
                 textStyle = MaterialTheme.typography.titleLarge.copy(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
-}
-
-@Composable
-fun CreateLanguageCard(
-    languageViewModel: LanguageViewModel,
-    onStartClick: () -> Unit,
-    languageIsSelected: Boolean
-) {
-    LanguageCard { lang ->
-        when (lang) {
-            "eu" -> languageViewModel.changeLanguage(AppLanguage.EUSKERA)
-            "es" -> languageViewModel.changeLanguage(AppLanguage.CASTELLANO)
-            "en" -> languageViewModel.changeLanguage(AppLanguage.INGLES)
-        }
-        languageIsSelected = true
-    }
-}*/
