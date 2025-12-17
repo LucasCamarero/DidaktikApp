@@ -16,6 +16,7 @@ import com.lucascamarero.didaktikapp.data.db.BarakaldoDatabase
 import com.lucascamarero.didaktikapp.ui.theme.DidaktikAppTheme
 import com.lucascamarero.didaktikapp.screens.SplashScreen
 import com.lucascamarero.didaktikapp.screens.IntroScreen
+import com.lucascamarero.didaktikapp.screens.activities.Activity6Screen
 import com.lucascamarero.didaktikapp.viewmodels.LanguageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -255,6 +255,9 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
 
                     /** Diploma final */
                     composable("diploma") { Diploma(navController) }
+
+                    //pantalla a donde llega al acabar el ejercicio 6
+                    composable("finActividad") {finActividad(navController )  }
                 }
             }
         }

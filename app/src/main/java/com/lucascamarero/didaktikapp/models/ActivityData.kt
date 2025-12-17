@@ -39,8 +39,8 @@ object ActivityDataSource {
             6 -> ActivityData(
                 id = 6,
                 title = "El ferrocarril",
-                description = stringResource(id = R.string.texto3_intro),
-                imageResId = R.drawable.activ3_img1, // Reemplaza con tu imagen
+                description = stringResource(id = R.string.texto6_intro),
+                imageResId = R.drawable.act6_ferrocarril, // Reemplaza con tu imagen
                 imageDescription = "",
                 gameRoute = "activity6"
             )

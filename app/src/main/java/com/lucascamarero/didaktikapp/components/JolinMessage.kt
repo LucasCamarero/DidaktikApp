@@ -1,5 +1,6 @@
 package com.lucascamarero.didaktikapp.components
 
+import android.annotation.SuppressLint
 import androidx.annotation.RawRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +48,7 @@ import kotlinx.coroutines.delay
  * @param onTextComplete Callback que se llama cuando todo el texto se ha mostrado.
  * @param onStartClick Callback que se llama al pulsar el botón de inicio (solo visible si el texto está completo).
  */
+@SuppressLint("ResourceType")
 @Composable
 fun JolinWelcomeMessage(
     message: String,
@@ -96,6 +98,7 @@ fun JolinWelcomeMessage(
  * Componente que muestra una burbuja de diálogo con texto que aparece letra por letra.
  * Es una versión limpia de la función original, ahora encapsulada aquí.
  */
+@SuppressLint("ResourceType")
 @Composable
 fun SpeechBubbleWithTypewriterText(
     text: String,

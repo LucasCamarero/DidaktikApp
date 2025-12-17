@@ -228,7 +228,6 @@ private fun IntroContent(
             verticalArrangement = Arrangement.Top
         ) {
             CreateTitle(stringResource(id = R.string.intro_title))
-
             JolinWelcomeMessage(
                 message = stringResource(id = R.string.intro),
                 onTextComplete = onTextComplete,
@@ -237,10 +236,8 @@ private fun IntroContent(
                 bubbleSize = 380.dp,
                 jolinOffsetY = 240.dp
             )
-
             if (isJolinTextComplete) {
                 Spacer(modifier = Modifier.height(40.dp))
-
                 CreateButton(
                     texto = stringResource(id = R.string.intro_button),
                     onClick = onStartClick
