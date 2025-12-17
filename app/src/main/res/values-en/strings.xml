@@ -7,7 +7,8 @@
     <string name="language_en">English</string>
     <string name="menu_change_language">Change lenguage</string>
     <string name="menu_name">Settings</string>
-    <string name="exit">Close app</string>
+    <string name="exit">Close dropdown</string>
+    <string name="restart">Restart games</string>
     <!-- Botones -->
     <string name="intro_button">Start</string>
     <string name="intro_play_button">Start game</string>

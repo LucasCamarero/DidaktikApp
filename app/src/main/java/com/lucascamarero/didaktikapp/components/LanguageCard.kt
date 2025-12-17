@@ -3,6 +3,7 @@ package com.lucascamarero.didaktikapp.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -71,34 +72,38 @@ fun LanguageCard(
                 ) { onLanguageSelected("en") }
             }
         } else {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                LanguageItem(
-                    title = "Hizkuntza",
-                    flagRes = R.drawable.basque_flag,
-                    contentDescription = "Euskara"
-                ) { onLanguageSelected("eu") }
+                item {
+                    LanguageItem(
+                        title = "Hizkuntza",
+                        flagRes = R.drawable.basque_flag,
+                        contentDescription = "Euskara"
+                    ) { onLanguageSelected("eu") }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+                item {
+                    LanguageItem(
+                        title = "Idioma",
+                        flagRes = R.drawable.spain_flag,
+                        contentDescription = "Castellano"
+                    ) { onLanguageSelected("es") }
 
-                LanguageItem(
-                    title = "Idioma",
-                    flagRes = R.drawable.spain_flag,
-                    contentDescription = "Castellano"
-                ) { onLanguageSelected("es") }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                LanguageItem(
-                    title = "Language",
-                    flagRes = R.drawable.england_flag,
-                    contentDescription = "English"
-                ) { onLanguageSelected("en") }
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+                item {
+                    LanguageItem(
+                        title = "Language",
+                        flagRes = R.drawable.england_flag,
+                        contentDescription = "English"
+                    ) { onLanguageSelected("en") }
+                }
             }
         }
     }

@@ -38,7 +38,6 @@ fun Activity1Screen(
     navController: NavController,
     viewModel: GameViewModel = hiltViewModel(),
     counterViewModel: CounterViewModel = hiltViewModel(), // Asegúrate de compartir la instancia
-    //onNavigateBack: () -> Unit
 ) {
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF0F2F5))) {

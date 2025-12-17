@@ -148,7 +148,7 @@ fun PolaroidImage(
 @Composable
 fun StartOfActivityScreen(
     navController: NavController,
-    activityNumber: Int,
+    activityNumber: Int
 ){
     // 1. Obtener los datos de la actividad
     val data = ActivityDataSource.getActivityData(activityNumber)
@@ -210,7 +210,5 @@ fun StartOfActivityScreen(
                 navController.navigate(data.gameRoute)
             }
         )
-
-
     }
 }
