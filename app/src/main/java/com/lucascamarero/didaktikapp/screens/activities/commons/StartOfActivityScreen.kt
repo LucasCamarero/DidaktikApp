@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
-import com.lucascamarero.didaktikapp.components.CustomGameButton
+import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
 import com.lucascamarero.didaktikapp.models.ActivityDataSource
 import com.lucascamarero.didaktikapp.models.ActivityData
@@ -148,7 +148,7 @@ fun PolaroidImage(
 @Composable
 fun StartOfActivityScreen(
     navController: NavController,
-    activityNumber: Int,
+    activityNumber: Int
 ){
     // 1. Obtener los datos de la actividad
     val data = ActivityDataSource.getActivityData(activityNumber)
@@ -195,17 +195,10 @@ fun StartOfActivityScreen(
         // 4. Botón de Empezar Juego (Debajo de Jolín)
         if (isJolinTextComplete) {
 
-            CustomGameButton(
-                text = stringResource(id = R.string.intro_play_button),
-                backgroundResId = R.drawable.boton_verde,
+            CreateButton(
+                texto = stringResource(id = R.string.intro_play_button),
                 onClick = {// NAVEGACIÓN DINÁMICA SEGÚN LA DATA
-                    navController.navigate(data.gameRoute)},
-                modifier = Modifier.fillMaxWidth(0.9f).padding(vertical = 8.dp)
-                    .height(68.dp),
-                textStyle = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                    navController.navigate(data.gameRoute)}
             )
         }
 
@@ -217,7 +210,5 @@ fun StartOfActivityScreen(
                 navController.navigate(data.gameRoute)
             }
         )
-
-
     }
 }

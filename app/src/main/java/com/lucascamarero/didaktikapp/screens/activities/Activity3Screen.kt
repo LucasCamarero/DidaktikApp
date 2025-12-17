@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
-import com.lucascamarero.didaktikapp.components.CustomGameButton
+import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.viewmodels.Game3ViewModel
 
 // --- COLORES ---
@@ -76,21 +76,11 @@ fun Activity3Screen(
         if (viewModel.isGameFinished) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            CustomGameButton(
-                text = "¡NIVEL COMPLETADO!",
-                backgroundResId = R.drawable.boton_azul,
+            CreateButton(
+                texto = "¡NIVEL COMPLETADO!",
                 onClick = {
                     navController.navigate("map")
-                },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .padding(horizontal = 16.dp)
-                    .height(68.dp),
-                textStyle = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
+                }
             )
         }
     }

@@ -7,11 +7,13 @@
     <string name="language_en">Inglés</string>
     <string name="menu_change_language">Cambiar idioma</string>
     <string name="menu_name">Ajustes</string>
-    <string name="exit">Cerrar app</string>
+    <string name="exit">Cerrar desplegable</string>
+    <string name="restart">Reiniciar los juegos</string>
     <!-- Botones -->
     <string name="intro_button">Comenzar</string>
     <string name="intro_play_button">Empezar juego</string>
     <!-- Introducción -->
+    <string name="intro_title">¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!</string>
     <string name="intro">¡Hola, chicas y chicos! ¡Soy Jolín, el personaje más fiestero de
         Barakaldo! Me encanta que estéis aquí, porque juntos vamos a descubrir cómo este lugar
         tan bonito ha pasado de ser un pueblo rural lleno de caseríos a una ciudad moderna y llena

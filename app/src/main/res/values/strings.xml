@@ -7,11 +7,13 @@
     <string name="language_en">Ingelesa</string>
     <string name="menu_change_language">Hizkuntza aldatu</string>
     <string name="menu_name">Ezarpenak</string>
-    <string name="exit">Itxi app</string>
+    <string name="exit">Itxi goitibeherako</string>
+    <string name="restart">Partidak berrabiarazi</string>
     <!-- Botones -->
     <string name="intro_button">Hasi</string>
     <string name="intro_play_button">Hasi jokoa</string>
     <!-- Introducción -->
+    <string name="intro_title">Ezagutu dezagun Barakaldo, landa-eremutik modernora!</string>
     <string name="intro">Kaixo guztioi! Jolín naiz, Barakaldoko pertsonaiarik dibertigarriena! Oso
         pozik nago hemen zaudela, elkarrekin ezagutuko baitugu nola eraldatu den leku eder hau
         baserriz betetako landa-herrixka batetik hiri moderno eta bizigarri batera. Bidean zehar,
