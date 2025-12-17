@@ -1,6 +1,5 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
-import android.R.attr.translationZ
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,7 +18,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,64 +31,35 @@ import com.lucascamarero.didaktikapp.R
 import kotlin.math.roundToInt
 
 // --- MODELOS DE DATOS ---
-
-// Representa una de las 4 zonas (Imágenes de la iglesia)
-data class DropZone(
+data class PhaseData(
     val id: Int,
-    val title: String, // "Altar", "Coro", etc. (Lo usamos para validar internamente)
-    val imageRes: Int
-)
-
-// Representa la etiqueta que arrastramos
-data class DraggableWord(
-    val id: Int,
-    val text: String,
-    val correctZoneId: Int // Con qué zona debe emparejarse
+    val imageRes: Int,
+    val correctWord: String,
+    val options: List<String>
 )
 
 @Composable
 fun Activity2Screen(
     navController: NavController? = null
 ) {
-    // --- DATOS INICIALES ---
-    // DEFINE AQUÍ TUS IMÁGENES REALES DE LA IGLESIA
-    val zones = remember {
+    // --- 1. CONFIGURACIÓN DE FASES ---
+    val phases = remember {
         listOf(
-            DropZone(1, "Altar", R.drawable.activ2_img_altar),      // Cambiar por R.drawable.img_altar
-            DropZone(2, "Coro", R.drawable.activ2_img_coro),       // Cambiar por R.drawable.img_coro
-            DropZone(3, "Sagrario", R.drawable.activ2_img_sagrario),   // Cambiar por R.drawable.img_sagrario
-            DropZone(4, "Vía Crucis", R.drawable.activ2_img_via_crucis)  // Cambiar por R.drawable.img_viacrucis
+            PhaseData(1, R.drawable.activ2_img_altar, "Altar", listOf("Altar", "Coro", "Sagrario", "Vía Crucis").shuffled()),
+            PhaseData(2, R.drawable.activ2_img_coro, "Coro", listOf("Púlpito", "Coro", "Banco", "Confesionario").shuffled()),
+            PhaseData(3, R.drawable.activ2_img_sagrario, "Sagrario", listOf("Sagrario", "Cáliz", "Vela", "Altar").shuffled()),
+            PhaseData(4, R.drawable.activ2_img_via_crucis, "Vía Crucis", listOf("Cruz", "Vía Crucis", "Cuadro", "Estatua").shuffled())
         )
     }
 
-    // Las palabras a arrastrar
-    val words = remember {
-        listOf(
-            DraggableWord(1, "Altar", 1),
-            DraggableWord(2, "Coro", 2),
-            DraggableWord(3, "Sagrario", 3),
-            DraggableWord(4, "Vía Crucis", 4)
-        ).shuffled() // Las mezclamos para que no salgan en orden
-    }
-
-    // --- ESTADO DEL JUEGO ---
-
-    // Guarda dónde está cada palabra actualmente: Map<WordId, ZoneId?>
-    // Si el valor es null, la palabra está en la "piscina" de abajo.
-    var wordPlacements by remember { mutableStateOf(words.associate { it.id to (null as Int?) }) }
-
-    // Guarda las coordenadas en pantalla de cada zona de caída (para detectar colisiones)
-    val zoneBounds = remember { mutableStateMapOf<Int, Rect>() }
-
-    // Mensajes de feedback
-    var message by remember { mutableStateOf("Arrastra las palabras a su imagen correspondiente.") }
-    var isSuccess by remember { mutableStateOf(false) }
-
-    // Offset temporal mientras arrastramos (x, y)
-    var currentDragOffset by remember { mutableStateOf(Offset.Zero) }
-    // Qué palabra estamos arrastrando ahora mismo
-    var currentlyDraggingWordId by remember { mutableStateOf<Int?>(null) }
-
+    // --- ESTADOS ---
+    var currentPhaseIndex by remember { mutableStateOf(0) }
+    val currentPhase = phases[currentPhaseIndex]
+    var droppedWord by remember { mutableStateOf<String?>(null) }
+    var feedbackMessage by remember { mutableStateOf("Arrastra la palabra correcta a la imagen.") }
+    var isCorrectAnswer by remember { mutableStateOf(false) }
+    var isGameFinished by remember { mutableStateOf(false) }
+    var dropZoneRect by remember { mutableStateOf(Rect.Zero) }
 
     // --- UI PRINCIPAL ---
     Column(
@@ -99,314 +68,188 @@ fun Activity2Screen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(24.dp))
 
+        // TÍTULO (Altura fija, no entra en el reparto de weights)
         Text(
-            text = "Iglesia de San Vicente",
-            fontSize = 22.sp,
+            text = "Quiz sobre la Iglesia de San Vicente (${currentPhaseIndex + 1}/4)",
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        // --- ZONA SUPERIOR: GRID DE IMÁGENES (Drop Zones) ---
-        // Usamos un Box para poder superponer las etiquetas "soltadas" encima de las imágenes
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+        if (isGameFinished) {
+            // PANTALLA FINAL
+            Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("¡Juego Terminado!", fontSize = 28.sp, color = Color(0xFF2E7D32))
+                    Button(onClick = {
+                        currentPhaseIndex = 0; droppedWord = null; isGameFinished = false; isCorrectAnswer = false
+                    }) { Text("REINICIAR") }
+                }
+            }
+        } else {
+
+            // --- PARTE 1: IMAGEN (2/4 de la altura = weight 2f) ---
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(3f) // <--- AQUÍ ESTÁ EL AJUSTE DEL 50% SUPERIOR
+                    .padding(vertical = 8.dp)
+                    .onGloballyPositioned { coordinates ->
+                        dropZoneRect = coordinates.boundsInWindow()
+                    },
+                elevation = CardDefaults.cardElevation(4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                // Fila 1 (Zonas 1 y 2)
-                Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DropZoneItem(zones[0], zoneBounds, wordPlacements, words)
-                    DropZoneItem(zones[1], zoneBounds, wordPlacements, words)
-                }
-                // Fila 2 (Zonas 3 y 4)
-                Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DropZoneItem(zones[2], zoneBounds, wordPlacements, words)
-                    DropZoneItem(zones[3], zoneBounds, wordPlacements, words)
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // --- ZONA MEDIA: MENSAJE ---
-        Text(
-            text = message,
-            fontSize = 16.sp,
-            color = if (message.contains("¡Correcto!", true)) Color(0xFF2E7D32) else if (message.contains("incorrecto", true)) Color.Red else Color.Black,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(8.dp)
-        )
-
-        // --- ZONA INFERIOR: PALABRAS ARRASTRABLES (Pool inicial) ---
-        // Aquí mostramos solo las palabras que NO han sido colocadas en ninguna zona (value == null)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp) // Altura fija para el área de palabras
-                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            words.forEach { word ->
-                // Solo renderizamos aquí si NO está colocada en una zona
-                if (wordPlacements[word.id] == null) {
-                    DraggableWordTag(
-                        word = word,
-                        isDragging = currentlyDraggingWordId == word.id,
-                        dragOffset = if (currentlyDraggingWordId == word.id) currentDragOffset else Offset.Zero,
-                        onDragStart = { currentlyDraggingWordId = word.id },
-                        onDrag = { change, dragAmount ->
-                            change.consume()
-                            currentDragOffset += dragAmount
-                        },
-                        onDragEnd = {
-                            // Lógica mágica: ¿Dónde solté la palabra?
-                            // Buscamos si el gesto terminó dentro de algún rectángulo de zona
-                            // Nota: Necesitamos convertir la posición del gesto a coordenadas globales,
-                            // pero para simplificar en este ejemplo, usaremos la detección visual aproximada.
-                            // Una forma robusta es verificar bounds.
-
-                            // Iteramos las zonas para ver si el usuario soltó encima de alguna
-                            // (Esto requiere lógica compleja de coordenadas globales vs locales)
-
-                            // *** SOLUCIÓN SIMPLIFICADA PARA UN SOLO FICHERO ***
-                            // Vamos a usar un truco: En onDragEnd no tenemos las coordenadas globales del evento fácilmente sin modifiers extra.
-                            // Pero como hemos actualizado 'currentDragOffset', podemos estimar o usar un DropTarget.
-
-                            // Para mantenerlo simple y funcional:
-                            // Vamos a detectar la colisión basándonos en dónde está el dedo RELATIVO a la pantalla.
-                            // Como esto es complejo de calcular aquí sin pasar el contexto global,
-                            // haremos que al soltar, busquemos la zona más cercana o intersectada.
-
-                            // REVISIÓN: La mejor forma en un solo fichero es comprobar colisión manual
-                            // usando las coordenadas globales que guardamos en 'zoneBounds'.
-
-                            // Pero necesitamos saber las coordenadas globales ACTUALES de la palabra arrastrada.
-                            // Eso es difícil sin un estado global de puntero.
-
-                            // ALTERNATIVA DE ARRASTRE:
-                            // Resetear siempre al soltar si no es válido.
-                            // Para validar la caída, necesitamos pasar las coordenadas del puntero.
-                        },
-                        // Pasamos el mapa de zonas para calcular la caída dentro del componente
-                        zonesBounds = zoneBounds,
-                        onDropInZone = { zoneId ->
-                            // Asignamos la palabra a la zona
-                            val newMap = wordPlacements.toMutableMap()
-                            // Si esa zona ya tenía algo, lo devolvemos a la piscina (opcional, o reemplazamos)
-                            // Aquí permitimos reemplazar: buscamos si alguien ya tiene este zoneId
-                            val previousOwner = newMap.entries.find { it.value == zoneId }?.key
-                            if (previousOwner != null) {
-                                newMap[previousOwner] = null
-                            }
-                            newMap[word.id] = zoneId
-                            wordPlacements = newMap
-
-                            currentlyDraggingWordId = null
-                            currentDragOffset = Offset.Zero
-                        },
-                        onDropCancel = {
-                            currentlyDraggingWordId = null
-                            currentDragOffset = Offset.Zero
-                        }
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Image(
+                        painter = painterResource(id = currentPhase.imageRes),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize().padding(bottom = 50.dp)
                     )
-                }
-            }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // --- BOTÓN VALIDAR ---
-        Button(
-            onClick = {
-                // Validar lógica
-                var allCorrect = true
-                var placedCount = 0
-
-                wordPlacements.forEach { (wordId, zoneId) ->
-                    if (zoneId != null) {
-                        placedCount++
-                        val word = words.find { it.id == wordId }
-                        if (word != null && word.correctZoneId != zoneId) {
-                            allCorrect = false
+                    // Zona de texto soltado
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .background(if (isCorrectAnswer) Color(0xAA4CAF50) else Color(0xAAFFFFFF)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (droppedWord != null) {
+                            Text(droppedWord!!, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        } else {
+                            Text("Suelta aquí", color = Color.Gray)
                         }
-                    } else {
-                        // Si hay alguna sin colocar, no está completo (opcional, o cuenta como error)
-                        allCorrect = false
                     }
                 }
+            }
 
-                if (placedCount < 4) {
-                    message = "Faltan palabras por colocar."
-                    isSuccess = false
-                } else if (allCorrect) {
-                    message = "¡Correcto! Has identificado todos los elementos."
-                    isSuccess = true
-                } else {
-                    message = "Algún elemento es incorrecto. Inténtalo de nuevo."
-                    isSuccess = false
-                }
-            },
-            modifier = Modifier.fillMaxWidth().height(50.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF154c79))
-        ) {
-            Text("VALIDAR", fontSize = 18.sp, color = Color.White)
-        }
-    }
-}
-
-// --- COMPONENTES AUXILIARES ---
-
-@Composable
-fun RowScope.DropZoneItem(
-    zone: DropZone,
-    zoneBounds: MutableMap<Int, Rect>,
-    wordPlacements: Map<Int, Int?>,
-    allWords: List<DraggableWord>
-) {
-    // Buscamos qué palabra está asignada a esta zona (si hay alguna)
-    val assignedWordId = wordPlacements.entries.find { it.value == zone.id }?.key
-    val assignedWord = allWords.find { it.id == assignedWordId }
-
-    Card(
-        modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight()
-            .onGloballyPositioned { coordinates ->
-                // Mágia: Guardamos las coordenadas globales de esta tarjeta
-                zoneBounds[zone.id] = coordinates.boundsInWindow()
-            },
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            // 1. La Imagen de fondo
-            Image(
-                painter = painterResource(id = zone.imageRes),
-                contentDescription = zone.title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize().padding(bottom = 30.dp) // Dejamos espacio abajo para la etiqueta
-            )
-
-            // 2. Área para la etiqueta soltada
-            Box(
+            // --- PARTE 2: MENSAJE Y BOTONES (2/4 de la altura = weight 2f) ---
+            // Agrupamos todo esto en una Columna para que ocupe la otra mitad exacta
+            Column(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .height(40.dp)
-                    .background(Color(0xAAFFFFFF)), // Fondo semitransparente
-                contentAlignment = Alignment.Center
+                    .weight(2f) // <--- AQUÍ ESTÁ EL AJUSTE DEL 50% INFERIOR
+                    .padding(top = 8.dp),
+                verticalArrangement = Arrangement.Center, // Centramos verticalmente el contenido
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (assignedWord != null) {
-                    // Si hay palabra asignada, mostramos una "copia" estática de la etiqueta aquí
-                    // Y permitimos que se pueda "sacar" (clic para devolver a la piscina)
-                    DraggableWordTagStatic(
-                        text = assignedWord.text,
-                        // Opcional: Permitir arrastrar desde aquí también requeriría más lógica.
-                        // Para simplificar, si tocas una colocada, la dejas ahí o usas lógica de reset.
-                        // En este diseño simple, si quieres moverla, la lógica de abajo la resetea si arrastras otra encima.
-                    )
+
+                // Mensaje
+                Text(
+                    text = feedbackMessage,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
+                    color = if (isCorrectAnswer) Color(0xFF2E7D32) else if (feedbackMessage.contains("incorrecto", true)) Color.Red else Color.Black,
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+
+                // Botones / Opciones
+                if (isCorrectAnswer) {
+                    Button(
+                        onClick = {
+                            if (currentPhaseIndex < phases.size - 1) {
+                                currentPhaseIndex++
+                                droppedWord = null
+                                isCorrectAnswer = false
+                                feedbackMessage = "Arrastra la palabra correcta."
+                            } else {
+                                isGameFinished = true
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().height(56.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF154c79))
+                    ) {
+                        Text(if (currentPhaseIndex < phases.size - 1) "SIGUIENTE" else "FINALIZAR")
+                    }
                 } else {
-                    Text("Arrastra aquí", fontSize = 12.sp, color = Color.Gray)
+                    // Grid de opciones
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        val rows = currentPhase.options.chunked(2)
+                        rows.forEach { rowWords ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                rowWords.forEach { word ->
+                                    DraggableOption(
+                                        text = word,
+                                        onDrop = { droppedText ->
+                                            if (droppedText == currentPhase.correctWord) {
+                                                droppedWord = droppedText
+                                                isCorrectAnswer = true
+                                                feedbackMessage = "¡Correcto!"
+                                            } else {
+                                                feedbackMessage = "¡Incorrecto! Inténtalo de nuevo."
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-// Etiqueta que se mueve
-// Etiqueta que se mueve
+// --- COMPONENTE ARRASTRABLE (Simplificado para validación visual vertical) ---
 @Composable
-fun DraggableWordTag(
-    word: DraggableWord,
-    isDragging: Boolean,
-    dragOffset: Offset,
-    onDragStart: () -> Unit,
-    onDrag: (androidx.compose.ui.input.pointer.PointerInputChange, Offset) -> Unit,
-    onDragEnd: () -> Unit,
-    zonesBounds: Map<Int, Rect>,
-    onDropInZone: (Int) -> Unit,
-    onDropCancel: () -> Unit
+fun DraggableOption(
+    text: String,
+    onDrop: (String) -> Unit
 ) {
-    // Obtenemos densidad para cálculos
-    val density = LocalDensity.current
-
-    // Variable para guardar nuestra propia posición global mientras nos movemos
-    var myGlobalPosition by remember { mutableStateOf(Offset.Zero) }
+    var offsetX by remember { mutableStateOf(0f) }
+    var offsetY by remember { mutableStateOf(0f) }
+    var isDragging by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
-            .offset {
-                // Aplicamos el movimiento visual
-                IntOffset(dragOffset.x.roundToInt(), dragOffset.y.roundToInt())
-            }
+            .width(150.dp)
+            .height(50.dp)
+            .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+            .zIndex(if (isDragging) 10f else 1f)
             .graphicsLayer {
-                // Si arrastramos, aumentamos escala y sombra
-                scaleX = if (isDragging) 1.2f else 1f
-                scaleY = if (isDragging) 1.2f else 1f
-                shadowElevation = if (isDragging) 10.dp.toPx() else 0f
-                // ELIMINADA LA LÍNEA DE translationZ QUE DABA ERROR
-            }
-            // Esto es lo que realmente lo pone por encima de todo (z-index)
-            .zIndex(if (isDragging) 100f else 1f)
-            .onGloballyPositioned {
-                // Guardamos dónde estamos en la pantalla
-                myGlobalPosition = it.boundsInWindow().center
+                scaleX = if (isDragging) 1.1f else 1f
+                scaleY = if (isDragging) 1.1f else 1f
+                shadowElevation = if (isDragging) 8.dp.toPx() else 0f
             }
             .pointerInput(Unit) {
                 detectDragGestures(
-                    onDragStart = { onDragStart() },
+                    onDragStart = { isDragging = true },
                     onDragEnd = {
-                        // LÓGICA DE COLISIÓN MANUAL
-                        var droppedZoneId: Int? = null
-
-                        // Revisamos si el centro de la etiqueta cae dentro de alguna zona
-                        for ((id, rect) in zonesBounds) {
-                            if (rect.contains(myGlobalPosition)) {
-                                droppedZoneId = id
-                                break
-                            }
+                        isDragging = false
+                        // DETECCIÓN DE CAÍDA (Simplificada: Si arrastró mucho hacia arriba)
+                        // Como la imagen ocupa la mitad superior, un offset Y negativo grande indica intención
+                        if (offsetY < -150) {
+                            onDrop(text)
                         }
-
-                        if (droppedZoneId != null) {
-                            onDropInZone(droppedZoneId)
-                        } else {
-                            onDropCancel()
-                        }
-                        onDragEnd()
+                        // Efecto resorte: vuelve al sitio siempre
+                        offsetX = 0f
+                        offsetY = 0f
                     },
-                    onDragCancel = { onDropCancel() },
-                    onDrag = onDrag
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        offsetX += dragAmount.x
+                        offsetY += dragAmount.y
+                    }
                 )
             }
             .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
-            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp)),
+        contentAlignment = Alignment.Center
     ) {
-        Text(text = word.text, fontWeight = FontWeight.Bold)
+        Text(text = text, fontWeight = FontWeight.Bold, color = Color.Black)
     }
 }
-
-// Etiqueta visual estática (cuando ya está colocada en la imagen)
-@Composable
-fun DraggableWordTagStatic(text: String) {
-    Box(
-        modifier = Modifier
-            .background(Color(0xFFFFEB3B), RoundedCornerShape(8.dp)) // Amarillo para destacar colocada
-            .border(1.dp, Color(0xFFFBC02D), RoundedCornerShape(8.dp))
-            .padding(horizontal = 12.dp, vertical = 6.dp)
-    ) {
-        Text(text = text, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable
