@@ -163,7 +163,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     )
 
                     Spacer(modifier = Modifier.padding(vertical = 15.dp))
-
+/*
                     /**
                      * Juego final
                      */
@@ -175,17 +175,13 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         onClick = {
                             // TIENE QUE SER count == 7
                             if (count == 0) {
-                                scope.launch {
-                                    drawerState.close()
                                     navController.navigate("jointhephotos")
-                                }
                             } else {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(
                                         message = snackbarMessage,
                                         duration = SnackbarDuration.Short
                                     )
-                                    drawerState.close()
                                 }
                             }
                         }
@@ -206,7 +202,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
                         }
-                    }
+                    }*/
 
                     /**
                      * Diploma
@@ -216,9 +212,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         icon = Icons.Filled.School,
                         onClick = {
                             // a desarrollar
-                            scope.launch {
-                                drawerState.close()
-                            }
                         }
                     )
 
@@ -247,9 +240,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         icon = Icons.Filled.Refresh,
                         onClick = {
                             // a desarrollar
-                            scope.launch {
-                                drawerState.close()
-                            }
                         }
                     )
 
