@@ -146,8 +146,11 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                             LanguageCard(
                                 isLandscape = isLandscape,
                                 onLanguageSelected = { lang ->
-                                    selectLanguage(lang, languageViewModel)
-                                    showLanguageCard = false
+                                    scope.launch {
+                                        drawerState.close()
+                                        showLanguageCard = false
+                                        selectLanguage(lang, languageViewModel)
+                                    }
                                 }
                             )
                         }
@@ -185,6 +188,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                                         message = snackbarMessage,
                                         duration = SnackbarDuration.Short
                                     )
+                                    drawerState.close()
                                 }
                             }
                         }
@@ -215,6 +219,9 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         icon = Icons.Filled.School,
                         onClick = {
                             // a desarrollar
+                            scope.launch {
+                                drawerState.close()
+                            }
                         }
                     )
 
@@ -243,6 +250,9 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         icon = Icons.Filled.Refresh,
                         onClick = {
                             // a desarrollar
+                            scope.launch {
+                                drawerState.close()
+                            }
                         }
                     )
 
@@ -250,17 +260,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         thickness = 1.dp,
                         color = MaterialTheme.colorScheme.scrim,
                         modifier = Modifier.padding(vertical = 2.dp)
-                    )
-
-                    /**
-                     * Opción para cerrar el menú lateral.
-                     */
-                    CreateNavigationDrawerItem(
-                        text = stringResource(id = R.string.exit),
-                        icon = Icons.Filled.ExitToApp,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                        }
                     )
                 }
             }
