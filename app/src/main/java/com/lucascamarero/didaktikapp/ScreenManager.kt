@@ -257,7 +257,25 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     composable("diploma") { Diploma(navController) }
 
                     //pantalla a donde llega al acabar el ejercicio 6
-                    composable("finActividad") {finActividad(navController )  }
+                    composable("finActividad/{fotoAntiguo}/{fotoActual}",//{fotoAntiguo} y {fotoActual} son parámetros dinámicos
+                       arguments = listOf( //Lista de argumentos que esta ruta espera recibir
+                           navArgument("fotoAntiguo"){type = NavType.IntType},
+                           navArgument("fotoActual"){type = NavType.IntType}
+                           /*Declara el argumento fotoAntiguo:
+                           Su nombre debe coincidir con {fotoAntiguo}
+                           NavType.IntType indica que será un Int*/
+                       )
+                    ) {backStackEntry ->
+                        /*Lambda que se ejecuta cuando se navega a esta pantalla.
+                        backStackEntry contiene los argumentos que llegaron por la ruta*/
+                        val fotoAntiguo = backStackEntry.arguments!!.getInt("fotoAntiguo")
+                        val fotoActual = backStackEntry.arguments!!.getInt("fotoActual")
+                        /*Recupera el valor del argumento fotoAntiguo:
+                        arguments → Bundle con los datos
+                        getInt("fotoAntiguo") → obtiene el Int
+                        El !! indica que sabemos que no será null (porque la ruta lo exige)*/
+                        finActividad(navController, fotoAntiguo, fotoActual)
+                    }
                 }
             }
         }

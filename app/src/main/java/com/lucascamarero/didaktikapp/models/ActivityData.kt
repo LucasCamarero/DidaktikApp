@@ -36,6 +36,14 @@ object ActivityDataSource {
                 imageDescription = "",
                 gameRoute = "activity3"
             )
+            5 -> ActivityData(
+                id = 5,
+                title = "Rompecabezas",
+                description = stringResource(id = R.string.texto5_intro),
+                imageResId = R.drawable.fondopuzzle, // Reemplaza con tu imagen
+                imageDescription = "",
+                gameRoute = "activity5"
+            )
             6 -> ActivityData(
                 id = 6,
                 title = "El ferrocarril",
