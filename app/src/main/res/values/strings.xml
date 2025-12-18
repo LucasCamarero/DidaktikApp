@@ -9,6 +9,7 @@
     <string name="menu_name">Ezarpenak</string>
     <string name="exit">Itxi goitibeherako</string>
     <string name="restart">Partidak berrabiarazi</string>
+    <string name="snackbar">Lehenik eta behin, 7 joko guztiak osatu behar dituzu</string>
     <!-- Botones -->
     <string name="intro_button">Hasi</string>
     <string name="intro_play_button">Hasi jokoa</string>
@@ -85,9 +86,12 @@
     <string name="titulo5_columna1">Langileak</string>
     <string name="titulo5_columna2">Burgesa</string>
     <!-- Juego final -->
+    <string name="final_name">Amaiera jokoa</string>
     <string name="textofinal_intro">Barakaldo asko aldatu da bere landa-jatorritik gaur egunera
         arte. Bere istorioa kontatzen duten fabrika, eliza, jauregi eta parke zaharrak ditugu.
         Leku horiek guztiak gure ondarearen parte dira, eta zaindu egin behar ditugu etorkizuneko
         belaunaldiek ere ezagutu ditzaten.</string>
     <string name="reflexionfinal">___ zainduko nuke zeren eta...</string>
+    <!-- Diploma -->
+    <string name="diploma_name">Diploma</string>
 </resources>

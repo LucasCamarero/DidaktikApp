@@ -7,10 +7,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.SportsEsports
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,9 +26,14 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,6 +89,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
      * ViewModel que gestiona el contador de progreso del usuario.
      */
     val counterViewModel: CounterViewModel = hiltViewModel()
+    val count by counterViewModel.count.collectAsState()
 
     /**
      * Estado del menú lateral (drawer).
@@ -95,6 +107,11 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
     var showLanguageCard by remember { mutableStateOf(false) }
 
     /**
+     * Estado del Snackbar utilizado dentro del drawer.
+     */
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    /**
      * Drawer lateral de navegación.
      *
      * Los gestos están desactivados para evitar conflictos con el mapa.
@@ -109,7 +126,9 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                 drawerContentColor = MaterialTheme.colorScheme.scrim
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
@@ -146,6 +165,70 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     Spacer(modifier = Modifier.padding(vertical = 15.dp))
 
                     /**
+                     * Juego final
+                     */
+                    val snackbarMessage = stringResource(id = R.string.snackbar)
+
+                    CreateNavigationDrawerItem(
+                        text = stringResource(id = R.string.final_name),
+                        icon = Icons.Filled.SportsEsports,
+                        onClick = {
+                            // TIENE QUE SER count == 7
+                            if (count == 0) {
+                                scope.launch {
+                                    drawerState.close()
+                                    navController.navigate("jointhephotos")
+                                }
+                            } else {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = snackbarMessage,
+                                        duration = SnackbarDuration.Short
+                                    )
+                                    drawerState.close()
+                                }
+                            }
+                        }
+                    )
+
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                        //modifier = Modifier.padding(8.dp)
+                    ) { snackbarData ->
+                        Snackbar(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Text(
+                                text = snackbarData.visuals.message,
+                                style = MaterialTheme.typography.labelSmall,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                        }
+                    }
+
+                    /**
+                     * Diploma
+                     */
+                    CreateNavigationDrawerItem(
+                        text = stringResource(id = R.string.diploma_name),
+                        icon = Icons.Filled.School,
+                        onClick = {
+                            // a desarrollar
+                            scope.launch {
+                                drawerState.close()
+                            }
+                        }
+                    )
+
+                    Divider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.scrim,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+
+                    /**
                      * Opción para cambiar el idioma.
                      */
                     CreateNavigationDrawerItem(
@@ -156,8 +239,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         }
                     )
 
-                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
                     /**
                      * Opción para reiniciar el juego.
                      */
@@ -166,10 +247,17 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         icon = Icons.Filled.Refresh,
                         onClick = {
                             // a desarrollar
+                            scope.launch {
+                                drawerState.close()
+                            }
                         }
                     )
 
-                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    Divider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.scrim,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
 
                     /**
                      * Opción para cerrar el menú lateral.
@@ -257,7 +345,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     composable("diploma") { Diploma(navController) }
 
                     //pantalla a donde llega al acabar el ejercicio 6
-                    composable("finActividad") {finActividad(navController )  }
+                    composable("finActividad") { finActividad(navController) }
                 }
             }
         }
@@ -292,7 +380,7 @@ fun CreateNavigationDrawerItem(
         label = {
             Text(
                 text = text,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelSmall
             )
         },
         selected = selected,

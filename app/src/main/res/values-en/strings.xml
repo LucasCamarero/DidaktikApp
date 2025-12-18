@@ -9,6 +9,7 @@
     <string name="menu_name">Settings</string>
     <string name="exit">Close dropdown</string>
     <string name="restart">Restart games</string>
+    <string name="snackbar">First you have to complete all 7 games</string>
     <!-- Botones -->
     <string name="intro_button">Start</string>
     <string name="intro_play_button">Start game</string>
@@ -86,10 +87,12 @@
     <string name="titulo5_columna1">Workers</string>
     <string name="titulo5_columna2">Bourgeois</string>
     <!-- Juego final -->
+    <string name="final_name">Last game</string>
     <string name="textofinal_intro">Barakaldo has changed a lot from its rural origins to the
         present day. We have old factories, churches, palaces, and parks that tell its story. All
         these places are part of our heritage, and we must take care of them so that future
         generations can also know them.</string>
     <string name="reflexionfinal">I would take care of ___ because...</string>
-
+    <!-- Diploma -->
+    <string name="diploma_name">Diploma</string>
 </resources>

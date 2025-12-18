@@ -9,6 +9,7 @@
     <string name="menu_name">Ajustes</string>
     <string name="exit">Cerrar desplegable</string>
     <string name="restart">Reiniciar los juegos</string>
+    <string name="snackbar">Antes tienes que completar los 7 juegos</string>
     <!-- Botones -->
     <string name="intro_button">Comenzar</string>
     <string name="intro_play_button">Empezar juego</string>
@@ -87,10 +88,12 @@
     <string name="titulo5_columna1">Obreros</string>
     <string name="titulo5_columna2">Burgueses</string>
     <!-- Juego final -->
+    <string name="final_name">Juego final</string>
     <string name="textofinal_intro">Barakaldo ha cambiado mucho desde sus orígenes rurales hasta
         hoy. Tenemos fábricas antiguas, iglesias, palacios y parques que nos cuentan su historia.
         Todos estos lugares forman parte de nuestro patrimonio, y debemos cuidarlos para que las
         futuras generaciones también los conozcan.</string>
     <string name="reflexionfinal">Yo cuidaría ___ porque...</string>
-
+    <!-- Diploma -->
+    <string name="diploma_name">Diploma</string>
 </resources>
