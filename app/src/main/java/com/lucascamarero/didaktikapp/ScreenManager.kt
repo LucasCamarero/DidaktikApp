@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -125,12 +126,15 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                 drawerContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 drawerContentColor = MaterialTheme.colorScheme.scrim
             ) {
-                Column(
+                LazyColumn(
                     modifier = Modifier
                         .padding(16.dp)
                         //.verticalScroll(rememberScrollState())
                 ) {
-                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    item {
+                        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    }
+
 
                     /**
                      * Selector de idiomas.
@@ -138,129 +142,152 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                      * Se muestra u oculta dinámicamente dentro del drawer.
                      */
                     if (showLanguageCard) {
-                        Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                        BoxWithConstraints {
-                            val isLandscape = maxWidth > maxHeight
+                        item {
+                            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                        }
 
-                            LanguageCard(
-                                isLandscape = isLandscape,
-                                onLanguageSelected = { lang ->
+                        item {
+                            BoxWithConstraints {
+                                val isLandscape = maxWidth > maxHeight
+
+                                LanguageCard(
+                                    isLandscape = isLandscape,
+                                    onLanguageSelected = { lang ->
+                                        scope.launch {
+                                            drawerState.close()
+                                            showLanguageCard = false
+                                            selectLanguage(lang, languageViewModel)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    item {
+                        /**
+                         * Título del menú.
+                         */
+                        Text(
+                            text = stringResource(id = R.string.menu_name),
+                            modifier = Modifier.padding(horizontal = 12.dp),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.padding(vertical = 15.dp))
+                    }
+
+                    item {
+                        /**
+                         * Juego final
+                         */
+                        val snackbarMessage = stringResource(id = R.string.snackbar)
+
+                        CreateNavigationDrawerItem(
+                            text = stringResource(id = R.string.final_name),
+                            icon = Icons.Filled.SportsEsports,
+                            onClick = {
+                                // TIENE QUE SER count == 7
+                                if (count == 0) {
                                     scope.launch {
                                         drawerState.close()
-                                        showLanguageCard = false
-                                        selectLanguage(lang, languageViewModel)
+                                        navController.navigate("jointhephotos")
+                                    }
+                                } else {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = snackbarMessage,
+                                            duration = SnackbarDuration.Short
+                                        )
+                                        drawerState.close()
                                     }
                                 }
-                            )
+                            }
+                        )
+                    }
+
+                    item {
+                        SnackbarHost(
+                            hostState = snackbarHostState,
+                            //modifier = Modifier.padding(8.dp)
+                        ) { snackbarData ->
+                            Snackbar(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                shape = RoundedCornerShape(16.dp)
+                            ) {
+                                Text(
+                                    text = snackbarData.visuals.message,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                )
+                            }
                         }
                     }
 
-                    /**
-                     * Título del menú.
-                     */
-                    Text(
-                        text = stringResource(id = R.string.menu_name),
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-
-                    Spacer(modifier = Modifier.padding(vertical = 15.dp))
-
-                    /**
-                     * Juego final
-                     */
-                    val snackbarMessage = stringResource(id = R.string.snackbar)
-
-                    CreateNavigationDrawerItem(
-                        text = stringResource(id = R.string.final_name),
-                        icon = Icons.Filled.SportsEsports,
-                        onClick = {
-                            // TIENE QUE SER count == 7
-                            if (count == 0) {
+                    item {
+                        /**
+                         * Diploma
+                         */
+                        CreateNavigationDrawerItem(
+                            text = stringResource(id = R.string.diploma_name),
+                            icon = Icons.Filled.School,
+                            onClick = {
+                                // a desarrollar
                                 scope.launch {
-                                    drawerState.close()
-                                    navController.navigate("jointhephotos")
-                                }
-                            } else {
-                                scope.launch {
-                                    snackbarHostState.showSnackbar(
-                                        message = snackbarMessage,
-                                        duration = SnackbarDuration.Short
-                                    )
                                     drawerState.close()
                                 }
                             }
-                        }
-                    )
-
-                    SnackbarHost(
-                        hostState = snackbarHostState,
-                        //modifier = Modifier.padding(8.dp)
-                    ) { snackbarData ->
-                        Snackbar(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            shape = RoundedCornerShape(16.dp)
-                        ) {
-                            Text(
-                                text = snackbarData.visuals.message,
-                                style = MaterialTheme.typography.labelSmall,
-                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                            )
-                        }
+                        )
                     }
 
-                    /**
-                     * Diploma
-                     */
-                    CreateNavigationDrawerItem(
-                        text = stringResource(id = R.string.diploma_name),
-                        icon = Icons.Filled.School,
-                        onClick = {
-                            // a desarrollar
-                            scope.launch {
-                                drawerState.close()
+                    item {
+                        Divider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.scrim,
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        )
+                    }
+
+                    item {
+                        /**
+                         * Opción para cambiar el idioma.
+                         */
+                        CreateNavigationDrawerItem(
+                            text = stringResource(id = R.string.menu_change_language),
+                            icon = Icons.Filled.Language,
+                            onClick = {
+                                showLanguageCard = !showLanguageCard
                             }
-                        }
-                    )
+                        )
+                    }
 
-                    Divider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.scrim,
-                        modifier = Modifier.padding(vertical = 2.dp)
-                    )
-
-                    /**
-                     * Opción para cambiar el idioma.
-                     */
-                    CreateNavigationDrawerItem(
-                        text = stringResource(id = R.string.menu_change_language),
-                        icon = Icons.Filled.Language,
-                        onClick = {
-                            showLanguageCard = !showLanguageCard
-                        }
-                    )
-
-                    /**
-                     * Opción para reiniciar el juego.
-                     */
-                    CreateNavigationDrawerItem(
-                        text = stringResource(id = R.string.restart),
-                        icon = Icons.Filled.Refresh,
-                        onClick = {
-                            // a desarrollar
-                            scope.launch {
-                                drawerState.close()
+                    item {
+                        /**
+                         * Opción para reiniciar el juego.
+                         */
+                        CreateNavigationDrawerItem(
+                            text = stringResource(id = R.string.restart),
+                            icon = Icons.Filled.Refresh,
+                            onClick = {
+                                // a desarrollar
+                                scope.launch {
+                                    drawerState.close()
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
 
-                    Divider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.scrim,
-                        modifier = Modifier.padding(vertical = 2.dp)
-                    )
+                    item {
+                        Divider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.scrim,
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        )
+                    }
                 }
             }
         }

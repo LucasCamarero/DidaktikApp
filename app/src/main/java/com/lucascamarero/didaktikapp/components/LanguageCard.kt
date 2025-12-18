@@ -72,14 +72,14 @@ fun LanguageCard(
                 ) { onLanguageSelected("en") }
             }
         } else {
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                item {
+
                     LanguageItem(
                         title = "Hizkuntza",
                         flagRes = R.drawable.basque_flag,
@@ -87,8 +87,8 @@ fun LanguageCard(
                     ) { onLanguageSelected("eu") }
 
                     Spacer(modifier = Modifier.height(20.dp))
-                }
-                item {
+
+
                     LanguageItem(
                         title = "Idioma",
                         flagRes = R.drawable.spain_flag,
@@ -96,14 +96,14 @@ fun LanguageCard(
                     ) { onLanguageSelected("es") }
 
                     Spacer(modifier = Modifier.height(20.dp))
-                }
-                item {
+
+
                     LanguageItem(
                         title = "Language",
                         flagRes = R.drawable.england_flag,
                         contentDescription = "English"
                     ) { onLanguageSelected("en") }
-                }
+
             }
         }
     }
