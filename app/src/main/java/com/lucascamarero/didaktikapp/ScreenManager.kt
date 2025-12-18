@@ -128,7 +128,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                 Column(
                     modifier = Modifier
                         .padding(16.dp)
-                        .verticalScroll(rememberScrollState())
+                        //.verticalScroll(rememberScrollState())
                 ) {
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
@@ -163,7 +163,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     )
 
                     Spacer(modifier = Modifier.padding(vertical = 15.dp))
-/*
+
                     /**
                      * Juego final
                      */
@@ -175,7 +175,10 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         onClick = {
                             // TIENE QUE SER count == 7
                             if (count == 0) {
+                                scope.launch {
+                                    drawerState.close()
                                     navController.navigate("jointhephotos")
+                                }
                             } else {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(
@@ -202,7 +205,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
                         }
-                    }*/
+                    }
 
                     /**
                      * Diploma
