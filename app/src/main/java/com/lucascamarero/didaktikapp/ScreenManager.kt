@@ -129,7 +129,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                 LazyColumn(
                     modifier = Modifier
                         .padding(16.dp)
-                        //.verticalScroll(rememberScrollState())
+                    //.verticalScroll(rememberScrollState())
                 ) {
                     item {
                         Spacer(modifier = Modifier.padding(vertical = 10.dp))
@@ -292,7 +292,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
             }
         }
     ) {
-
         /**
          * Scaffold principal que contiene la barra superior y el contenido.
          */
