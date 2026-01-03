@@ -10,6 +10,7 @@
     <string name="exit">Cerrar desplegable</string>
     <string name="restart">Reiniciar los juegos</string>
     <string name="snackbar">Antes tienes que completar los 7 juegos</string>
+    <string name="snackbar2">Antes tienes que completar los 7 juegos y el juego final</string>
     <!-- Botones -->
     <string name="intro_button">Comenzar</string>
     <string name="intro_play_button">Empezar juego</string>

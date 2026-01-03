@@ -10,6 +10,7 @@
     <string name="exit">Close dropdown</string>
     <string name="restart">Restart games</string>
     <string name="snackbar">First you have to complete all 7 games</string>
+    <string name="snackbar2">First you have to complete all 7 games and the final game</string>
     <!-- Botones -->
     <string name="intro_button">Start</string>
     <string name="intro_play_button">Start game</string>

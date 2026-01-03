@@ -10,6 +10,7 @@
     <string name="exit">Itxi goitibeherako</string>
     <string name="restart">Partidak berrabiarazi</string>
     <string name="snackbar">Lehenik eta behin, 7 joko guztiak osatu behar dituzu</string>
+    <string name="snackbar2">Lehenik eta behin 7 jokoak eta azken jokoa osatu behar dituzu</string>
     <!-- Botones -->
     <string name="intro_button">Hasi</string>
     <string name="intro_play_button">Hasi jokoa</string>

@@ -194,7 +194,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                                 if (count == 0) {
                                     scope.launch {
                                         drawerState.close()
-                                        //navController.navigate("jointhephotos")
                                         navController.navigate("startactivity/8")
                                     }
                                 } else {
@@ -233,13 +232,27 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         /**
                          * Diploma
                          */
+
+                        val snackbarMessage = stringResource(id = R.string.snackbar2)
+
                         CreateNavigationDrawerItem(
                             text = stringResource(id = R.string.diploma_name),
                             icon = Icons.Filled.School,
                             onClick = {
-                                // a desarrollar
-                                scope.launch {
-                                    drawerState.close()
+                                // TIENE QUE SER count == 8
+                                if (count == 0) {
+                                    scope.launch {
+                                        drawerState.close()
+                                        navController.navigate("diploma")
+                                    }
+                                } else {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = snackbarMessage,
+                                            duration = SnackbarDuration.Short
+                                        )
+                                        drawerState.close()
+                                    }
                                 }
                             }
                         )
