@@ -15,15 +15,13 @@ import androidx.navigation.NavController
 @Composable
 fun JoinThePhotos(navController: NavController){
 
-    // SE PUEDE BORRAR (Codigo para probar que funciona el menu)
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally) {
         item {
-            Spacer(modifier = Modifier.padding(vertical = 20.dp))
-            Text(" Ventana Join the Photos")
+
         }
     }
 }

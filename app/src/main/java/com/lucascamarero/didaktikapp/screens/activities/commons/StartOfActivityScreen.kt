@@ -162,6 +162,7 @@ fun StartOfActivityScreen(
         1 -> listOf(R.drawable.act1_img1, R.drawable.act1_img2) // EJEMPLO
         2 -> listOf(R.drawable.activ3_img1)
         6 -> listOf(R.drawable.act6_ferrocarril)
+        8 -> listOf(R.drawable.premio11, R.drawable.premio12)
         // ... define el resto de las 7 actividades
         else -> listOf(data.imageResId)
     }

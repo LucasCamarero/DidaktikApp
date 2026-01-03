@@ -194,7 +194,8 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                                 if (count == 0) {
                                     scope.launch {
                                         drawerState.close()
-                                        navController.navigate("jointhephotos")
+                                        //navController.navigate("jointhephotos")
+                                        navController.navigate("startactivity/8")
                                     }
                                 } else {
                                     scope.launch {
