@@ -209,15 +209,15 @@ fun MapScreen(
                         .padding(horizontal = 32.dp)
                         .wrapContentWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
                     elevation = CardDefaults.cardElevation(8.dp)
                 ) {
                     Text(
                         text = snackbarData.visuals.message,
                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
-                        style = Typography3.bodySmall,
-                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
                 }
