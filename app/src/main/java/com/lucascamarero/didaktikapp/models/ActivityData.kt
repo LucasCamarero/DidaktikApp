@@ -33,23 +33,23 @@ object ActivityDataSource {
                 title = "El Acertijo del Puente",
                 description = stringResource(id = R.string.texto3_intro),
                 imageResId = R.drawable.activ3_img1, // Reemplaza con tu imagen
-                imageDescription = "",
+                imageDescription = "Fotografia 3",
                 gameRoute = "activity3"
             )
             6 -> ActivityData(
                 id = 6,
                 title = "El ferrocarril",
                 description = stringResource(id = R.string.texto6_intro),
-                imageResId = R.drawable.act6_ferrocarril, // Reemplaza con tu imagen
-                imageDescription = "",
+                imageResId = R.drawable.act6_ferrocarril,
+                imageDescription = "Fotografia 6",
                 gameRoute = "activity6"
             )
             8 -> ActivityData(
                 id = 8,
-                title = "Juego final",
+                title = stringResource(R.string.final_name),
                 description = stringResource(id = R.string.textofinal_intro),
-                imageResId = R.drawable.premio11, // Reemplaza con tu imagen
-                imageDescription = "",
+                imageResId = R.drawable.premio11,
+                imageDescription = "Fotografía 8",
                 gameRoute = "jointhephotos"
             )
             // ... define el resto de las 7 actividades

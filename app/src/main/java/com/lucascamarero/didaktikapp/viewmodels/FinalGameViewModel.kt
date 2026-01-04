@@ -1,6 +1,7 @@
 package com.lucascamarero.didaktikapp.viewmodels
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.data.db.models.PhotoItem
@@ -33,21 +34,24 @@ class FinalGameViewModel : ViewModel() {
     var message by mutableStateOf("")
         private set
 
+    var messageResId by mutableStateOf<Int?>(null)
+        private set
+
     fun onPhotoClicked(photo: PhotoItem): Boolean {
         if (matched.contains(photo.id)) return false
 
         if (firstSelected == null) {
             firstSelected = photo
-            message = ""
+            messageResId = null
             return false
         }
 
         if (firstSelected!!.id != photo.id) {
             if (firstSelected!!.pairId == photo.pairId) {
                 matched = matched + firstSelected!!.id + photo.id
-                message = "✅ Asociación correcta"
+                messageResId = R.string.asocia1
             } else {
-                message = "❌ Asociación incorrecta"
+                messageResId = R.string.asocia2
             }
             firstSelected = null
         }

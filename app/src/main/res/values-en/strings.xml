@@ -6,8 +6,9 @@
     <string name="language_es">Spanish</string>
     <string name="language_en">English</string>
     <string name="menu_change_language">Change lenguage</string>
-    <string name="menu_name">Settings</string>
+    <string name="menu_name">Menú</string>
     <string name="exit">Close dropdown</string>
+    <string name="exit_app">Exit</string>
     <string name="restart">Restart games</string>
     <string name="snackbar">First you have to complete all 7 games</string>
     <string name="snackbar2">First you have to complete all 7 games and the final game</string>
@@ -89,11 +90,20 @@
     <string name="titulo5_columna2">Bourgeois</string>
     <!-- Juego final -->
     <string name="final_name">Last game</string>
+    <string name="asocia">Join the photos</string>
+    <string name="asocia1">✅ Correct association</string>
+    <string name="asocia2">❌ Incorrect association</string>
     <string name="textofinal_intro">Barakaldo has changed a lot from its rural origins to the
         present day. We have old factories, churches, palaces, and parks that tell its story. All
         these places are part of our heritage, and we must take care of them so that future
         generations can also know them.</string>
-    <string name="reflexionfinal">I would take care of ___ because...</string>
+    <string name="reflexion_titulo">Thought</string>
+    <string name="reflexion_explicacion">Now think about the places you saw in the pictures and
+        write a sentence explaining why it is important to take care of these places and respect
+        nature.</string>
+    <string name="reflexionfinal">"I would take care of... because..."</string>
+    <string name="textocaja">Write your sentence here</string>
     <!-- Diploma -->
+    <string name="diploma_button">Get diploma</string>
     <string name="diploma_name">Diploma</string>
 </resources>

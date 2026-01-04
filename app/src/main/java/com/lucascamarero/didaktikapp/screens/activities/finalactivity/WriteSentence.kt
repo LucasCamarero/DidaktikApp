@@ -12,9 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.components.CreateButton
 
 @Composable
 fun WriteSentence(navController: NavController) {
@@ -31,9 +34,8 @@ fun WriteSentence(navController: NavController) {
 
         item {
             Text(
-                text = "Reflexión",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
+                text = stringResource(R.string.reflexion_titulo),
+                style = MaterialTheme.typography.titleSmall
             )
         }
 
@@ -43,21 +45,19 @@ fun WriteSentence(navController: NavController) {
 
         item {
             Text(
-                text = "Ahora piensa en los lugares que has visto en las imágenes.\n\n" +
-                        "Escribe una frase explicando por qué es importante cuidar estos lugares y respetar la naturaleza.",
-                style = MaterialTheme.typography.bodyLarge
+                text = stringResource(R.string.reflexion_explicacion),
+                style = MaterialTheme.typography.bodySmall
             )
         }
 
         item {
-            Spacer(modifier = Modifier.padding(top = 20.dp))
+            Spacer(modifier = Modifier.padding(top = 24.dp))
         }
 
         item {
             Text(
-                text = "Ejemplo:\n\"Yo cuidaría ... porque ...\"",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium
+                text = stringResource(R.string.reflexionfinal),
+                style = MaterialTheme.typography.bodySmall
             )
         }
 
@@ -69,7 +69,7 @@ fun WriteSentence(navController: NavController) {
             OutlinedTextField(
                 value = userText,
                 onValueChange = { userText = it },
-                label = { Text("Escribe tu frase aquí") },
+                label = { Text(stringResource(id = R.string.textocaja)) },
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -79,13 +79,13 @@ fun WriteSentence(navController: NavController) {
         }
 
         item {
-            Button(
-                onClick = {
-                    navController.navigate("diploma")
-                },
-                enabled = userText.isNotBlank()
-            ) {
-                Text(text = "Obtener diploma")
+            if (userText.isNotBlank()) {
+                CreateButton(
+                    texto = stringResource(id = R.string.diploma_button),
+                    onClick = {
+                        navController.navigate("diploma")
+                    }
+                )
             }
         }
     }

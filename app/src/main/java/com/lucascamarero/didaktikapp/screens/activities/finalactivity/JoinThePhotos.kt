@@ -13,9 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.ui.theme.Typography2
 import com.lucascamarero.didaktikapp.viewmodels.FinalGameViewModel
 
 @Composable
@@ -32,8 +35,8 @@ fun JoinThePhotos(
     ) {
 
         Text(
-            text = "Asocia correctamente las imágenes",
-            style = MaterialTheme.typography.titleMedium
+            text = stringResource(R.string.asocia),
+            style = MaterialTheme.typography.bodyLarge
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -74,9 +77,15 @@ fun JoinThePhotos(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = viewModel.message,
-            color = if (viewModel.message.contains("correcta")) Color.Green else Color.Red
-        )
+        if (viewModel.messageResId != null) {
+            Text(
+                text = stringResource(viewModel.messageResId!!),
+                style = Typography2.bodyLarge,
+                color = if (viewModel.messageResId == R.string.asocia1)
+                    Color.Green
+                else
+                    Color.Red
+            )
+        }
     }
 }

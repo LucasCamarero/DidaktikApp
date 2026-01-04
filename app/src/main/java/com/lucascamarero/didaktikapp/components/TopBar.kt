@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -83,7 +84,7 @@ fun TopBar(
                  */
                 IconButton(onMenuClick) {
                     Icon(
-                        imageVector = Icons.Filled.Settings,
+                        imageVector = Icons.Filled.Menu,
                         contentDescription = "Abrir menú",
                         tint = MaterialTheme.colorScheme.secondaryContainer,
                         modifier = Modifier.size(35.dp)

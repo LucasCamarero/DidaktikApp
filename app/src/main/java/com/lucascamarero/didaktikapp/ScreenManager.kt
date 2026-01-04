@@ -1,5 +1,6 @@
 package com.lucascamarero.didaktikapp
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -12,7 +13,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Explicit
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.School
@@ -42,6 +45,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -111,6 +115,9 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
      * Estado del Snackbar utilizado dentro del drawer.
      */
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val context = LocalContext.current
+    val activity = context as? Activity
 
     /**
      * Drawer lateral de navegación.
@@ -300,6 +307,37 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                             thickness = 1.dp,
                             color = MaterialTheme.colorScheme.scrim,
                             modifier = Modifier.padding(vertical = 2.dp)
+                        )
+                    }
+
+                    item {
+                        /**
+                         * Opción para cerrar el menúdesplegable
+                         */
+                        CreateNavigationDrawerItem(
+                            text = stringResource(id = R.string.exit),
+                            icon = Icons.Filled.ArrowBackIosNew,
+                            onClick = {
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                            }
+                        )
+                    }
+
+                    item {
+                        /**
+                         * Opción para salir de la app.
+                         */
+                        CreateNavigationDrawerItem(
+                            text = stringResource(id = R.string.exit_app),
+                            icon = Icons.Filled.ExitToApp,
+                            onClick = {
+                                scope.launch {
+                                    drawerState.close()
+                                    activity?.finish()
+                                }
+                            }
                         )
                     }
                 }

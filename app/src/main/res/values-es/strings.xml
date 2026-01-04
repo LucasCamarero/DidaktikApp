@@ -6,11 +6,13 @@
     <string name="language_es">Castellano</string>
     <string name="language_en">Inglés</string>
     <string name="menu_change_language">Cambiar idioma</string>
-    <string name="menu_name">Ajustes</string>
+    <string name="menu_name">Menú</string>
     <string name="exit">Cerrar desplegable</string>
+    <string name="exit_app">Salir</string>
     <string name="restart">Reiniciar los juegos</string>
     <string name="snackbar">Antes tienes que completar los 7 juegos</string>
     <string name="snackbar2">Antes tienes que completar los 7 juegos y el juego final</string>
+
     <!-- Botones -->
     <string name="intro_button">Comenzar</string>
     <string name="intro_play_button">Empezar juego</string>
@@ -90,11 +92,20 @@
     <string name="titulo5_columna2">Burgueses</string>
     <!-- Juego final -->
     <string name="final_name">Juego final</string>
+    <string name="asocia">Asocia las imágenes</string>
+    <string name="asocia1">✅ Asociación correcta</string>
+    <string name="asocia2">❌ Asociación incorrecta</string>
     <string name="textofinal_intro">Barakaldo ha cambiado mucho desde sus orígenes rurales hasta
         hoy. Tenemos fábricas antiguas, iglesias, palacios y parques que nos cuentan su historia.
         Todos estos lugares forman parte de nuestro patrimonio, y debemos cuidarlos para que las
         futuras generaciones también los conozcan.</string>
-    <string name="reflexionfinal">Yo cuidaría ___ porque...</string>
+    <string name="reflexion_titulo">Reflexión</string>
+    <string name="reflexion_explicacion">Ahora piensa en los lugares que has visto en las imágenes y
+        escribe una frase explicando por qué es importante cuidar estos lugares y respetar la
+        naturaleza.</string>
+    <string name="reflexionfinal">"Yo cuidaría... porque..."</string>
+    <string name="textocaja">Escribe tu frase aquí</string>
     <!-- Diploma -->
+    <string name="diploma_button">Obtener diploma</string>
     <string name="diploma_name">Diploma</string>
 </resources>

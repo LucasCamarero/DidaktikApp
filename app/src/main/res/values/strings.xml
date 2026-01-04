@@ -6,8 +6,9 @@
     <string name="language_es">Gaztelania</string>
     <string name="language_en">Ingelesa</string>
     <string name="menu_change_language">Hizkuntza aldatu</string>
-    <string name="menu_name">Ezarpenak</string>
+    <string name="menu_name">Menua</string>
     <string name="exit">Itxi goitibeherako</string>
+    <string name="exit_app">Atera</string>
     <string name="restart">Partidak berrabiarazi</string>
     <string name="snackbar">Lehenik eta behin, 7 joko guztiak osatu behar dituzu</string>
     <string name="snackbar2">Lehenik eta behin 7 jokoak eta azken jokoa osatu behar dituzu</string>
@@ -88,11 +89,20 @@
     <string name="titulo5_columna2">Burgesa</string>
     <!-- Juego final -->
     <string name="final_name">Amaiera jokoa</string>
+    <string name="asocia">Lotu Irudiak</string>
+    <string name="asocia1">✅ Elkarketa zuzena</string>
+    <string name="asocia2">❌ Elkarte okerra</string>
     <string name="textofinal_intro">Barakaldo asko aldatu da bere landa-jatorritik gaur egunera
         arte. Bere istorioa kontatzen duten fabrika, eliza, jauregi eta parke zaharrak ditugu.
         Leku horiek guztiak gure ondarearen parte dira, eta zaindu egin behar ditugu etorkizuneko
         belaunaldiek ere ezagutu ditzaten.</string>
-    <string name="reflexionfinal">___ zainduko nuke zeren eta...</string>
+    <string name="reflexion_titulo">Hausnarketa</string>
+    <string name="reflexion_explicacion">Orain, pentsatu irudietan ikusi dituzun lekuetan eta idatzi
+        esaldi bat zergatik den garrantzitsua leku horiek zaintzea eta natura errespetatzea
+        azaltzen.</string>
+    <string name="reflexionfinal">"... zainduko nuke zeren eta..."</string>
+    <string name="textocaja">Idatzi zure esaldia hemen</string>
     <!-- Diploma -->
+    <string name="diploma_button">Diploma lortu</string>
     <string name="diploma_name">Diploma</string>
 </resources>
