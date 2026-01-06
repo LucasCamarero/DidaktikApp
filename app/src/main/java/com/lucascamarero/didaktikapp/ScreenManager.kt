@@ -276,6 +276,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                         El !! indica que sabemos que no será null (porque la ruta lo exige)*/
                         finActividad(navController, fotoAntiguo, fotoActual)
                     }
+                    composable("EJ5Info") { ventanaInfo(navController) }
                 }
             }
         }
