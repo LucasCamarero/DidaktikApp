@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -39,10 +41,13 @@ import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.lucascamarero.didaktikapp.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -395,37 +400,54 @@ fun DraggablePieceMapAgujeros(
     )
 }
 
-
+@Preview  // ✅ Esta función no tiene parámetros, funciona
+@Composable
+fun PreviewVentanaInfo() {
+    // Puedes crear un NavController mock o usar rememberNavController()
+    val mockNavController = rememberNavController()
+    ventanaInfo(navController = mockNavController)
+}
 @Composable
 fun ventanaInfo(navController: NavController){
-
-
     LazyColumn(Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         item {
-            Text("Por aquí llegaban los trenes con el hierro")
+            Text("Por aquí llegaban los trenes con el hierro",
+                fontWeight = FontWeight.Bold)
             Image(painter = painterResource(R.drawable.copia_de_descarga_25),
-                contentDescription = "")
+                contentDescription = "",
+                Modifier.size(300.dp))
             Text("Por qué: En esta foto se ve muy bien la estructura alargada que conecta" +
                     " la tierra con el cargadero. Puedes explicar que los trenes circulaban por esa " +
                     "parte superior para descargar el mineral directamente desde los vagones")
-            Spacer(Modifier.height(16.dp))
-            Text("El hierro se cargaba en los barcos que iban a otros países")
+            Divider(
+                color = Color.Black,  // Color de la línea
+                thickness = 8.dp,    // Grosor
+                modifier = Modifier.padding(horizontal = 16.dp)// Margen
+            )
+            Text("El hierro se cargaba en los barcos que iban a otros países",
+                fontWeight = FontWeight.Bold)
             Image(painter = painterResource(R.drawable.copia_de_descarga_26),
-                contentDescription = "")
+                contentDescription = "",
+                Modifier.size(300.dp))
             Text("Por qué: Al ser una toma desde arriba, se ve claramente la posición del" +
                     " cargadero dentro del río (la Ría del Nervión). Es la imagen perfecta para que " +
                     "el alumnado imagine un gran barco atracado junto a la estructura de madera esperando " +
                     "a ser llenado de hierro para viajar a Inglaterra o Francia")
-            Spacer(Modifier.height(16.dp))
-            Text("Los cargaderos ayudaron a que Barakaldo creciera mucho")
+            Divider(
+                color = Color.Black,  // Color de la línea
+                thickness = 8.dp,    // Grosor
+                modifier = Modifier.padding(horizontal = 16.dp)  // Margen
+            )
+            Text("Los cargaderos ayudaron a que Barakaldo creciera mucho",
+                fontWeight = FontWeight.Bold)
             Image(painter = painterResource(R.drawable.copia_de_descarga_27),
-                contentDescription = "")
+                contentDescription = "",
+                Modifier.size(300.dp))
             Text("Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera" +
                     " y hierro. Representa el \"corazón\" de la industria que trajo trabajo, personas y" +
                     " riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy")
-            Spacer(Modifier.height(16.dp))
             Button({
                 navController.navigate(
                     "finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.ferrocarril_actual}")
