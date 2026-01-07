@@ -1,6 +1,5 @@
 package com.lucascamarero.didaktikapp
 
-import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -8,19 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Explicit
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.School
-import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,14 +20,9 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +30,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -94,7 +78,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
      * ViewModel que gestiona el contador de progreso del usuario.
      */
     val counterViewModel: CounterViewModel = hiltViewModel()
-    val count by counterViewModel.count.collectAsState()
 
     /**
      * Estado del menú lateral (drawer).
@@ -112,14 +95,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
     var showLanguageCard by remember { mutableStateOf(false) }
 
     /**
-     * Estado del Snackbar utilizado dentro del drawer.
-     */
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    val context = LocalContext.current
-    val activity = context as? Activity
-
-    /**
      * Drawer lateral de navegación.
      *
      * Los gestos están desactivados para evitar conflictos con el mapa.
@@ -133,15 +108,10 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                 drawerContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 drawerContentColor = MaterialTheme.colorScheme.scrim
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(16.dp)
-                    //.verticalScroll(rememberScrollState())
+                Column(
+                    modifier = Modifier.padding(16.dp)
                 ) {
-                    item {
-                        Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                    }
-
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                     /**
                      * Selector de idiomas.
@@ -149,201 +119,73 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                      * Se muestra u oculta dinámicamente dentro del drawer.
                      */
                     if (showLanguageCard) {
+                        Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-                        item {
-                            Spacer(modifier = Modifier.padding(vertical = 8.dp))
-                        }
+                        BoxWithConstraints {
+                            val isLandscape = maxWidth > maxHeight
 
-                        item {
-                            BoxWithConstraints {
-                                val isLandscape = maxWidth > maxHeight
-
-                                LanguageCard(
-                                    isLandscape = isLandscape,
-                                    onLanguageSelected = { lang ->
-                                        scope.launch {
-                                            drawerState.close()
-                                            showLanguageCard = false
-                                            selectLanguage(lang, languageViewModel)
-                                        }
-                                    }
-                                )
-                            }
+                            LanguageCard(
+                                isLandscape = isLandscape,
+                                onLanguageSelected = { lang ->
+                                    selectLanguage(lang, languageViewModel)
+                                    showLanguageCard = false
+                                }
+                            )
                         }
                     }
 
-                    item {
-                        /**
-                         * Título del menú.
-                         */
-                        Text(
-                            text = stringResource(id = R.string.menu_name),
-                            modifier = Modifier.padding(horizontal = 12.dp),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
+                    /**
+                     * Título del menú.
+                     */
+                    Text(
+                        text = stringResource(id = R.string.menu_name),
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
 
-                    item {
-                        Spacer(modifier = Modifier.padding(vertical = 15.dp))
-                    }
+                    Spacer(modifier = Modifier.padding(vertical = 15.dp))
 
-                    item {
-                        /**
-                         * Juego final
-                         */
-                        val snackbarMessage = stringResource(id = R.string.snackbar)
-
-                        CreateNavigationDrawerItem(
-                            text = stringResource(id = R.string.final_name),
-                            icon = Icons.Filled.SportsEsports,
-                            onClick = {
-                                // TIENE QUE SER count == 7
-                                if (count == 0) {
-                                    scope.launch {
-                                        drawerState.close()
-                                        navController.navigate("startactivity/8")
-                                    }
-                                } else {
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message = snackbarMessage,
-                                            duration = SnackbarDuration.Short
-                                        )
-                                        drawerState.close()
-                                    }
-                                }
-                            }
-                        )
-                    }
-
-                    item {
-                        SnackbarHost(
-                            hostState = snackbarHostState,
-                            //modifier = Modifier.padding(8.dp)
-                        ) { snackbarData ->
-                            Snackbar(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                shape = RoundedCornerShape(16.dp)
-                            ) {
-                                Text(
-                                    text = snackbarData.visuals.message,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                                )
-                            }
+                    /**
+                     * Opción para cambiar el idioma.
+                     */
+                    CreateNavigationDrawerItem(
+                        text = stringResource(id = R.string.menu_change_language),
+                        icon = Icons.Filled.Language,
+                        onClick = {
+                            showLanguageCard = !showLanguageCard
                         }
-                    }
+                    )
 
-                    item {
-                        /**
-                         * Diploma
-                         */
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
-                        val snackbarMessage = stringResource(id = R.string.snackbar2)
+                    /**
+                     * Opción para reiniciar el juego.
+                     */
+                    CreateNavigationDrawerItem(
+                        text = stringResource(id = R.string.restart),
+                        icon = Icons.Filled.Refresh,
+                        onClick = {
+                            // a desarrollar
+                        }
+                    )
 
-                        CreateNavigationDrawerItem(
-                            text = stringResource(id = R.string.diploma_name),
-                            icon = Icons.Filled.School,
-                            onClick = {
-                                // TIENE QUE SER count == 8
-                                if (count == 0) {
-                                    scope.launch {
-                                        drawerState.close()
-                                        navController.navigate("diploma")
-                                    }
-                                } else {
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message = snackbarMessage,
-                                            duration = SnackbarDuration.Short
-                                        )
-                                        drawerState.close()
-                                    }
-                                }
-                            }
-                        )
-                    }
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
-                    item {
-                        Divider(
-                            thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.scrim,
-                            modifier = Modifier.padding(vertical = 2.dp)
-                        )
-                    }
-
-                    item {
-                        /**
-                         * Opción para cambiar el idioma.
-                         */
-                        CreateNavigationDrawerItem(
-                            text = stringResource(id = R.string.menu_change_language),
-                            icon = Icons.Filled.Language,
-                            onClick = {
-                                showLanguageCard = !showLanguageCard
-                            }
-                        )
-                    }
-
-                    item {
-                        /**
-                         * Opción para reiniciar el juego.
-                         */
-                        CreateNavigationDrawerItem(
-                            text = stringResource(id = R.string.restart),
-                            icon = Icons.Filled.Refresh,
-                            onClick = {
-                                // a desarrollar
-                                scope.launch {
-                                    drawerState.close()
-                                }
-                            }
-                        )
-                    }
-
-                    item {
-                        Divider(
-                            thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.scrim,
-                            modifier = Modifier.padding(vertical = 2.dp)
-                        )
-                    }
-
-                    item {
-                        /**
-                         * Opción para cerrar el menúdesplegable
-                         */
-                        CreateNavigationDrawerItem(
-                            text = stringResource(id = R.string.exit),
-                            icon = Icons.Filled.ArrowBackIosNew,
-                            onClick = {
-                                scope.launch {
-                                    drawerState.close()
-                                }
-                            }
-                        )
-                    }
-
-                    item {
-                        /**
-                         * Opción para salir de la app.
-                         */
-                        CreateNavigationDrawerItem(
-                            text = stringResource(id = R.string.exit_app),
-                            icon = Icons.Filled.ExitToApp,
-                            onClick = {
-                                scope.launch {
-                                    drawerState.close()
-                                    activity?.finish()
-                                }
-                            }
-                        )
-                    }
+                    /**
+                     * Opción para cerrar el menú lateral.
+                     */
+                    CreateNavigationDrawerItem(
+                        text = stringResource(id = R.string.exit),
+                        icon = Icons.Filled.ExitToApp,
+                        onClick = {
+                            scope.launch { drawerState.close() }
+                        }
+                    )
                 }
             }
         }
     ) {
+
         /**
          * Scaffold principal que contiene la barra superior y el contenido.
          */
@@ -415,7 +257,26 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     composable("diploma") { Diploma(navController) }
 
                     //pantalla a donde llega al acabar el ejercicio 6
-                    composable("finActividad") { finActividad(navController) }
+                    composable("finActividad/{fotoAntiguo}/{fotoActual}",//{fotoAntiguo} y {fotoActual} son parámetros dinámicos
+                       arguments = listOf( //Lista de argumentos que esta ruta espera recibir
+                           navArgument("fotoAntiguo"){type = NavType.IntType},
+                           navArgument("fotoActual"){type = NavType.IntType}
+                           /*Declara el argumento fotoAntiguo:
+                           Su nombre debe coincidir con {fotoAntiguo}
+                           NavType.IntType indica que será un Int*/
+                       )
+                    ) {backStackEntry ->
+                        /*Lambda que se ejecuta cuando se navega a esta pantalla.
+                        backStackEntry contiene los argumentos que llegaron por la ruta*/
+                        val fotoAntiguo = backStackEntry.arguments!!.getInt("fotoAntiguo")
+                        val fotoActual = backStackEntry.arguments!!.getInt("fotoActual")
+                        /*Recupera el valor del argumento fotoAntiguo:
+                        arguments → Bundle con los datos
+                        getInt("fotoAntiguo") → obtiene el Int
+                        El !! indica que sabemos que no será null (porque la ruta lo exige)*/
+                        finActividad(navController, fotoAntiguo, fotoActual)
+                    }
+                    composable("EJ5Info") { ventanaInfo(navController) }
                 }
             }
         }
@@ -450,7 +311,7 @@ fun CreateNavigationDrawerItem(
         label = {
             Text(
                 text = text,
-                style = MaterialTheme.typography.labelSmall
+                style = MaterialTheme.typography.labelMedium
             )
         },
         selected = selected,

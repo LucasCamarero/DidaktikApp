@@ -93,7 +93,7 @@ fun Activity6Screen(navController: NavController){
             if(pasoActual == ordenCorrecto.size){
                 scope.launch {
                     delay(5000)
-                    navController.navigate("finActividad")
+                    navController.navigate("finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.cargaderos_antigua}")
                 }
             }
         }else{
@@ -265,81 +265,4 @@ fun DosLineasDiagonalParalelas(maxX:Float) {
             strokeWidth = 20f
         )
     }
-}
-@Composable
-fun finActividad(navController: NavController){
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()), // Por si las fotos son grandes
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "¡NIVEL COMPLETADO!",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E7D32),
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Has desbloqueado la evolución histórica",
-                fontSize = 16.sp,
-                color = Color.Gray,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // FOTO 1: ANTIGUA
-            Card(
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
-                    Text("ANTES (1920)", fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 4.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.cargaderos_antigua), // PON AQUÍ TU FOTO ANTIGUA
-                        contentDescription = "Foto Antigua",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp) // Altura fija para que se vean bien
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // FOTO 2: ACTUAL
-            Card(
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(8.dp)) {
-                    Text("AHORA (2025)", fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 4.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.ferrocarril_actual), // PON AQUÍ TU FOTO ACTUAL
-                        contentDescription = "Foto Actual",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    CreateButton(
-                        texto = "FINALIZAR RUTA",
-                        onClick = {
-                            navController.navigate("map")
-                        }
-                    )
-                }
-            }
-        }
 }
