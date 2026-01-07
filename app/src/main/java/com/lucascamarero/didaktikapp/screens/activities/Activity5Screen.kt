@@ -455,4 +455,3 @@ fun ventanaInfo(navController: NavController){
         }
     }
 }
-
