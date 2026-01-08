@@ -16,9 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +50,9 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.Firebase
+import com.google.firebase.ai.ai
+import com.google.firebase.ai.type.GenerativeBackend
 import com.lucascamarero.didaktikapp.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -400,15 +405,15 @@ fun DraggablePieceMapAgujeros(
     )
 }
 
-@Preview  // ✅ Esta función no tiene parámetros, funciona
-@Composable
-fun PreviewVentanaInfo() {
-    // Puedes crear un NavController mock o usar rememberNavController()
-    val mockNavController = rememberNavController()
-    ventanaInfo(navController = mockNavController)
-}
+
 @Composable
 fun ventanaInfo(navController: NavController){
+    var isLoading1 by remember { mutableStateOf(false) }
+    var isLoading2 by remember { mutableStateOf(false) }
+    var isLoading3 by remember { mutableStateOf(false) }
+    var texto1 by remember { mutableStateOf("")}
+    var texto2 by remember { mutableStateOf("") }
+    var texto3 by remember { mutableStateOf("") }
     LazyColumn(Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
@@ -418,9 +423,29 @@ fun ventanaInfo(navController: NavController){
             Image(painter = painterResource(R.drawable.copia_de_descarga_25),
                 contentDescription = "",
                 Modifier.size(300.dp))
-            Text("Por qué: En esta foto se ve muy bien la estructura alargada que conecta" +
-                    " la tierra con el cargadero. Puedes explicar que los trenes circulaban por esa " +
-                    "parte superior para descargar el mineral directamente desde los vagones")
+            // Mostrar estado de carga
+                Text(texto1)
+            val primerPregunta by remember { mutableStateOf("Contestame a la pregunta en castellano y corto, que " +
+                    "no sea mas de 4 lineas: ¿Por cargadero de Baracaldo llegaban los trenes con el hierro?") }
+            // Se ejecuta solo una vez cuando el composable entra en composición
+            LaunchedEffect(Unit) {
+                if (!isLoading1 && texto1.isEmpty()) {
+                    isLoading1 = true
+                    try {
+                        val model = Firebase.ai(backend = GenerativeBackend.googleAI())
+                            .generativeModel("gemini-2.5-flash-lite")
+                        val prompt = primerPregunta
+                        val response = model.generateContent(prompt)
+                        texto1 = response.text.toString()
+                    } catch (e: Exception) {
+                        texto1 = "Por qué: En esta foto se ve muy bien la estructura alargada que conecta\" +\n" +
+                                "\" la tierra con el cargadero. Puedes explicar que los trenes circulaban por esa \" +\n" +
+                                "\"parte superior para descargar el mineral directamente desde los vagones"
+                    } finally {
+                        isLoading1 = false
+                    }
+                }
+            }
             Divider(
                 color = Color.Black,  // Color de la línea
                 thickness = 8.dp,    // Grosor
@@ -431,10 +456,29 @@ fun ventanaInfo(navController: NavController){
             Image(painter = painterResource(R.drawable.copia_de_descarga_26),
                 contentDescription = "",
                 Modifier.size(300.dp))
-            Text("Por qué: Al ser una toma desde arriba, se ve claramente la posición del" +
-                    " cargadero dentro del río (la Ría del Nervión). Es la imagen perfecta para que " +
-                    "el alumnado imagine un gran barco atracado junto a la estructura de madera esperando " +
-                    "a ser llenado de hierro para viajar a Inglaterra o Francia")
+            Text(texto2)
+            val segundaPregunta by remember { mutableStateOf("Contestame a la pregunta en castellano y corto," +
+                    " que no sea mas de 4 lineas: ¿El hierro se cargaba en los barcos que iban a otros países?") }
+            // Se ejecuta solo una vez cuando el composable entra en composición
+            LaunchedEffect(Unit) {
+                if (!isLoading2 && texto2.isEmpty()) {
+                    isLoading2 = true
+                    try {
+                        val model = Firebase.ai(backend = GenerativeBackend.googleAI())
+                            .generativeModel("gemini-2.5-flash-lite")
+                        val prompt = segundaPregunta
+                        val response = model.generateContent(prompt)
+                        texto2 = response.text.toString()
+                    } catch (e: Exception) {
+                        texto2 = "Por qué: Al ser una toma desde arriba, se ve claramente la posición del\" +\n" +
+                                "\" cargadero dentro del río (la Ría del Nervión). Es la imagen perfecta para que \" +\n" +
+                                "\"el alumnado imagine un gran barco atracado junto a la estructura de madera esperando \" +\n" +
+                                "\"a ser llenado de hierro para viajar a Inglaterra o Francia"
+                    } finally {
+                        isLoading2 = false
+                    }
+                }
+            }
             Divider(
                 color = Color.Black,  // Color de la línea
                 thickness = 8.dp,    // Grosor
@@ -445,9 +489,27 @@ fun ventanaInfo(navController: NavController){
             Image(painter = painterResource(R.drawable.copia_de_descarga_27),
                 contentDescription = "",
                 Modifier.size(300.dp))
-            Text("Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera" +
-                    " y hierro. Representa el \"corazón\" de la industria que trajo trabajo, personas y" +
-                    " riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy")
+            Text(texto3)
+            val tercerPregunta by remember { mutableStateOf("Contestame a la pregunta en castellano y corto, que no sea mas de 4 lineas: ¿Los cargaderos ayudaron a que Barakaldo creciera mucho?") }
+            // Se ejecuta solo una vez cuando el composable entra en composición
+            LaunchedEffect(Unit) {
+                if (!isLoading3 && texto3.isEmpty()) {
+                    isLoading3 = true
+                    try {
+                        val model = Firebase.ai(backend = GenerativeBackend.googleAI())
+                            .generativeModel("gemini-2.5-flash-lite")
+                        val prompt = tercerPregunta
+                        val response = model.generateContent(prompt)
+                        texto3 = response.text.toString()
+                    } catch (e: Exception) {
+                        texto3 = "Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera\" +\n" +
+                                "\" y hierro. Representa el \\\"corazón\\\" de la industria que trajo trabajo, personas y\" +\n" +
+                                "\" riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy"
+                    } finally {
+                        isLoading3 = false
+                    }
+                }
+            }
             Button({
                 navController.navigate(
                     "finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.ferrocarril_actual}")

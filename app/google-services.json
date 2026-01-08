@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "190305722552",
+    "project_id": "gracionia-didaktikapp",
+    "storage_bucket": "gracionia-didaktikapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190305722552:android:d7fa4636be8c078f31144d",
+        "android_client_info": {
+          "package_name": "com.lucascamarero.didaktikapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiDYYvzIGtK8mBnrfh9Hz5WLti8b0pILY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
