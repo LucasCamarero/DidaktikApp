@@ -71,8 +71,6 @@ data class BoxInfo(
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Activity5Screen(navController: NavController) {
-
-
     val image = ImageBitmap.imageResource(R.drawable.fondopuzzle)
     //total de piezas reales
     val totalPieces = pieceMapv2.size
@@ -86,16 +84,10 @@ fun Activity5Screen(navController: NavController) {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
         //matriz del tablero (3x4)
         val arrayBox = remember { Array(3) { Array(4) { BoxInfo() } } }
-
-
         //contar cuántas piezas están bien colocadas
         var correctPieces by remember { mutableStateOf(0) }
-
-
         //navegación automática al completar puzzle
         if (correctPieces == pieceMapv2.size && !finished) {
             finished = true
@@ -104,8 +96,6 @@ fun Activity5Screen(navController: NavController) {
                 navController.navigate("EJ5Info")
             }
         }
-
-
         // ===== TABLERO SUPERIOR =====
         Column {
             for (row in arrayBox.indices) {
@@ -144,11 +134,7 @@ fun Activity5Screen(navController: NavController) {
                 }
             }
         }
-
-
         Spacer(modifier = Modifier.height(40.dp))
-
-
         // ===== PIEZAS ABAJO =====
         Box {
             shuffledPieces.forEach  { piece ->
@@ -187,12 +173,8 @@ fun PuzzlePieceShape(
         val w = size.width
         val h = size.height //Tamaño de la pieza
         val knobSize = w * 0.2f //Tamaño de las orejas del puzzle
-
-
         val path = Path().apply { //Define la forma exacta de la pieza
             moveTo(0f, 0f)
-
-
             // borde superior
             //Decide si hay:
             if (topHead) { // Cabeza
@@ -200,8 +182,6 @@ fun PuzzlePieceShape(
                 lineTo(w * 0.4f, knobSize)
                 cubicTo(w * 0.45f, 0f, w * 0.55f, 0f, w * 0.6f, knobSize)
                 lineTo(w, 0f)
-
-
             } else if (topHole) { //Hueco
                 lineTo(w * 0.4f, 0f)
                 cubicTo(w * 0.45f, +knobSize, w * 0.55f, +knobSize, w * 0.6f, 0f)
@@ -209,8 +189,6 @@ fun PuzzlePieceShape(
             } else { //Linea recta
                 lineTo(w, 0f)
             }
-
-
             // borde derecho
             if (rightHead) {
                 lineTo(w, h * 0.4f)
@@ -223,8 +201,6 @@ fun PuzzlePieceShape(
             } else {
                 lineTo(w, h)
             }
-
-
             // borde inferior
             if (bottomHead) {
                 lineTo(w * 0.6f, h)
@@ -234,26 +210,14 @@ fun PuzzlePieceShape(
                 lineTo(w * 0.6f, h+knobSize)
                 cubicTo(w * 0.55f, h , w * 0.45f, h , w * 0.4f, h+knobSize)
                 lineTo(0f, h)
-
-
-
-
-
-
             } else {
                 lineTo(0f, h)
             }
-
-
             // borde izquierdo
             if (leftHead) {
-
-
                 lineTo(knobSize, h * 0.6f)
                 cubicTo(0f, h * 0.55f, 0f, h * 0.45f,knobSize , h * 0.4f)
                 //cubicTo(w , h * 0.45f, w , h * 0.55f, w+knobSize, h * 0.6f)
-
-
                 lineTo(0f, 0f)
             } else if (leftHole) {
                 lineTo(0f, h * 0.6f)
@@ -262,14 +226,8 @@ fun PuzzlePieceShape(
             } else {
                 lineTo(0f, 0f)
             }
-
-
             close()
         }
-
-
-
-
         clipPath(path) { //Recorta la imagen con la forma del rompecabezas
             drawImage(
                 image = image,
@@ -285,8 +243,6 @@ fun PuzzlePieceShape(
                 style = Stroke(width = 6f)
             )
         }
-
-
     }
 }
 data class PieceShapev4(
@@ -341,17 +297,11 @@ fun DraggablePieceMapAgujeros(
     onRemovedCorrectly: () -> Unit
 ) {
     val density = LocalDensity.current
-
-
     var offsetX by remember { mutableStateOf(0.dp) }
     var offsetY by remember { mutableStateOf(0.dp) }
     var isTouching by remember { mutableStateOf(false) }
-    var wasCorrect by remember { mutableStateOf(false) } // 🔥 CLAVE
-
-
+    var wasCorrect by remember { mutableStateOf(false) } // CLAVE
     val shape = pieceMapv2[pieceIndex]
-
-
     PuzzlePieceShape(
         modifier = Modifier
             .offset(x = offsetX, y = offsetY)
@@ -364,32 +314,22 @@ fun DraggablePieceMapAgujeros(
                 }
             }
             .onGloballyPositioned { coords ->
-
-
                 val canvasRect = coords.boundsInWindow()
                 val targetBox = arrayBox[shape.row][shape.column]
-
-
                 val isCorrect =
                     (canvasRect.topLeft.y - targetBox.y).absoluteValue < 10 &&
                             (canvasRect.topLeft.x - targetBox.x).absoluteValue < 10
-
-
                 if (isCorrect && !wasCorrect) {
                     wasCorrect = true
                     isTouching = true
                     onPlacedCorrectly() //  SUMA
                 }
-
-
                 if (!isCorrect && wasCorrect) {
                     wasCorrect = false
                     isTouching = false
                     onRemovedCorrectly() // RESTA
                 }
             },
-
-
         topHead = shape.topHead,
         topHole = shape.topHole,
         rightHead = shape.rightHead,
@@ -463,17 +403,13 @@ fun InfoSection(
 ) {
     var isLoading by remember { mutableStateOf(false) } // Estado que indica si está cargando la respuesta de la IA
     var texto by remember { mutableStateOf("") } // Estado que almacena el texto generado por la IA
-
     Text(titulo, fontWeight = FontWeight.Bold) // Texto del título en negrita
-
     Image(
         painter = painterResource(imagenId),
         contentDescription = "",
         Modifier.size(300.dp)
     )
-
     Text(texto)
-
     // LaunchedEffect: Ejecuta un efecto secundario cuando entra en composición
     // Unit como clave significa que se ejecuta solo una vez
     LaunchedEffect(Unit) {
