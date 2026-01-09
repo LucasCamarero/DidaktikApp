@@ -19,14 +19,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.viewmodels.Game4ViewModel
 
-// --- 1. MODELO DE DATOS ---
+// --- 1. MODELO DE DATOS (Debe coincidir con lo que espera el ViewModel) ---
 data class ToolItem(val id: Int, val name: String, val iconRes: Int)
 
 // --- 2. UTILIDAD PARA EL EFECTO NEÓN ---
@@ -59,27 +60,11 @@ fun Modifier.neonGlow(
 // --- 3. PANTALLA PRINCIPAL ---
 @Composable
 fun Activity4Screen(
-    navController: NavController? = null // Hacemos nulo el controller para facilitar la preview
+    navController: NavController,
+    viewModel: Game4ViewModel = hiltViewModel() // Inyección del ViewModel
 ) {
-    // DEFINICIÓN DE LOS DATOS
-    val toolsList = remember {
-        listOf(
-            ToolItem(1, "Bombilla", R.drawable.activ4_bombilla),    // CORRECTO
-            ToolItem(2, "Casco", R.drawable.activ4_casco),
-            ToolItem(3, "Cables", R.drawable.activ4_cable),         // CORRECTO
-            ToolItem(4, "Martillo", R.drawable.activ4_martillo),
-            ToolItem(5, "Generador", R.drawable.activ4_generador),  // CORRECTO
-            ToolItem(6, "Llave", R.drawable.activ4_llave)           // CORRECTO
-        )
-    }
-
-    // DEFINICIÓN DE LA SOLUCIÓN
-    val correctIds = remember { setOf(1, 3, 5, 6) }
-
-    // ESTADOS (VARIABLES QUE CAMBIAN)
-    var selectedIds by remember { mutableStateOf(setOf<Int>()) }
-    var isGameWon by remember { mutableStateOf(false) }
-    var feedbackMessage by remember { mutableStateOf("Elige los objetos que puedan encender el edificio Ilgner.") }
+    // Recolectamos el estado del ViewModel
+    val uiState by viewModel.uiState.collectAsState()
 
     // --- INTERFAZ DE USUARIO ---
     Column(
@@ -100,11 +85,11 @@ fun Activity4Screen(
             colors = CardDefaults.cardColors(containerColor = Color(0xFF7D9EAA))
         ) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                // LÓGICA DE LA IMAGEN
-                val imageRes = if (isGameWon) {
-                    R.drawable.activ4_edificio_ilgner_iluminado // Imagen encendida
+                // LÓGICA DE LA IMAGEN (Desde el estado)
+                val imageRes = if (uiState.isGameWon) {
+                    R.drawable.activ4_edificio_ilgner_iluminado
                 } else {
-                    R.drawable.activ4_edificio_ilgner_oscuro    // Imagen apagada
+                    R.drawable.activ4_edificio_ilgner_oscuro
                 }
 
                 Image(
@@ -116,13 +101,14 @@ fun Activity4Screen(
             }
         }
 
-        // --- MENSAJE DE TEXTO ---
+        // --- MENSAJE DE TEXTO (Desde el estado) ---
         Text(
-            text = feedbackMessage,
+            text = uiState.message,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center,
-            color = if (feedbackMessage.contains("incorrecto", true)) Color.Red else Color.Black
+            // Si el mensaje contiene "incorrecto", lo pintamos rojo
+            color = if (uiState.message.contains("incorrecto", true) || uiState.message.contains("faltan", true)) Color.Red else Color.Black
         )
 
         // --- SECCIÓN 2: GRID DE OBJETOS ---
@@ -133,8 +119,9 @@ fun Activity4Screen(
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = Color.Gray)
         ) {
+            // Usamos la lista de herramientas que viene del ViewModel
             val columns = 3
-            val chunkedTools = toolsList.chunked(columns)
+            val chunkedTools = uiState.tools.chunked(columns)
 
             Column(
                 modifier = Modifier
@@ -153,26 +140,16 @@ fun Activity4Screen(
                             Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
                                 ToolGridItem(
                                     tool = tool,
-                                    isSelected = selectedIds.contains(tool.id),
+                                    // Verificamos si el ID está en el set de seleccionados del estado
+                                    isSelected = uiState.selectedIds.contains(tool.id),
                                     onItemClick = {
-                                        // SI YA GANÓ, NO DEJAMOS TOCAR NADA MÁS
-                                        if (!isGameWon) {
-                                            // LÓGICA DE SELECCIÓN
-                                            val current = selectedIds.toMutableSet()
-                                            if (current.contains(tool.id)) {
-                                                current.remove(tool.id)
-                                            } else {
-                                                current.add(tool.id)
-                                            }
-                                            selectedIds = current
-                                            // Reiniciamos mensaje al tocar
-                                            feedbackMessage = "Elige los objetos que puedan encender el edificio Ilgner."
-                                        }
+                                        // Delegamos la lógica al ViewModel
+                                        viewModel.toggleSelection(tool.id)
                                     }
                                 )
                             }
                         }
-                        // Rellenar huecos
+                        // Rellenar huecos si la fila no está completa
                         val missing = columns - rowItems.size
                         repeat(missing) { Spacer(modifier = Modifier.weight(1f)) }
                     }
@@ -183,16 +160,10 @@ fun Activity4Screen(
         // --- SECCIÓN 3: BOTÓN ENCENDER ---
         Button(
             onClick = {
-                // LÓGICA DE VALIDACIÓN
-                if (selectedIds == correctIds) {
-                    isGameWon = true
-                    feedbackMessage = "¡Bien hecho! El sistema eléctrico funciona correctamente."
-                } else {
-                    isGameWon = false
-                    feedbackMessage = "Objeto incorrecto o faltan herramientas. Inténtalo de nuevo."
-                }
+                // Delegamos la comprobación al ViewModel
+                viewModel.checkAnswer()
             },
-            enabled = !isGameWon, // Se deshabilita al ganar
+            enabled = !uiState.isGameWon, // Se deshabilita al ganar
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
@@ -203,7 +174,7 @@ fun Activity4Screen(
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = if (isGameWon) "¡CONECTADO!" else "ENCENDER",
+                text = if (uiState.isGameWon) "¡CONECTADO!" else "ENCENDER",
                 fontSize = 18.sp,
                 color = Color.White
             )
@@ -211,7 +182,7 @@ fun Activity4Screen(
     }
 }
 
-// --- 4. COMPONENTE DE ITEM INDIVIDUAL ---
+// --- 4. COMPONENTE DE ITEM INDIVIDUAL (Sin cambios lógicos, solo visual) ---
 @Composable
 fun ToolGridItem(
     tool: ToolItem,
@@ -238,7 +209,7 @@ fun ToolGridItem(
     Card(
         modifier = Modifier
             .aspectRatio(1f)
-            .then(modifierWithSelection), // IMPORTANTE: EL CLICK NO VA AQUÍ
+            .then(modifierWithSelection),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) Color.Transparent else Color.LightGray
@@ -247,7 +218,7 @@ fun ToolGridItem(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { onItemClick() } // <--- ¡AQUÍ ES DONDE FUNCIONA EL CLICK!
+                .clickable { onItemClick() }
                 .padding(12.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -259,10 +230,4 @@ fun ToolGridItem(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Activity4ScreenPreview() {
-    Activity4Screen()
 }

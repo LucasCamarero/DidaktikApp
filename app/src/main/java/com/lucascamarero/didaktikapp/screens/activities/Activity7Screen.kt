@@ -1,3 +1,5 @@
+package com.lucascamarero.didaktikapp.screens.activities
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -7,11 +9,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,62 +24,50 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.lucascamarero.didaktikapp.viewmodels.Game7Item
+import com.lucascamarero.didaktikapp.viewmodels.Game7ViewModel
+import com.lucascamarero.didaktikapp.viewmodels.SocialClass
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
+import androidx.compose.ui.layout.ContentScale
 import com.lucascamarero.didaktikapp.R
 
-// --- 1. MODELO DE DATOS ---
-
-enum class SocialClass { OBREROS, BURGUESES, NONE }
-
-data class GameItem(
-    val id: Int,
-    val name: String,
-    val correctClass: SocialClass,
-    val icon: Int,
-    var currentClass: SocialClass = SocialClass.NONE
-)
-
-// --- 2. PANTALLA PRINCIPAL ---
-
 @Composable
-fun Activity7Screen() {
-    // Datos iniciales
-    val initialItems = remember {
-        listOf(
-            GameItem(1, "Martillo", SocialClass.OBREROS, R.drawable.activ7_img_martillo),
-            GameItem(2, "Sombrero", SocialClass.BURGUESES, R.drawable.activ7_img_sombrero),
-            GameItem(3, "Fábrica", SocialClass.OBREROS, R.drawable.activ7_img_fabrica),
-            GameItem(4, "Palacio", SocialClass.BURGUESES, R.drawable.activ7_img_banco),
-            GameItem(5, "Pobreza", SocialClass.OBREROS, R.drawable.activ7_img_pobreza),
-            GameItem(6, "Riqueza", SocialClass.BURGUESES, R.drawable.activ7_img_riqueza)
-        )
-    }
+fun Activity7Screen(
+    navController: NavController,
+    viewModel: Game7ViewModel = hiltViewModel()
+) {
+    // Recolectamos el estado del ViewModel
+    val uiState by viewModel.uiState.collectAsState()
 
-    val gameItems = remember { mutableStateListOf(*initialItems.toTypedArray()) }
+    // Variables de UI (Coordenadas de zonas)
     var obrerosZoneBounds by remember { mutableStateOf(Rect.Zero) }
     var burguesesZoneBounds by remember { mutableStateOf(Rect.Zero) }
 
-    // Estado del arrastre (Fantasma)
-    var draggedItem by remember { mutableStateOf<GameItem?>(null) }
+    // Estado del arrastre (Visual / Fantasma)
+    var draggedItem by remember { mutableStateOf<Game7Item?>(null) }
     var dragPosition by remember { mutableStateOf(Offset.Zero) }
 
-    // Estado de los Mensajes (Sin Toast)
-    var resultMessage by remember { mutableStateOf("") }
-    var resultColor by remember { mutableStateOf(Color.Transparent) }
-    var showMessage by remember { mutableStateOf(false) }
+    // --- EFECTO DE NAVEGACIÓN AL GANAR ---
+    LaunchedEffect(uiState.isGameWon) {
+        if (uiState.isGameWon) {
+            delay(1500)
+            navController.navigate("endactivity/7") {
+                popUpTo("activity7") { inclusive = true }
+            }
+        }
+    }
 
     // --- UI PRINCIPAL ---
     Box(
@@ -89,12 +79,12 @@ fun Activity7Screen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally, // CENTRADO HORIZONTAL
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // A. ENCABEZADO
             Text(
-                text = "Clasificación de elementos",
+                text = "CLASIFICACIÓN SOCIAL",
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(0xFFFF7043), shape = RoundedCornerShape(12.dp))
@@ -105,33 +95,29 @@ fun Activity7Screen() {
                 color = Color.White
             )
 
-            // B. ZONA CENTRAL (COLUMNAS) - USAMOS WEIGHT PARA QUE SEA MÁS ALTO
+            // B. ZONA CENTRAL (COLUMNAS)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f) // Esto hace que ocupe todo el espacio vertical disponible (más alto)
+                    .weight(1f)
                     .zIndex(1f),
-                horizontalArrangement = Arrangement.Center // Centrado horizontal
+                horizontalArrangement = Arrangement.Center
             ) {
                 // Columna OBREROS
                 DropZone(
                     title = "OBREROS",
-                    modifier = Modifier.weight(0.5f).fillMaxHeight(), // Llena el alto disponible
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .fillMaxHeight(),
                     titleStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.Black,
                         color = Color.White
                     ),
                     backgroundColor = Color(0xFF42A5F5),
                     borderColor = Color(0xFF1565C0),
-                    items = gameItems.filter { it.currentClass == SocialClass.OBREROS },
+                    items = uiState.items.filter { it.currentClass == SocialClass.OBREROS },
                     onPositioned = { obrerosZoneBounds = it },
-                    onRemoveItem = { item ->
-                        val index = gameItems.indexOfFirst { it.id == item.id }
-                        if (index != -1) {
-                            gameItems[index] = gameItems[index].copy(currentClass = SocialClass.NONE)
-                            showMessage = false // Ocultar mensaje si el usuario cambia algo
-                        }
-                    }
+                    onRemoveItem = { item -> viewModel.onItemRemoved(item.id) }
                 )
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -139,40 +125,38 @@ fun Activity7Screen() {
                 // Columna BURGUESES
                 DropZone(
                     title = "BURGUESES",
-                    modifier = Modifier.weight(0.5f).fillMaxHeight(), // Llena el alto disponible
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .fillMaxHeight(),
                     titleStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.Black,
                         color = Color.White
                     ),
                     backgroundColor = Color(0xFFAB47BC),
                     borderColor = Color(0xFF6A1B9A),
-                    items = gameItems.filter { it.currentClass == SocialClass.BURGUESES },
+                    items = uiState.items.filter { it.currentClass == SocialClass.BURGUESES },
                     onPositioned = { burguesesZoneBounds = it },
-                    onRemoveItem = { item ->
-                        val index = gameItems.indexOfFirst { it.id == item.id }
-                        if (index != -1) {
-                            gameItems[index] = gameItems[index].copy(currentClass = SocialClass.NONE)
-                            showMessage = false
-                        }
-                    }
+                    onRemoveItem = { item -> viewModel.onItemRemoved(item.id) }
                 )
             }
 
-            // --- ZONA DE MENSAJES (FEEDBACK) ---
-            Box(
+            // --- ZONA DE MENSAJES (CORREGIDA) ---
+            // CAMBIO: Usamos Column en lugar de Box para evitar el error de AnimatedVisibility
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp),
-                contentAlignment = Alignment.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                androidx.compose.animation.AnimatedVisibility(
-                    visible = showMessage,
+                AnimatedVisibility(
+                    visible = uiState.showFeedback,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
                     Text(
-                        text = resultMessage,
-                        color = resultColor,
+                        text = uiState.feedbackMessage,
+                        color = uiState.feedbackColor,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center
@@ -200,10 +184,10 @@ fun Activity7Screen() {
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
                         .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally), // Centrado items
+                    horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    gameItems.forEachIndexed { index, item ->
+                    uiState.items.forEach { item ->
                         if (item.currentClass == SocialClass.NONE) {
                             DraggableItemSource(
                                 item = item,
@@ -211,16 +195,15 @@ fun Activity7Screen() {
                                 onDragStart = { startPosition ->
                                     draggedItem = item
                                     dragPosition = startPosition
-                                    showMessage = false // Ocultar mensaje al mover
                                 },
                                 onDrag = { dragAmount ->
                                     dragPosition += dragAmount
                                 },
                                 onDragEnd = {
                                     if (obrerosZoneBounds.contains(dragPosition)) {
-                                        gameItems[index] = item.copy(currentClass = SocialClass.OBREROS)
+                                        viewModel.onItemDropped(item.id, SocialClass.OBREROS)
                                     } else if (burguesesZoneBounds.contains(dragPosition)) {
-                                        gameItems[index] = item.copy(currentClass = SocialClass.BURGUESES)
+                                        viewModel.onItemDropped(item.id, SocialClass.BURGUESES)
                                     }
                                     draggedItem = null
                                 }
@@ -232,36 +215,7 @@ fun Activity7Screen() {
 
             // D. BOTÓN COMPROBAR
             Button(
-                onClick = {
-                    val isComplete = gameItems.none { it.currentClass == SocialClass.NONE }
-
-                    if (!isComplete) {
-                        resultMessage = "¡Faltan objetos por clasificar! 👇"
-                        resultColor = Color(0xFFE65100) // Naranja oscuro
-                        showMessage = true
-                        return@Button
-                    }
-
-                    val errors = gameItems.filter { it.currentClass != it.correctClass }
-
-                    if (errors.isEmpty()) {
-                        // ÉXITO
-                        resultMessage = "¡EXCELENTE! TODO CORRECTO 🎉"
-                        resultColor = Color(0xFF2E7D32) // Verde oscuro
-                        showMessage = true
-                    } else {
-                        // ERRORES
-                        resultMessage = "¡UPS! HAY ${errors.size} ERRORES. CORRÍGELOS 🧐"
-                        resultColor = Color(0xFFC62828) // Rojo oscuro
-                        showMessage = true
-
-                        // Devolvemos los erróneos a la cinta automáticamente
-                        errors.forEach { errorItem ->
-                            val index = gameItems.indexOfFirst { it.id == errorItem.id }
-                            gameItems[index] = errorItem.copy(currentClass = SocialClass.NONE)
-                        }
-                    }
-                },
+                onClick = { viewModel.checkGame() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),
@@ -273,7 +227,7 @@ fun Activity7Screen() {
             }
         }
 
-        // --- E. CAPA FLOTANTE ---
+        // --- E. CAPA FLOTANTE (FANTASMA) ---
         if (draggedItem != null) {
             FloatingItemToken(
                 item = draggedItem!!,
@@ -287,7 +241,7 @@ fun Activity7Screen() {
 
 @Composable
 fun DraggableItemSource(
-    item: GameItem,
+    item: Game7Item,
     isHidden: Boolean,
     onDragStart: (Offset) -> Unit,
     onDrag: (Offset) -> Unit,
@@ -319,7 +273,7 @@ fun DraggableItemSource(
 }
 
 @Composable
-fun FloatingItemToken(item: GameItem, position: Offset) {
+fun FloatingItemToken(item: Game7Item, position: Offset) {
     Box(
         modifier = Modifier
             .offset {
@@ -342,13 +296,12 @@ fun DropZone(
     titleStyle: androidx.compose.ui.text.TextStyle,
     backgroundColor: Color,
     borderColor: Color,
-    items: List<GameItem>,
+    items: List<Game7Item>,
     onPositioned: (Rect) -> Unit,
-    onRemoveItem: (GameItem) -> Unit
+    onRemoveItem: (Game7Item) -> Unit
 ) {
     Box(
         modifier = modifier
-            // Nota: fillMaxHeight ya lo pasamos en el modifier desde el padre
             .border(4.dp, borderColor, RoundedCornerShape(16.dp))
             .background(backgroundColor, RoundedCornerShape(16.dp))
             .onGloballyPositioned { coordinates ->
@@ -386,7 +339,7 @@ fun DropZone(
 }
 
 @Composable
-fun ItemToken(item: GameItem, size: androidx.compose.ui.unit.Dp) {
+fun ItemToken(item: Game7Item, size: androidx.compose.ui.unit.Dp) {
     Box(
         modifier = Modifier.size(size),
         contentAlignment = Alignment.Center
@@ -401,7 +354,7 @@ fun ItemToken(item: GameItem, size: androidx.compose.ui.unit.Dp) {
 }
 
 @Composable
-fun FlowRowLikeColumn(items: List<GameItem>, content: @Composable (GameItem) -> Unit) {
+fun FlowRowLikeColumn(items: List<Game7Item>, content: @Composable (Game7Item) -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -421,16 +374,4 @@ fun FlowRowLikeColumn(items: List<GameItem>, content: @Composable (GameItem) -> 
 fun androidx.compose.ui.unit.Dp.toPx(): Float {
     val density = androidx.compose.ui.platform.LocalDensity.current
     return with(density) { this@toPx.toPx() }
-}
-
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-    device = "id:pixel_5"
-) 
-@Composable
-fun MinigamePreview() {
-    MaterialTheme {
-        Activity7Screen()
-    }
 }
