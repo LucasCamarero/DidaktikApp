@@ -53,7 +53,6 @@ import com.lucascamarero.didaktikapp.screens.activities.Activity3Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity4Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity5Screen
 import com.lucascamarero.didaktikapp.screens.activities.Activity6Screen
-import com.lucascamarero.didaktikapp.screens.activities.Activity7Screen
 import com.lucascamarero.didaktikapp.screens.activities.commons.EndOfActivityScreen
 import com.lucascamarero.didaktikapp.screens.activities.commons.StartOfActivityScreen
 import com.lucascamarero.didaktikapp.screens.activities.finalactivity.Diploma
