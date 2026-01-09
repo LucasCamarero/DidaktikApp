@@ -404,116 +404,92 @@ fun DraggablePieceMapAgujeros(
         isTouching = isTouching
     )
 }
-
-
 @Composable
-fun ventanaInfo(navController: NavController){
-    var isLoading1 by remember { mutableStateOf(false) }
-    var isLoading2 by remember { mutableStateOf(false) }
-    var isLoading3 by remember { mutableStateOf(false) }
-    var texto1 by remember { mutableStateOf("")}
-    var texto2 by remember { mutableStateOf("") }
-    var texto3 by remember { mutableStateOf("") }
-    LazyColumn(Modifier.fillMaxSize(),
+fun ventanaInfo(navController: NavController) {
+    LazyColumn(
+        Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         item {
-            Text("Por aquí llegaban los trenes con el hierro",
-                fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(R.drawable.copia_de_descarga_25),
-                contentDescription = "",
-                Modifier.size(300.dp))
-            // Mostrar estado de carga
-                Text(texto1)
-            val primerPregunta by remember { mutableStateOf("Contestame a la pregunta en castellano y corto, que " +
-                    "no sea mas de 4 lineas: ¿Por cargadero de Baracaldo llegaban los trenes con el hierro?") }
-            // Se ejecuta solo una vez cuando el composable entra en composición
-            LaunchedEffect(Unit) {
-                if (!isLoading1 && texto1.isEmpty()) {
-                    isLoading1 = true
-                    try {
-                        val model = Firebase.ai(backend = GenerativeBackend.googleAI())
-                            .generativeModel("gemini-2.5-flash-lite")
-                        val prompt = primerPregunta
-                        val response = model.generateContent(prompt)
-                        texto1 = response.text.toString()
-                    } catch (e: Exception) {
-                        texto1 = "Por qué: En esta foto se ve muy bien la estructura alargada que conecta\" +\n" +
-                                "\" la tierra con el cargadero. Puedes explicar que los trenes circulaban por esa \" +\n" +
-                                "\"parte superior para descargar el mineral directamente desde los vagones"
-                    } finally {
-                        isLoading1 = false
-                    }
-                }
-            }
-            Divider(
-                color = Color.Black,  // Color de la línea
-                thickness = 8.dp,    // Grosor
-                modifier = Modifier.padding(horizontal = 16.dp)// Margen
+            InfoSection( // Llamada al componente reutilizable InfoSection con sus parámetros
+                titulo = "Por aquí llegaban los trenes con el hierro", // Título de la primera sección
+                imagenId = R.drawable.copia_de_descarga_25, // ID del recurso de imagen para la primera sección
+                // Pregunta para el modelo de IA
+                pregunta = "Contestame a la pregunta en castellano y corto, que no sea mas de 4 lineas: ¿Por cargadero de Baracaldo llegaban los trenes con el hierro?",
+                // Texto alternativo que se muestra si hay error en la consulta a IA
+                textoAlt = "Por qué: En esta foto se ve muy bien la estructura alargada que conecta la tierra con el cargadero. Puedes explicar que los trenes circulaban por esa parte superior para descargar el mineral directamente desde los vagones"
             )
-            Text("El hierro se cargaba en los barcos que iban a otros países",
-                fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(R.drawable.copia_de_descarga_26),
-                contentDescription = "",
-                Modifier.size(300.dp))
-            Text(texto2)
-            val segundaPregunta by remember { mutableStateOf("Contestame a la pregunta en castellano y corto," +
-                    " que no sea mas de 4 lineas: ¿El hierro se cargaba en los barcos que iban a otros países?") }
-            // Se ejecuta solo una vez cuando el composable entra en composición
-            LaunchedEffect(Unit) {
-                if (!isLoading2 && texto2.isEmpty()) {
-                    isLoading2 = true
-                    try {
-                        val model = Firebase.ai(backend = GenerativeBackend.googleAI())
-                            .generativeModel("gemini-2.5-flash-lite")
-                        val prompt = segundaPregunta
-                        val response = model.generateContent(prompt)
-                        texto2 = response.text.toString()
-                    } catch (e: Exception) {
-                        texto2 = "Por qué: Al ser una toma desde arriba, se ve claramente la posición del\" +\n" +
-                                "\" cargadero dentro del río (la Ría del Nervión). Es la imagen perfecta para que \" +\n" +
-                                "\"el alumnado imagine un gran barco atracado junto a la estructura de madera esperando \" +\n" +
-                                "\"a ser llenado de hierro para viajar a Inglaterra o Francia"
-                    } finally {
-                        isLoading2 = false
-                    }
-                }
-            }
             Divider(
-                color = Color.Black,  // Color de la línea
-                thickness = 8.dp,    // Grosor
-                modifier = Modifier.padding(horizontal = 16.dp)  // Margen
+                color = Color.Black, // Color negro para la línea
+                thickness = 8.dp, // Grosor de 8 dp (density-independent pixels)
+                modifier = Modifier.padding(horizontal = 16.dp) // Margen horizontal de 16 dp a cada lado
             )
-            Text("Los cargaderos ayudaron a que Barakaldo creciera mucho",
-                fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(R.drawable.copia_de_descarga_27),
-                contentDescription = "",
-                Modifier.size(300.dp))
-            Text(texto3)
-            val tercerPregunta by remember { mutableStateOf("Contestame a la pregunta en castellano y corto, que no sea mas de 4 lineas: ¿Los cargaderos ayudaron a que Barakaldo creciera mucho?") }
-            // Se ejecuta solo una vez cuando el composable entra en composición
-            LaunchedEffect(Unit) {
-                if (!isLoading3 && texto3.isEmpty()) {
-                    isLoading3 = true
-                    try {
-                        val model = Firebase.ai(backend = GenerativeBackend.googleAI())
-                            .generativeModel("gemini-2.5-flash-lite")
-                        val prompt = tercerPregunta
-                        val response = model.generateContent(prompt)
-                        texto3 = response.text.toString()
-                    } catch (e: Exception) {
-                        texto3 = "Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera\" +\n" +
-                                "\" y hierro. Representa el \\\"corazón\\\" de la industria que trajo trabajo, personas y\" +\n" +
-                                "\" riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy"
-                    } finally {
-                        isLoading3 = false
-                    }
+            InfoSection( // Segunda sección de información
+                titulo = "El hierro se cargaba en los barcos que iban a otros países",
+                imagenId = R.drawable.copia_de_descarga_26,
+                pregunta = "Contestame a la pregunta en castellano y corto, que no sea mas de 4 lineas: ¿El hierro se cargaba en los barcos que iban a otros países?",
+                textoAlt = "Por qué: Al ser una toma desde arriba, se ve claramente la posición del cargadero dentro del río (la Ría del Nervión). Es la imagen perfecta para que el alumnado imagine un gran barco atracado junto a la estructura de madera esperando a ser llenado de hierro para viajar a Inglaterra o Francia"
+            )
+            Divider(
+                color = Color.Black,
+                thickness = 8.dp,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            InfoSection( // Tercera sección de información
+                titulo = "Los cargaderos ayudaron a que Barakaldo creciera mucho",
+                imagenId = R.drawable.copia_de_descarga_27,
+                pregunta = "Contestame a la pregunta en castellano y corto, que no sea mas de 4 lineas: ¿Los cargaderos ayudaron a que Barakaldo creciera mucho?",
+                textoAlt = "Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera y hierro. Representa el \"corazón\" de la industria que trajo trabajo, personas y riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy"
+            )
+            Button( // Botón para navegar a la pantalla final
+                onClick = {
+                    navController.navigate(
+                        "finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.ferrocarril_actual}"
+                    )
                 }
+            ) {
+                Text("Ventana final")
             }
-            Button({
-                navController.navigate(
-                    "finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.ferrocarril_actual}")
-            }) {Text("Ventana final") }
+        }
+    }
+}
+@Composable
+fun InfoSection(
+    titulo: String,        // Título de la sección
+    imagenId: Int,         // ID del recurso de imagen
+    pregunta: String,      // Pregunta para la IA
+    textoAlt: String  // Texto alternativo en caso de error
+) {
+    var isLoading by remember { mutableStateOf(false) } // Estado que indica si está cargando la respuesta de la IA
+    var texto by remember { mutableStateOf("") } // Estado que almacena el texto generado por la IA
+
+    Text(titulo, fontWeight = FontWeight.Bold) // Texto del título en negrita
+
+    Image(
+        painter = painterResource(imagenId),
+        contentDescription = "",
+        Modifier.size(300.dp)
+    )
+
+    Text(texto)
+
+    // LaunchedEffect: Ejecuta un efecto secundario cuando entra en composición
+    // Unit como clave significa que se ejecuta solo una vez
+    LaunchedEffect(Unit) {
+        if (!isLoading && texto.isEmpty()) { // Condición: solo ejecutar si no está cargando y el texto está vacío
+            isLoading = true // Marcar como cargando
+            try {
+                val model = Firebase.ai(backend = GenerativeBackend.googleAI()) // Configurar el modelo de IA de Firebase (Gemini)
+                    .generativeModel("gemini-2.5-flash-lite")
+
+                val response = model.generateContent(pregunta) // Generar contenido usando el modelo de IA
+                texto = response.text.toString() // Almacenar el texto de respuesta
+            } catch (e: Exception) {
+                texto = textoAlt // En caso de error, usar el texto alternativo
+            } finally {
+                isLoading = false // Siempre marcar como no cargando, haya éxito o error
+            }
         }
     }
 }
