@@ -9,13 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Explicit
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.School
@@ -375,7 +372,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                  */
                 NavHost(
                     navController = navController,
-                    startDestination = "map"
+                    startDestination = "jointhephotos"
                 ) {
 
                     /** Pantalla principal (mapa) */
