@@ -35,6 +35,7 @@ fun Activity2Screen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF0F2F5))
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

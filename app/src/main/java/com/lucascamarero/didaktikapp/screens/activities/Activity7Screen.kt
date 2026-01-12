@@ -73,7 +73,7 @@ fun Activity7Screen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFF9C4)) // Fondo Crema
+            .background(Color(0xFFF0F2F5))
     ) {
         Column(
             modifier = Modifier

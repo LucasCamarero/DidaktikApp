@@ -3,6 +3,7 @@ package com.lucascamarero.didaktikapp.screens.activities
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -77,7 +78,9 @@ fun Activity5Screen(navController: NavController) {
     var finished by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .background(Color(0xFFF0F2F5))
+            .fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

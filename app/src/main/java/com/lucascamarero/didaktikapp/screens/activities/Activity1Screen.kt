@@ -1,5 +1,7 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +42,18 @@ fun Activity1Screen(
     viewModel: GameViewModel = hiltViewModel(),
     counterViewModel: CounterViewModel = hiltViewModel(), // Asegúrate de compartir la instancia
 ) {
+    val context = LocalContext.current
+
+    DisposableEffect(Unit) {
+        val activity = context as? Activity
+        // Forzamos vertical al entrar
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+        onDispose {
+            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF0F2F5))) {
 

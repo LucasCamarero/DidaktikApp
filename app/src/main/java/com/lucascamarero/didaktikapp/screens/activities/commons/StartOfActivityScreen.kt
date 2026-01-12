@@ -1,5 +1,7 @@
 package com.lucascamarero.didaktikapp.screens.activities.commons
 
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CreateButton
+import com.lucascamarero.didaktikapp.components.CreateTitle
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
 import com.lucascamarero.didaktikapp.models.ActivityDataSource
 import com.lucascamarero.didaktikapp.models.ActivityData
@@ -179,15 +184,8 @@ fun StartOfActivityScreen(
         verticalArrangement = Arrangement.Top
     ) {
         // 1. Título de la actividad
-        Text(
-            text = data.title,
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.ExtraBold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            textAlign = TextAlign.Center,
-            fontSize = 28.sp, // Tamaño ajustado
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-        )
+
+        CreateTitle(data.title)
 
         // 2. Imagen Polaroid con Carrusel
         PolaroidImage(data = data, imageResIds = images)

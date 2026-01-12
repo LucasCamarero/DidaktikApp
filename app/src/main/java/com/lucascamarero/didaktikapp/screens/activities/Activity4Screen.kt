@@ -2,6 +2,7 @@ package com.lucascamarero.didaktikapp.screens.activities
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -70,6 +71,7 @@ fun Activity4Screen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF0F2F5))
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
