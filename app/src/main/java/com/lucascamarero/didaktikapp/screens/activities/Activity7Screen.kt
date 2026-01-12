@@ -1,5 +1,7 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -41,6 +43,7 @@ import com.lucascamarero.didaktikapp.viewmodels.SocialClass
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import com.lucascamarero.didaktikapp.R
 
 @Composable
@@ -59,6 +62,19 @@ fun Activity7Screen(
     var draggedItem by remember { mutableStateOf<Game7Item?>(null) }
     var dragPosition by remember { mutableStateOf(Offset.Zero) }
 
+    // ===================================================================
+    // EVITA QUE GIRE HORIZONTALMENTE
+    // ===================================================================
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val activity = context as? Activity
+        // Forzamos vertical al entrar
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        onDispose {
+            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
     // --- EFECTO DE NAVEGACIÓN AL GANAR ---
     LaunchedEffect(uiState.isGameWon) {
         if (uiState.isGameWon) {

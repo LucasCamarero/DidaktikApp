@@ -1,6 +1,8 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +42,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
@@ -67,8 +71,6 @@ data class BoxInfo(
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Activity5Screen(navController: NavController) {
-
-
     val image = ImageBitmap.imageResource(R.drawable.fondopuzzle)
     //total de piezas reales
     val totalPieces = pieceMapv2.size
@@ -77,6 +79,20 @@ fun Activity5Screen(navController: NavController) {
     //evita navegar varias veces
     var finished by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+
+    // ===================================================================
+    // EVITA QUE GIRE HORIZONTALMENTE
+    // ===================================================================
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val activity = context as? Activity
+        // Forzamos vertical al entrar
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        onDispose {
+            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
     Column(
         modifier = Modifier
             .background(Color(0xFFF0F2F5))

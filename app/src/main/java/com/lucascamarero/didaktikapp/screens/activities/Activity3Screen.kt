@@ -1,5 +1,7 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -17,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +41,19 @@ fun Activity3Screen(
     navController: NavController,
     viewModel: Game3ViewModel = hiltViewModel()
 ) {
+    // ===================================================================
+    // EVITA QUE GIRE HORIZONTALMENTE
+    // ===================================================================
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val activity = context as? Activity
+        // Forzamos vertical al entrar
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        onDispose {
+            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
     val personaId = 1
     val scrollState = rememberScrollState()
 

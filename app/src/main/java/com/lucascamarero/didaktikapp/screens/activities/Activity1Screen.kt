@@ -42,13 +42,16 @@ fun Activity1Screen(
     viewModel: GameViewModel = hiltViewModel(),
     counterViewModel: CounterViewModel = hiltViewModel(), // Asegúrate de compartir la instancia
 ) {
-    val context = LocalContext.current
 
+
+    // ===================================================================
+    // EVITA QUE GIRE HORIZONTALMENTE
+    // ===================================================================
+    val context = LocalContext.current
     DisposableEffect(Unit) {
         val activity = context as? Activity
         // Forzamos vertical al entrar
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
         onDispose {
             // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
