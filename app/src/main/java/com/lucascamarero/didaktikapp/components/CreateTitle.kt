@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import com.lucascamarero.didaktikapp.ui.theme.Typography2
 import com.lucascamarero.didaktikapp.ui.theme.Typography3
 
 /**
@@ -44,7 +46,7 @@ fun CreateTitle(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = Typography3.titleLarge.copy(
-                color = MaterialTheme.colorScheme.scrim,
+                color = MaterialTheme.colorScheme.tertiaryContainer,
                 drawStyle = Stroke(width = 20f),
                 lineHeight = Typography3.titleLarge.fontSize * 1.3
             )
@@ -62,6 +64,51 @@ fun CreateTitle(
             style = Typography3.titleLarge.copy(
                 color = MaterialTheme.colorScheme.secondaryContainer,
                 lineHeight = Typography3.titleLarge.fontSize * 1.3
+            )
+        )
+    }
+}
+
+@Composable
+fun CreateTitle2(
+    message: String
+) {
+    /**
+     * Contenedor que ocupa el ancho disponible y centra su contenido.
+     */
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+
+        /**
+         * Texto de contorno.
+         *
+         * Se dibuja primero y utiliza un [Stroke] para simular el borde del texto.
+         */
+        Text(
+            text = message,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = Typography3.bodyLarge.copy(
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                drawStyle = Stroke(width = 15f),
+                lineHeight = Typography3.bodySmall.fontSize * 1.3
+            )
+        )
+
+        /**
+         * Texto de relleno.
+         *
+         * Se superpone al texto de contorno para completar el efecto visual.
+         */
+        Text(
+            text = message,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = Typography3.bodyLarge.copy(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                lineHeight = Typography3.bodySmall.fontSize * 1.3
             )
         )
     }

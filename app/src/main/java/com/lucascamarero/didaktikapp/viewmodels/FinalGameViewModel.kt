@@ -37,6 +37,10 @@ class FinalGameViewModel : ViewModel() {
     var messageResId by mutableStateOf<Int?>(null)
         private set
 
+    // frase que introduce el usuario al final del juego
+    var userSentence by mutableStateOf("")
+        private set
+
     fun onPhotoClicked(photo: PhotoItem): Boolean {
         if (matched.contains(photo.id)) return false
 
@@ -64,4 +68,8 @@ class FinalGameViewModel : ViewModel() {
 
     fun isMatched(photo: PhotoItem): Boolean =
         matched.contains(photo.id)
+
+    fun onSentenceChange(text: String) {
+        userSentence = text
+    }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -101,7 +102,7 @@ fun TopBar(
                         Badge(
                             modifier = Modifier.size(25.dp),
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            contentColor = MaterialTheme.colorScheme.tertiaryContainer
                         ) {
                             Text(currentCount.toString())
                         }
@@ -137,7 +138,7 @@ fun TopBar(
          * Colores personalizados de la barra superior.
          */
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.scrim,
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             navigationIconContentColor = MaterialTheme.colorScheme.secondaryContainer,
             titleContentColor = MaterialTheme.colorScheme.scrim
         )

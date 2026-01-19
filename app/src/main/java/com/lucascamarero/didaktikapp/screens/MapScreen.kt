@@ -19,9 +19,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.models.MapPoint
 import com.lucascamarero.didaktikapp.ui.theme.Typography3
 import com.lucascamarero.didaktikapp.utils.createNumberedMarker
@@ -57,7 +59,7 @@ fun MapScreen(
     /**
      * Número de actividades completadas, observado desde la base de datos.
      */
-    val count = counterViewModel.count.collectAsState().value + 4
+    val count = counterViewModel.count.collectAsState().value
 
     /**
      * Identificador de la siguiente actividad disponible.
@@ -68,8 +70,10 @@ fun MapScreen(
      * Colores convertidos desde Compose a formato Android (ARGB),
      * utilizados para los marcadores completados.
      */
-    val completedBg = MaterialTheme.colorScheme.scrim.toArgb()
+    val completedBg = MaterialTheme.colorScheme.tertiaryContainer.toArgb()
     val completedText = MaterialTheme.colorScheme.secondaryContainer.toArgb()
+
+    val introMessage = stringResource(id = R.string.intro_map)
 
     /**
      * Estado y scope para mostrar mensajes temporales mediante Snackbar.
@@ -179,7 +183,7 @@ fun MapScreen(
                                 else -> {
                                     scope.launch {
                                         snackbarHostState.showSnackbar(
-                                            message = "Primero completa la actividad $nextActivity",
+                                            message = introMessage + " $nextActivity",
                                             duration = SnackbarDuration.Short
                                         )
                                     }

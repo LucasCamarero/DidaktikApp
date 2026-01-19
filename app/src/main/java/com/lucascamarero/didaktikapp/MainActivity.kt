@@ -115,6 +115,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                     }*/
+
                     ScreenManager(
                         languageViewModel = languageViewModel
                     )
