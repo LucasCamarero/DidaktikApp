@@ -11,6 +11,7 @@
     <string name="exit_app">Salir</string>
     <string name="restart">Reiniciar los juegos</string>
     <string name="snackbar">Antes tienes que completar los 7 juegos</string>
+    <string name="snackbar1">Ya has completado el juego</string>
     <string name="snackbar2">Antes tienes que completar los 7 juegos y el juego final</string>
     <string name="intro_map">Primero completa la actividad</string>
     <!-- Botones -->

@@ -153,9 +153,6 @@ fun StartOfActivityScreen(
     navController: NavController,
     activityNumber: Int
 ){
-    // 🔒 BLOQUEO SOLO EN VERTICAL
-    LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-
     // 1. Obtener los datos de la actividad
     val data = ActivityDataSource.getActivityData(activityNumber)
 

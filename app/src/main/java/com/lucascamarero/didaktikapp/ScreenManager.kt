@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -62,6 +63,7 @@ import com.lucascamarero.didaktikapp.screens.activities.finalactivity.JoinThePho
 import com.lucascamarero.didaktikapp.screens.activities.finalactivity.WriteSentence
 import com.lucascamarero.didaktikapp.screens.selectLanguage
 import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
+import com.lucascamarero.didaktikapp.viewmodels.FinalGameViewModel
 import com.lucascamarero.didaktikapp.viewmodels.LanguageViewModel
 import kotlinx.coroutines.launch
 
@@ -92,6 +94,9 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
      */
     val counterViewModel: CounterViewModel = hiltViewModel()
     val count by counterViewModel.count.collectAsState()
+
+    // view model del juegofinal
+    val finalGameViewModel: FinalGameViewModel = viewModel()
 
     /**
      * Estado del menú lateral (drawer).
@@ -138,7 +143,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     item {
                         Spacer(modifier = Modifier.padding(vertical = 10.dp))
                     }
-
 
                     /**
                      * Selector de idiomas.
@@ -190,6 +194,8 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                          */
                         val snackbarMessage = stringResource(id = R.string.snackbar)
 
+                        val snackbarMessage1 = stringResource(id = R.string.snackbar1)
+
                         CreateNavigationDrawerItem(
                             text = stringResource(id = R.string.final_name),
                             icon = Icons.Filled.SportsEsports,
@@ -199,6 +205,14 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                                     scope.launch {
                                         drawerState.close()
                                         navController.navigate("startactivity/8")
+                                    }
+                                } else if (count == 8){
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = snackbarMessage1,
+                                            duration = SnackbarDuration.Short
+                                        )
+                                        drawerState.close()
                                     }
                                 } else {
                                     scope.launch {
@@ -406,11 +420,11 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     composable("activity7") { Activity7Screen(navController) }
 
                     /** Actividad final */
-                    composable("jointhephotos") { JoinThePhotos(navController) }
-                    composable("writesentence") { WriteSentence(navController) }
+                    composable("jointhephotos") { JoinThePhotos(navController, finalGameViewModel) }
+                    composable("writesentence") { WriteSentence(navController, finalGameViewModel) }
 
                     /** Diploma final */
-                    composable("diploma") { Diploma(navController) }
+                    composable("diploma") { Diploma(navController, finalGameViewModel) }
 
                     //pantalla a donde llega al acabar el ejercicio 6
                     composable("finActividad/{fotoAntiguo}/{fotoActual}",//{fotoAntiguo} y {fotoActual} son parámetros dinámicos

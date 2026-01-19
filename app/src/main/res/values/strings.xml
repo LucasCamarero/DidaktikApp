@@ -11,6 +11,7 @@
     <string name="exit_app">Atera</string>
     <string name="restart">Partidak berrabiarazi</string>
     <string name="snackbar">Lehenik eta behin, 7 joko guztiak osatu behar dituzu</string>
+    <string name="snackbar1">Jokoa amaitu duzu orain</string>
     <string name="snackbar2">Lehenik eta behin 7 jokoak eta azken jokoa osatu behar dituzu</string>
     <string name="intro_map">Osatu jarduera lehenik</string>
     <!-- Botones -->

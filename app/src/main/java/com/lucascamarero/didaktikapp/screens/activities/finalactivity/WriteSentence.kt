@@ -12,27 +12,37 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.components.CreateTitle2
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
 import com.lucascamarero.didaktikapp.components.LockScreenOrientation
+import com.lucascamarero.didaktikapp.viewmodels.FinalGameViewModel
 
 @Composable
-fun WriteSentence(navController: NavController) {
+fun WriteSentence(
+    navController: NavController,
+    viewModel: FinalGameViewModel = viewModel()
+) {
 
-    var userText by remember { mutableStateOf("") }
+    var localText by rememberSaveable { mutableStateOf("") }
+
+    val userText = viewModel.userSentence
 
     var isJolinTextComplete by remember { mutableStateOf(false) }
 
@@ -73,14 +83,29 @@ fun WriteSentence(navController: NavController) {
             Spacer(modifier = Modifier.padding(top = 80.dp))
         }
 
-        // poner bonito el text field
         item {
             if (isJolinTextComplete) {
                 OutlinedTextField(
-                    value = userText,
-                    onValueChange = { userText = it },
+                    value = localText,
+                    onValueChange = { localText = it },
                     label = { Text(stringResource(id = R.string.textocaja)) },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    textStyle = MaterialTheme.typography.labelLarge,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White,
+
+                        focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        disabledTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+
+                        focusedLabelColor = MaterialTheme.colorScheme.secondaryContainer,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+
+                        focusedBorderColor = MaterialTheme.colorScheme.secondaryContainer,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.secondaryContainer
+                    )
                 )
             }
         }
@@ -90,10 +115,11 @@ fun WriteSentence(navController: NavController) {
         }
 
         item {
-            if (userText.isNotBlank()) {
+            if (localText.isNotBlank()) {
                 CreateButton(
                     texto = stringResource(id = R.string.diploma_button),
                     onClick = {
+                        viewModel.onSentenceChange(localText)
                         navController.navigate("diploma")
                     }
                 )

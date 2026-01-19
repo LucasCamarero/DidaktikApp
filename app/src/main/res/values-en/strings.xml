@@ -11,6 +11,7 @@
     <string name="exit_app">Exit</string>
     <string name="restart">Restart games</string>
     <string name="snackbar">First you have to complete all 7 games</string>
+    <string name="snackbar1">You have now completed the game</string>
     <string name="snackbar2">First you have to complete all 7 games and the final game</string>
     <string name="intro_map">Complete the activity first</string>
     <!-- Botones -->
