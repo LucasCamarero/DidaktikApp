@@ -12,6 +12,7 @@
     <string name="restart">Restart games</string>
     <string name="snackbar">First you have to complete all 7 games</string>
     <string name="snackbar2">First you have to complete all 7 games and the final game</string>
+    <string name="intro_map">Complete the activity first</string>
     <!-- Botones -->
     <string name="intro_button">Start</string>
     <string name="intro_play_button">Start game</string>
@@ -29,6 +30,7 @@
 
         Ready? Let´s go! Let´s discover Barakaldo, from rural to modern!</string>
     <!-- Juego 1 -->
+    <string name="title1">The hermitage of Saint Agatha</string>
     <string name="texto1_intro">Many years ago, Barakaldo was a town surrounded by fields,
         farmhouses, and mountains. Families helped each other, grew their own food, and went to
         the hermitage of Santa Águeda to celebrate festivals and ask for protection. The hermitage
@@ -40,6 +42,7 @@
     <string name="respuesta1_b">b) There are no more mountains</string>
     <string name="respuesta1_c">c) There are no parties</string>
     <!-- Juego 2 -->
+    <string name="title2">The church of Saint Vincent</string>
     <string name="texto2_intro">The Church of San Vicente has been the heart of the village for
         many years. Here people gathered to pray, celebrate festivals, and meet with their
         neighbors. Look closely at the photo of the church and notice the elements that make
@@ -47,6 +50,7 @@
         the Central Nave… Each one has its function and helps us understand what life was like
         in that time.</string>
     <!-- Juego 3 -->
+    <string name="title3">The riddle of the bridge</string>
     <string name="texto3_intro">In the Barakaldo market, people bought food and met their
         neighbors. Typical products were sold here: Barakaldo beans, talos (corn tortillas), cod
         in pil-pil sauce, and homemade sweets. The market was a place full of smells, colors, and
@@ -61,12 +65,14 @@
     <string name="respuesta3_3">COD</string>
     <string name="respuesta3_4">CAKE</string>
     <!-- Juego 4 -->
+    <string name="title4">The Ilgner building</string>
     <string name="texto4_intro">The Ilgner building was very important for Barakaldo. Here,
         electricity was produced for the factories and workshops. Thanks to the energy, the
         machines could operate, and the city grew considerably. Engineers, mechanics, and
         electricians worked here. The building still stands and reminds us how modern industry
         began.</string>
     <!-- Juego 5 -->
+    <string name="title5">Puzzle</string>
     <string name="texto5_intro">Many years ago, Barakaldo was a place full of factories and
         trains. Iron was extracted from the nearby mountains, and the loading docks were enormous
         structures used to load the ore onto ships. Trains brought the iron, and dockworkers moved
@@ -76,11 +82,13 @@
     <string name="mensaje5_2">The iron was loaded onto ships that went to other countries.</string>
     <string name="mensaje5_3">The loading docks helped Barakaldo to grow a lot.</string>
     <!-- Juego 6 -->
+    <string name="title6">The railway</string>
     <string name="texto6_intro">In industrial Barakaldo, trains transported iron ore from the
         mines to the loading docks, where it was loaded onto ships. Thanks to the railway, many
         factories could operate continuously, and workers traveled daily on these trains.
         The railway was one of the driving forces behind Barakaldo´s growth.</string>
     <!-- Juego 7 -->
+    <string name="title7">Munoa Palace</string>
     <string name="texto7_intro">The Munoa Palace was the home of a very wealthy family. While many
         people worked in the factories, parties and dances were held here. It had gardens,
         paintings, and elegant furniture. Today, the Munoa Palace is a park open to everyone,
@@ -89,9 +97,9 @@
     <string name="titulo5_columna2">Bourgeois</string>
     <!-- Juego final -->
     <string name="final_name">Last game</string>
-    <string name="asocia">Join the photos</string>
-    <string name="asocia1">✅ Correct association</string>
-    <string name="asocia2">❌ Incorrect association</string>
+    <string name="asocia">Match the photos</string>
+    <string name="asocia1">Correct</string>
+    <string name="asocia2">Incorrect</string>
     <string name="textofinal_intro">Barakaldo has changed a lot from its rural origins to the
         present day. We have old factories, churches, palaces, and parks that tell its story. All
         these places are part of our heritage, and we must take care of them so that future
@@ -99,8 +107,7 @@
     <string name="reflexion_titulo">Thought</string>
     <string name="reflexion_explicacion">Now think about the places you saw in the pictures and
         write a sentence explaining why it is important to take care of these places and respect
-        nature.</string>
-    <string name="reflexionfinal">"I would take care of... because..."</string>
+        nature. For instance: "I would take care of... because..."</string>
     <string name="textocaja">Write your sentence here</string>
     <!-- Diploma -->
     <string name="diploma_button">Get diploma</string>

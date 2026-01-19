@@ -1,5 +1,6 @@
 package com.lucascamarero.didaktikapp.screens.activities.finalactivity
 
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
-import com.lucascamarero.didaktikapp.components.CreateTitle
-import com.lucascamarero.didaktikapp.ui.theme.Typography2
+import com.lucascamarero.didaktikapp.components.CreateTitle2
+import com.lucascamarero.didaktikapp.components.LockScreenOrientation
 import com.lucascamarero.didaktikapp.ui.theme.Typography3
 import com.lucascamarero.didaktikapp.viewmodels.FinalGameViewModel
 
@@ -29,10 +30,13 @@ fun JoinThePhotos(
     navController: NavController,
     viewModel: FinalGameViewModel = viewModel()
 ) {
+    // 🔒 BLOQUEO SOLO EN VERTICAL
+    LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.outline)
+            .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(
             modifier = Modifier
@@ -40,16 +44,21 @@ fun JoinThePhotos(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(20.dp))
 
-            CreateTitle(stringResource(R.string.asocia))
-            /*
-            Text(
-                text = stringResource(R.string.asocia),
-                style = Typography3.bodyLarge,
-                color = MaterialTheme.colorScheme.tertiary
-            )*/
+            CreateTitle2(stringResource(R.string.asocia))
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(25.dp))
+
+            if (viewModel.messageResId != null) {
+                Text(
+                    text = stringResource(viewModel.messageResId!!),
+                    style = Typography3.titleSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+            }
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -83,19 +92,6 @@ fun JoinThePhotos(
                             }
                     )
                 }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (viewModel.messageResId != null) {
-                Text(
-                    text = stringResource(viewModel.messageResId!!),
-                    style = Typography3.bodyLarge,
-                    color = if (viewModel.messageResId == R.string.asocia1)
-                        Color.Green
-                    else
-                        Color.Red
-                )
             }
         }
     }

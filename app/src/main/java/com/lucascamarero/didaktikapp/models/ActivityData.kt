@@ -22,7 +22,7 @@ object ActivityDataSource {
         return when (number) {
             1 -> ActivityData(
                 id = 1,
-                title = "La Ermita de Santa Agueda",
+                title = stringResource(R.string.title1),
                 description = stringResource(id = R.string.texto1_intro),
                 imageResId = R.drawable.act1_premio1, // Reemplaza con tu imagen
                 imageDescription = "Fotografia 1",
@@ -30,7 +30,7 @@ object ActivityDataSource {
             )
             2 -> ActivityData(
                 id = 2,
-                title = "La iglesia de San Vicente",
+                title = stringResource(R.string.title2),
                 description = stringResource(id = R.string.texto2_intro),
                 imageResId = R.drawable.act2_img1, // Reemplaza con tu imagen
                 imageDescription = "Fotografia 2",
@@ -38,7 +38,7 @@ object ActivityDataSource {
             )
             3 -> ActivityData(
                 id = 3,
-                title = "El Acertijo del Puente",
+                title = stringResource(R.string.title3),
                 description = stringResource(id = R.string.texto3_intro),
                 imageResId = R.drawable.activ3_img1, // Reemplaza con tu imagen
                 imageDescription = "Fotografia 3",
@@ -47,7 +47,7 @@ object ActivityDataSource {
 
             4 -> ActivityData(
                 id = 4,
-                title = "El Edificio Ilgner",
+                title = stringResource(R.string.title4),
                 description = stringResource(id = R.string.texto4_intro),
                 imageResId = R.drawable.act4_img1, // Reemplaza con tu imagen
                 imageDescription = "Fotografia 4",
@@ -55,7 +55,7 @@ object ActivityDataSource {
             )
             5 -> ActivityData(
                 id = 5,
-                title = "Rompecabezas",
+                title = stringResource(R.string.title5),
                 description = stringResource(id = R.string.texto5_intro),
                 imageResId = R.drawable.fondopuzzle, // Reemplaza con tu imagen
                 imageDescription = "",
@@ -63,7 +63,7 @@ object ActivityDataSource {
             )
             6 -> ActivityData(
                 id = 6,
-                title = "El ferrocarril",
+                title = stringResource(R.string.title6),
                 description = stringResource(id = R.string.texto6_intro),
                 imageResId = R.drawable.act6_ferrocarril,
                 imageDescription = "Fotografia 6",
@@ -71,7 +71,7 @@ object ActivityDataSource {
             )
             7 -> ActivityData(
                 id = 7,
-                title = "Palacio Munoa",
+                title = stringResource(R.string.title7),
                 description = stringResource(id = R.string.texto7_intro),
                 imageResId = R.drawable.act7_img1,
                 imageDescription = "Fotografia 7",

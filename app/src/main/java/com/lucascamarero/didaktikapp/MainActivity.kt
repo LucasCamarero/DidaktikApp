@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                      * Control del flujo inicial de navegación basado en estados.
                      */
 
-                    /*
                     when {
                         showSplash -> {
                             SplashScreen(
@@ -114,10 +113,7 @@ class MainActivity : AppCompatActivity() {
                                 languageViewModel = languageViewModel
                             )
                         }
-                    }*/
-                    ScreenManager(
-                        languageViewModel = languageViewModel
-                    )
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.lucascamarero.didaktikapp.screens.activities.commons
 
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -44,7 +45,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CreateButton
+import com.lucascamarero.didaktikapp.components.CreateTitle
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
+import com.lucascamarero.didaktikapp.components.LockScreenOrientation
 import com.lucascamarero.didaktikapp.models.ActivityDataSource
 import com.lucascamarero.didaktikapp.models.ActivityData
 import kotlinx.coroutines.launch
@@ -150,6 +153,9 @@ fun StartOfActivityScreen(
     navController: NavController,
     activityNumber: Int
 ){
+    // 🔒 BLOQUEO SOLO EN VERTICAL
+    LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
     // 1. Obtener los datos de la actividad
     val data = ActivityDataSource.getActivityData(activityNumber)
 
@@ -179,15 +185,11 @@ fun StartOfActivityScreen(
         verticalArrangement = Arrangement.Top
     ) {
         // 1. Título de la actividad
-        Text(
-            text = data.title,
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.ExtraBold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            textAlign = TextAlign.Center,
-            fontSize = 28.sp, // Tamaño ajustado
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-        )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        CreateTitle(data.title)
+
+        Spacer(modifier = Modifier.height(30.dp))
 
         // 2. Imagen Polaroid con Carrusel
         PolaroidImage(data = data, imageResIds = images)
@@ -196,6 +198,8 @@ fun StartOfActivityScreen(
 
         // 4. Botón de Empezar Juego (Debajo de Jolín)
         if (isJolinTextComplete) {
+
+            Spacer(modifier = Modifier.height(26.dp))
 
             CreateButton(
                 texto = stringResource(id = R.string.intro_play_button),

@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.components.CreateTitle2
 
 @Composable
 fun Diploma(navController: NavController) {
@@ -36,15 +37,17 @@ fun Diploma(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.padding(top = 20.dp))
+        }
 
-            Text(
-                text = stringResource(R.string.diploma_name),
-                style = MaterialTheme.typography.titleSmall
-            )
+        item {
+            CreateTitle2(stringResource(R.string.diploma_name))
+        }
 
-            Spacer(modifier = Modifier.height(26.dp))
-
+        item {
+            Spacer(modifier = Modifier.padding(top = 25.dp))
+        }
+        item {
             Image(
                 painter = painterResource(id = diplomaImage),
                 contentDescription = "Diploma",

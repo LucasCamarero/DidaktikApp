@@ -372,7 +372,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                  */
                 NavHost(
                     navController = navController,
-                    startDestination = "jointhephotos"
+                    startDestination = "map"
                 ) {
 
                     /** Pantalla principal (mapa) */
