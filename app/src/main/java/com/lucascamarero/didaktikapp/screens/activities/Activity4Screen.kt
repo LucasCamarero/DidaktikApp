@@ -29,9 +29,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
+// 1. IMPORTAMOS TU COMPONENTE
+import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import com.lucascamarero.didaktikapp.viewmodels.Game4ViewModel
+import kotlinx.coroutines.delay
 
-// --- 1. MODELO DE DATOS (Debe coincidir con lo que espera el ViewModel) ---
+// --- 1. MODELO DE DATOS ---
 data class ToolItem(val id: Int, val name: String, val iconRes: Int)
 
 // --- 2. UTILIDAD PARA EL EFECTO NEÓN ---
@@ -65,142 +68,173 @@ fun Modifier.neonGlow(
 @Composable
 fun Activity4Screen(
     navController: NavController,
-    viewModel: Game4ViewModel = hiltViewModel() // Inyección del ViewModel
+    viewModel: Game4ViewModel = hiltViewModel()
 ) {
     // ===================================================================
-    // EVITA QUE GIRE HORIZONTALMENTE
+    // 1. CONFIGURACIÓN DE PANTALLA (BLOQUEO VERTICAL)
     // ===================================================================
     val context = LocalContext.current
     DisposableEffect(Unit) {
         val activity = context as? Activity
-        // Forzamos vertical al entrar
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         onDispose {
-            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
+
     // Recolectamos el estado del ViewModel
     val uiState by viewModel.uiState.collectAsState()
 
-    // --- INTERFAZ DE USUARIO ---
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF0F2F5))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    // Estado local para controlar cuándo mostrar el modal (después del delay visual)
+    var showSuccessModal by remember { mutableStateOf(false) }
 
-        // --- SECCIÓN 1: EDIFICIO (CAMBIA SI GANAS) ---
-        Card(
+    // ===================================================================
+    // 2. LÓGICA DE TIEMPO (DELAY VISUAL)
+    // ===================================================================
+    if (uiState.isGameWon) {
+        LaunchedEffect(Unit) {
+            // Esperamos 1.5 segundos viendo el edificio iluminado
+            delay(1500)
+            // Activamos el modal
+            showSuccessModal = true
+        }
+    }
+
+    // Usamos Box para superponer capas
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        // ===================================================================
+        // CAPA 1: JUEGO (FONDO)
+        // ===================================================================
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.9f),
-            shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF7D9EAA))
+                .fillMaxSize()
+                .background(Color(0xFFF0F2F5))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                // LÓGICA DE LA IMAGEN (Desde el estado)
-                val imageRes = if (uiState.isGameWon) {
-                    R.drawable.activ4_edificio_ilgner_iluminado
-                } else {
-                    R.drawable.activ4_edificio_ilgner_oscuro
-                }
 
-                Image(
-                    painter = painterResource(id = imageRes),
-                    contentDescription = "Edificio Ilgner",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+            // --- SECCIÓN 1: EDIFICIO (CAMBIA SI GANAS) ---
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.9f),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF7D9EAA))
+            ) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    val imageRes = if (uiState.isGameWon) {
+                        R.drawable.activ4_edificio_ilgner_iluminado
+                    } else {
+                        R.drawable.activ4_edificio_ilgner_oscuro
+                    }
+
+                    Image(
+                        painter = painterResource(id = imageRes),
+                        contentDescription = "Edificio Ilgner",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+
+            // --- MENSAJE DE TEXTO ---
+            Text(
+                text = uiState.message,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+                color = if (uiState.message.contains("incorrecto", true) || uiState.message.contains("faltan", true)) Color.Red else Color.Black
+            )
+
+            // --- SECCIÓN 2: GRID DE OBJETOS ---
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.6f),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.Gray)
+            ) {
+                val columns = 3
+                val chunkedTools = uiState.tools.chunked(columns)
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    chunkedTools.forEach { rowItems ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            rowItems.forEach { tool ->
+                                Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                                    ToolGridItem(
+                                        tool = tool,
+                                        isSelected = uiState.selectedIds.contains(tool.id),
+                                        onItemClick = {
+                                            if (!uiState.isGameWon) {
+                                                viewModel.toggleSelection(tool.id)
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                            val missing = columns - rowItems.size
+                            repeat(missing) { Spacer(modifier = Modifier.weight(1f)) }
+                        }
+                    }
+                }
+            }
+
+            // --- SECCIÓN 3: BOTÓN ENCENDER ---
+            Button(
+                onClick = { viewModel.checkAnswer() },
+                enabled = !uiState.isGameWon,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF154c79),
+                    disabledContainerColor = Color(0xFF4CAF50)
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text(
+                    text = if (uiState.isGameWon) "¡CONECTADO!" else "ENCENDER",
+                    fontSize = 18.sp,
+                    color = Color.White
                 )
             }
         }
 
-        // --- MENSAJE DE TEXTO (Desde el estado) ---
-        Text(
-            text = uiState.message,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Center,
-            // Si el mensaje contiene "incorrecto", lo pintamos rojo
-            color = if (uiState.message.contains("incorrecto", true) || uiState.message.contains("faltan", true)) Color.Red else Color.Black
-        )
-
-        // --- SECCIÓN 2: GRID DE OBJETOS ---
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.6f),
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.Gray)
-        ) {
-            // Usamos la lista de herramientas que viene del ViewModel
-            val columns = 3
-            val chunkedTools = uiState.tools.chunked(columns)
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                chunkedTools.forEach { rowItems ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        rowItems.forEach { tool ->
-                            Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
-                                ToolGridItem(
-                                    tool = tool,
-                                    // Verificamos si el ID está en el set de seleccionados del estado
-                                    isSelected = uiState.selectedIds.contains(tool.id),
-                                    onItemClick = {
-                                        // Delegamos la lógica al ViewModel
-                                        viewModel.toggleSelection(tool.id)
-                                    }
-                                )
-                            }
-                        }
-                        // Rellenar huecos si la fila no está completa
-                        val missing = columns - rowItems.size
-                        repeat(missing) { Spacer(modifier = Modifier.weight(1f)) }
+        // ===================================================================
+        // CAPA 2: MENSAJE FINAL (POP-UP)
+        // ===================================================================
+        if (showSuccessModal) {
+            MensajeFinalActivity(
+                titulo = "¡ENERGÍA RESTAURADA!",
+                mensaje = "Has conectado correctamente el sistema eléctrico del Edificio Ilgner.",
+                botonText = "VER RESULTADO",
+                onButtonClick = {
+                    // ID = 4
+                    val ruta = "endactivity/4/${R.drawable.activ4_edificio_ilgner_oscuro}/${R.drawable.activ4_edificio_ilgner_iluminado}"
+                    navController.navigate(ruta) {
+                        popUpTo("activity4") { inclusive = true }
                     }
                 }
-            }
-        }
-
-        // --- SECCIÓN 3: BOTÓN ENCENDER ---
-        Button(
-            onClick = {
-                // Delegamos la comprobación al ViewModel
-                viewModel.checkAnswer()
-            },
-            enabled = !uiState.isGameWon, // Se deshabilita al ganar
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF154c79),
-                disabledContainerColor = Color(0xFF4CAF50) // Se pone verde al ganar
-            ),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Text(
-                text = if (uiState.isGameWon) "¡CONECTADO!" else "ENCENDER",
-                fontSize = 18.sp,
-                color = Color.White
             )
         }
     }
 }
 
-// --- 4. COMPONENTE DE ITEM INDIVIDUAL (Sin cambios lógicos, solo visual) ---
+// --- 4. COMPONENTE DE ITEM INDIVIDUAL (Sin cambios) ---
 @Composable
 fun ToolGridItem(
     tool: ToolItem,

@@ -392,11 +392,27 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
 
                     /** Pantalla de final genérica de actividades */
                     composable(
-                        route = "endactivity/{number}",
-                        arguments = listOf(navArgument("number") { type = NavType.IntType })
+                        // 1. Definimos la ruta con los 3 huecos para los datos
+                        route = "endactivity/{activityId}/{imgBefore}/{imgAfter}",
+                        arguments = listOf(
+                            // 2. Declaramos que los 3 son de tipo Entero (Int)
+                            navArgument("activityId") { type = NavType.IntType },
+                            navArgument("imgBefore") { type = NavType.IntType },
+                            navArgument("imgAfter") { type = NavType.IntType }
+                        )
                     ) { backStackEntry ->
-                        val number = backStackEntry.arguments?.getInt("number") ?: 1
-                        EndOfActivityScreen(navController, number)
+                        // 3. Recuperamos los datos de la "mochila" (argumentos)
+                        val activityId = backStackEntry.arguments?.getInt("activityId") ?: 1
+                        val imgBefore = backStackEntry.arguments?.getInt("imgBefore") ?: R.drawable.act1_premio1 // Imagen por defecto por seguridad
+                        val imgAfter = backStackEntry.arguments?.getInt("imgAfter") ?: R.drawable.act1_premio2
+
+                        // 4. Llamamos a la pantalla pasándole los datos recuperados
+                        EndOfActivityScreen(
+                            navController = navController,
+                            activityId = activityId,
+                            imageBeforeRes = imgBefore,
+                            imageAfterRes = imgAfter
+                        )
                     }
 
                     /** Pantallas de actividades */

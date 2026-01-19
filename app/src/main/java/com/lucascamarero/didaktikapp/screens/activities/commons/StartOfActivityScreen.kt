@@ -7,8 +7,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -154,61 +157,99 @@ fun PolaroidImage(
 fun StartOfActivityScreen(
     navController: NavController,
     activityNumber: Int
-){
-    // 1. Obtener los datos de la actividad
+) {
     val data = ActivityDataSource.getActivityData(activityNumber)
-
-    // 2. Estado para el texto completo (necesario para mostrar el botón)
     var isJolinTextComplete by remember { mutableStateOf(false) }
 
-    // Define las imágenes que quieres mostrar para esta actividad
-    // Debes tener estos drawables en tu carpeta res/drawable
     val images = when (activityNumber) {
-        1 -> listOf(R.drawable.act1_img1, R.drawable.act1_img2) // EJEMPLO
+        1 -> listOf(R.drawable.act1_img1, R.drawable.act1_img2)
         2 -> listOf(R.drawable.activ3_img1)
         6 -> listOf(R.drawable.act6_ferrocarril)
         8 -> listOf(R.drawable.premio11, R.drawable.premio12)
-        // ... define el resto de las 7 actividades
         else -> listOf(data.imageResId)
     }
 
-    // CAMBIO CLAVE: Usamos Column con verticalScroll para evitar LazyColumn
-    // y asegurar que Jolín y el botón se rendericen inmediatamente si hay espacio.
-    Column(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .verticalScroll(rememberScrollState()) // Permite el scroll si no cabe
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
     ) {
-        // 1. Título de la actividad
+        val isLandscape = maxWidth > maxHeight
 
-        CreateTitle(data.title)
+        if (isLandscape) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CreateTitle(data.title)
 
-        // 2. Imagen Polaroid con Carrusel
-        PolaroidImage(data = data, imageResIds = images)
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // LADO IZQUIERDO: Imagen
+                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                        PolaroidImage(data = data, imageResIds = images)
+                    }
 
-        Spacer(modifier = Modifier.height(16.dp))
+                    // LADO DERECHO: Texto + Jolín + Botón
+                    Box(
+                        modifier = Modifier.weight(1.2f).fillMaxHeight(),
+                        contentAlignment = Alignment.Center // Centra todo el bloque de Jolín
+                    ) {
+                        // 1. El bloque completo (Burbuja + Personaje)
+                        JolinWelcomeMessage(
+                            message = data.description,
+                            onTextComplete = { isJolinTextComplete = it },
+                            onStartClick = { navController.navigate(data.gameRoute) },
+                            jolinSize = 130.dp,
+                            bubbleSize = 210.dp,
+                            jolinOffsetY = 0.dp
+                        )
 
-        // 4. Botón de Empezar Juego (Debajo de Jolín)
-        if (isJolinTextComplete) {
-
-            CreateButton(
-                texto = stringResource(id = R.string.intro_play_button),
-                onClick = {// NAVEGACIÓN DINÁMICA SEGÚN LA DATA
-                    navController.navigate(data.gameRoute)}
-            )
-        }
-
-        // 3. Jolín explicando el juego (Contiene el bocadillo y el ícono de Play)
-        JolinWelcomeMessage(
-            message = data.description,
-            onTextComplete = { isJolinTextComplete = it },
-            onStartClick = {
-                navController.navigate(data.gameRoute)
+                        // 2. El BOTÓN (Posicionado manualmente a la izquierda de Jolín)
+                        if (isJolinTextComplete) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(bottom = 20.dp, end = 140.dp), // Ajusta 'end' para moverlo a la izquierda de Jolín
+                                contentAlignment = Alignment.BottomCenter
+                            ) {
+                                CreateButton(
+                                    texto = stringResource(id = R.string.intro_play_button),
+                                    onClick = { navController.navigate(data.gameRoute) }
+                                )
+                            }
+                        }
+                    }
+                }
             }
-        )
+        } else {
+            // --- DISEÑO VERTICAL (Sin cambios significativos) ---
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CreateTitle(data.title)
+                PolaroidImage(data = data, imageResIds = images)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (isJolinTextComplete) {
+                    CreateButton(
+                        texto = stringResource(id = R.string.intro_play_button),
+                        onClick = { navController.navigate(data.gameRoute) }
+                    )
+                }
+
+                JolinWelcomeMessage(
+                    message = data.description,
+                    onTextComplete = { isJolinTextComplete = it },
+                    onStartClick = { navController.navigate(data.gameRoute) }
+                )
+            }
+        }
     }
 }

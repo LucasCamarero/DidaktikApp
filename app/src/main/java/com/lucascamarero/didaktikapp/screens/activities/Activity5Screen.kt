@@ -7,28 +7,13 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -54,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.lucascamarero.didaktikapp.R
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+// 1. IMPORTAMOS TU COMPONENTE
+import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import kotlin.math.absoluteValue
 
 
@@ -68,6 +53,7 @@ data class BoxInfo(
 ){
     var isCorrecto: Boolean by mutableStateOf(false)
 }
+
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Activity5Screen(navController: NavController) {
@@ -76,9 +62,6 @@ fun Activity5Screen(navController: NavController) {
     val totalPieces = pieceMapv2.size
     //Guarda el orden una sola vez
     val shuffledPieces = remember { pieceMapv2.indices.shuffled() }
-    //evita navegar varias veces
-    var finished by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
 
     // ===================================================================
     // EVITA QUE GIRE HORIZONTALMENTE
@@ -93,94 +76,98 @@ fun Activity5Screen(navController: NavController) {
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
-    Column(
-        modifier = Modifier
-            .background(Color(0xFFF0F2F5))
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
 
+    // Usamos Box para capas (Juego al fondo, Mensaje arriba)
+    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF0F2F5))) {
 
-        //matriz del tablero (3x4)
+        // variables del juego
         val arrayBox = remember { Array(3) { Array(4) { BoxInfo() } } }
-
-
-        //contar cuántas piezas están bien colocadas
         var correctPieces by remember { mutableStateOf(0) }
+        val isGameFinished = correctPieces == pieceMapv2.size
 
-
-        //navegación automática al completar puzzle
-        if (correctPieces == pieceMapv2.size && !finished) {
-            finished = true
-            scope.launch {
-                delay(5000)
-                navController.navigate("EJ5Info")
-            }
-        }
-
-
-        // ===== TABLERO SUPERIOR =====
-        Column {
-            for (row in arrayBox.indices) {
-                Row {
-                    for (col in arrayBox[row].indices) {
-                        Box(
-                            modifier = Modifier
-                                .size(100.dp)
-                                .alpha(0.5f)
-                                .drawBehind {
-                                    drawImage(
-                                        image = image,
-                                        srcOffset = IntOffset(
-                                            col * size.width.toInt(),
-                                            row * size.height.toInt()
-                                        ),
-                                        srcSize = IntSize(
-                                            size.width.toInt(),
-                                            size.height.toInt()
-                                        ),
-                                        dstSize = IntSize(
-                                            size.width.toInt(),
-                                            size.height.toInt()
+        // ===================================================================
+        // CAPA 1: EL JUEGO (FONDO)
+        // ===================================================================
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // ===== TABLERO SUPERIOR =====
+            Column {
+                for (row in arrayBox.indices) {
+                    Row {
+                        for (col in arrayBox[row].indices) {
+                            Box(
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .alpha(0.5f)
+                                    .drawBehind {
+                                        drawImage(
+                                            image = image,
+                                            srcOffset = IntOffset(
+                                                col * size.width.toInt(),
+                                                row * size.height.toInt()
+                                            ),
+                                            srcSize = IntSize(
+                                                size.width.toInt(),
+                                                size.height.toInt()
+                                            ),
+                                            dstSize = IntSize(
+                                                size.width.toInt(),
+                                                size.height.toInt()
+                                            )
                                         )
-                                    )
-                                }
-                                .onGloballyPositioned { coords ->
-                                    val box = arrayBox[row][col]
-                                    arrayBox[row][col] = box.copy(
-                                        x = coords.positionInWindow().x,
-                                        y = coords.positionInWindow().y
-                                    )
-                                }
-                        )
+                                    }
+                                    .onGloballyPositioned { coords ->
+                                        val box = arrayBox[row][col]
+                                        arrayBox[row][col] = box.copy(
+                                            x = coords.positionInWindow().x,
+                                            y = coords.positionInWindow().y
+                                        )
+                                    }
+                            )
+                        }
                     }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            // ===== PIEZAS ABAJO =====
+            Box {
+                shuffledPieces.forEach  { piece ->
+                    DraggablePieceMapAgujeros(
+                        pieceIndex = piece,
+                        image = image,
+                        arrayBox = arrayBox,
+                        onPlacedCorrectly = {
+                            correctPieces++
+                        },
+                        onRemovedCorrectly = {
+                            correctPieces--
+                        }
+                    )
                 }
             }
         }
 
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-
-        // ===== PIEZAS ABAJO =====
-        Box {
-            shuffledPieces.forEach  { piece ->
-                DraggablePieceMapAgujeros(
-                    pieceIndex = piece,
-                    image = image,
-                    arrayBox = arrayBox,
-                    onPlacedCorrectly = {
-                        correctPieces++
-                    },
-                    onRemovedCorrectly = {
-                        correctPieces--
-                    }
-                )
-            }
+        // ===================================================================
+        // CAPA 2: MENSAJE FINAL (POP-UP)
+        // ===================================================================
+        if (isGameFinished) {
+            MensajeFinalActivity(
+                titulo = "¡PUZZLE COMPLETADO!",
+                mensaje = "Has reconstruido el Cargadero de Minas correctamente.",
+                botonText = "VER HISTORIA", // Nos lleva a la pantalla de info
+                onButtonClick = {
+                    navController.navigate("EJ5Info")
+                }
+            )
         }
     }
 }
+
 @Composable
 fun PuzzlePieceShape(
     modifier: Modifier = Modifier,
@@ -249,11 +236,6 @@ fun PuzzlePieceShape(
                 cubicTo(w * 0.55f, h , w * 0.45f, h , w * 0.4f, h+knobSize)
                 lineTo(0f, h)
 
-
-
-
-
-
             } else {
                 lineTo(0f, h)
             }
@@ -262,11 +244,9 @@ fun PuzzlePieceShape(
             // borde izquierdo
             if (leftHead) {
 
-
                 lineTo(knobSize, h * 0.6f)
                 cubicTo(0f, h * 0.55f, 0f, h * 0.45f,knobSize , h * 0.4f)
                 //cubicTo(w , h * 0.45f, w , h * 0.55f, w+knobSize, h * 0.6f)
-
 
                 lineTo(0f, 0f)
             } else if (leftHole) {
@@ -277,12 +257,8 @@ fun PuzzlePieceShape(
                 lineTo(0f, 0f)
             }
 
-
             close()
         }
-
-
-
 
         clipPath(path) { //Recorta la imagen con la forma del rompecabezas
             drawImage(
@@ -299,8 +275,6 @@ fun PuzzlePieceShape(
                 style = Stroke(width = 6f)
             )
         }
-
-
     }
 }
 data class PieceShapev4(
@@ -426,9 +400,10 @@ fun PreviewVentanaInfo() {
     val mockNavController = rememberNavController()
     ventanaInfo(navController = mockNavController)
 }
+
 @Composable
 fun ventanaInfo(navController: NavController){
-    LazyColumn(Modifier.fillMaxSize(),
+    LazyColumn(Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         item {
@@ -467,10 +442,26 @@ fun ventanaInfo(navController: NavController){
             Text("Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera" +
                     " y hierro. Representa el \"corazón\" de la industria que trajo trabajo, personas y" +
                     " riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy")
-            Button({
-                navController.navigate(
-                    "finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.ferrocarril_actual}")
-            }) {Text("Ventana final") }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // BOTÓN FINAL -> Actualizado para usar la ruta endactivity
+            Button(
+                onClick = {
+                    // ID 5 = Cargaderos
+                    // Fotos antes/después
+                    val ruta = "endactivity/5/${R.drawable.cargaderos_antigua}/${R.drawable.cargaderos_antigua}"
+                    navController.navigate(ruta) {
+                        popUpTo("activity5") { inclusive = true }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF154c79))
+            ) {
+                Text("FINALIZAR ACTIVIDAD")
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

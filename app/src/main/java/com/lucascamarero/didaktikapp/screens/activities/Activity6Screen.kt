@@ -1,6 +1,5 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
-
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
@@ -13,39 +12,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -64,10 +36,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lucascamarero.didaktikapp.R
-import com.lucascamarero.didaktikapp.components.CreateButton
-import kotlinx.coroutines.delay
+import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import kotlinx.coroutines.launch
-import kotlin.collections.plus
 
 enum class AnimacionSelecionada {
     Mima,
@@ -75,6 +45,7 @@ enum class AnimacionSelecionada {
     Barco,
     Cargadero
 }
+
 val ordenCorrecto = listOf(
     AnimacionSelecionada.Mima,
     AnimacionSelecionada.Tren,
@@ -84,26 +55,32 @@ val ordenCorrecto = listOf(
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Activity6Screen(navController: NavController){
-    var animacionActual by remember{ mutableStateOf(setOf<AnimacionSelecionada>()) }
+fun Activity6Screen(navController: NavController) {
+
+    // --- ESTADOS ---
+    var animacionActual by remember { mutableStateOf(setOf<AnimacionSelecionada>()) }
     var pasoActual by remember { mutableStateOf(0) }
     var mensajeError by remember { mutableStateOf(false) }
-    var scope = rememberCoroutineScope()
-    fun manejoBotones(animacion: AnimacionSelecionada){
-        if(ordenCorrecto[pasoActual] == animacion){
+    var juegoTerminado by remember { mutableStateOf(false) } // 💡 NUEVO ESTADO
+
+    // --- LÓGICA DEL JUEGO ---
+    fun manejoBotones(animacion: AnimacionSelecionada) {
+        if (ordenCorrecto[pasoActual] == animacion) {
+            // Acierto
             animacionActual = animacionActual + animacion
-            pasoActual ++
+            pasoActual++
             mensajeError = false
-            if(pasoActual == ordenCorrecto.size){
-                scope.launch {
-                    delay(5000)
-                    navController.navigate("finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.cargaderos_antigua}")
-                }
+
+            // Verificar si completó la secuencia
+            if (pasoActual == ordenCorrecto.size) {
+                juegoTerminado = true // 💡 ACTIVAMOS EL FINAL
             }
-        }else{
+        } else {
+            // Error: Reiniciar
             animacionActual = emptySet()
             pasoActual = 0
             mensajeError = true
+            juegoTerminado = false
         }
     }
 
@@ -113,99 +90,83 @@ fun Activity6Screen(navController: NavController){
     val context = LocalContext.current
     DisposableEffect(Unit) {
         val activity = context as? Activity
-        // Forzamos vertical al entrar
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         onDispose {
-            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
+
     Scaffold(
         bottomBar = {
-            Row(Modifier.fillMaxWidth()
-                .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+            // BARRA DE BOTONES (Solo visible si no ha terminado el juego para evitar clics extra)
+            if (!juegoTerminado) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                IconButton({
-                    manejoBotones(AnimacionSelecionada.Barco)
-                }) { Icon(
-                    painter = painterResource(R.drawable.boton_barco),
-                    contentDescription = "Barco",
-                    tint = Color.Unspecified
-                ) }
-                IconButton({
-                    manejoBotones(AnimacionSelecionada.Mima)
-                }) { Icon(
-                    painter = painterResource(R.drawable.boton_mina),
-                    contentDescription = "Mina",
-                    tint = Color.Unspecified
-                ) }
-                IconButton({
-                    manejoBotones(AnimacionSelecionada.Cargadero)
-                }) { Icon(
-                    painter = painterResource(R.drawable.boton_cargadero),
-                    contentDescription = "Cagradero",
-                    tint = Color.Unspecified
-                ) }
-                IconButton({
-                    manejoBotones(AnimacionSelecionada.Tren)
-                }) { Icon(
-                    painter = painterResource(R.drawable.boton_tren),
-                    contentDescription = "Tren",
-                    tint = Color.Unspecified
-                ) }
+                    IconButton({ manejoBotones(AnimacionSelecionada.Barco) }) {
+                        Icon(painter = painterResource(R.drawable.boton_barco), contentDescription = "Barco", tint = Color.Unspecified)
+                    }
+                    IconButton({ manejoBotones(AnimacionSelecionada.Mima) }) {
+                        Icon(painter = painterResource(R.drawable.boton_mina), contentDescription = "Mina", tint = Color.Unspecified)
+                    }
+                    IconButton({ manejoBotones(AnimacionSelecionada.Cargadero) }) {
+                        Icon(painter = painterResource(R.drawable.boton_cargadero), contentDescription = "Cargadero", tint = Color.Unspecified)
+                    }
+                    IconButton({ manejoBotones(AnimacionSelecionada.Tren) }) {
+                        Icon(painter = painterResource(R.drawable.boton_tren), contentDescription = "Tren", tint = Color.Unspecified)
+                    }
+                }
             }
         }
     ) {
-        val lottieTren by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.trenv9)
-        )
-        val lottieCagradero by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.cargaderoanimacion)
-        )
-        val lottieBarco by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.animacionbarco)
-        )
-        val lottieMina by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.animacionmina)
-        )
+        // --- RECURSOS LOTTIE ---
+        val lottieTren by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.trenv9))
+        val lottieCagradero by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.cargaderoanimacion))
+        val lottieBarco by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animacionbarco))
+        val lottieMina by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animacionmina))
+
         val infiniteTransition = rememberInfiniteTransition()
-        // Tamaño total del área animada
         val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-        val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        // Convertimos a px porque Offset usa px
         val density = LocalDensity.current
         val maxX = with(density) { screenWidth.toPx() }
-        val maxY = with(density) { screenHeight.toPx() }
-        // Movimiento diagonal: avanza X e Y al mismo ritmo
+
         val offsetAnim = infiniteTransition.animateFloat(
             initialValue = -900f,
-            targetValue = maxX,   // misma distancia para simular 45°
+            targetValue = maxX,
             animationSpec = infiniteRepeatable(
                 animation = tween(durationMillis = 5000, easing = LinearEasing),
                 repeatMode = RepeatMode.Restart
             )
         )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            // 1. FONDO
             Image(
                 painter = painterResource(R.drawable.fondof2),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
-            if(mensajeError){
-                Box(Modifier.fillMaxWidth()
-                    .background(Color.Red.copy(0.8f))
-                    .padding(8.dp)
-                    .align (Alignment.TopCenter)){
-                    Text("Orden incorrecto",
-                        color = Color.White)
+
+            // 2. MENSAJE DE ERROR
+            if (mensajeError) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(Color.Red.copy(0.8f))
+                        .padding(8.dp)
+                        .align(Alignment.TopCenter)
+                ) {
+                    Text("Orden incorrecto. Inténtalo de nuevo.", color = Color.White, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
                 }
             }
-            if (animacionActual.contains(AnimacionSelecionada.Mima)){
+
+            // 3. ANIMACIONES (Lógica original)
+            if (animacionActual.contains(AnimacionSelecionada.Mima)) {
                 LottieAnimation(
                     composition = lottieMina,
                     iterations = LottieConstants.IterateForever,
@@ -215,21 +176,20 @@ fun Activity6Screen(navController: NavController){
                         .offset(x = (-50).dp)
                 )
             }
-            if(animacionActual.contains(AnimacionSelecionada.Tren)){
+            if (animacionActual.contains(AnimacionSelecionada.Tren)) {
                 DosLineasDiagonalParalelas(maxX)
-                // Animación en diagonal
                 LottieAnimation(
                     composition = lottieTren,
                     iterations = LottieConstants.IterateForever,
                     modifier = Modifier
                         .width(450.dp)
                         .graphicsLayer {
-                            // Movimiento en X = movimiento en Y —> diagonal 45°
-                            translationX = (offsetAnim.value).toFloat()
-                            translationY = (offsetAnim.value).toFloat()
+                            translationX = (offsetAnim.value)
+                            translationY = (offsetAnim.value)
                             rotationZ = 15f
                         }
                 )
+                // Superposición Mina
                 Image(
                     painter = painterResource(id = R.drawable.minaf2),
                     contentDescription = null,
@@ -239,47 +199,61 @@ fun Activity6Screen(navController: NavController){
                     contentScale = ContentScale.FillHeight
                 )
             }
-            if(animacionActual.contains(AnimacionSelecionada.Cargadero)){
+            if (animacionActual.contains(AnimacionSelecionada.Cargadero)) {
                 LottieAnimation(
                     composition = lottieCagradero,
                     iterations = LottieConstants.IterateForever,
                     modifier = Modifier
-                        //.size(150.dp)
                         .height(650.dp)
                         .align(Alignment.BottomEnd)
                 )
             }
-            if(animacionActual.contains(AnimacionSelecionada.Barco)){
+            if (animacionActual.contains(AnimacionSelecionada.Barco)) {
                 LottieAnimation(
                     composition = lottieBarco,
                     iterations = LottieConstants.IterateForever,
                     modifier = Modifier
-                        //.size(150.dp)
                         .align(Alignment.BottomStart)
                         .height(350.dp)
+                )
+            }
+
+            // ===================================================================
+            // 4. MENSAJE DE ÉXITO Y BOTÓN FINALIZAR (Superpuesto)
+            // ===================================================================
+            if (juegoTerminado) {
+                MensajeFinalActivity(
+                    titulo = "¡MUY BIEN!",
+                    mensaje = "Has completado la secuencia del transporte de mineral correctamente.",
+                    botonText = "FINALIZAR",
+                    onButtonClick = {
+                        // Aquí defines qué hace el botón específicamente para ESTA actividad
+                        val ruta = "endactivity/6/${R.drawable.cargaderos_antigua}/${R.drawable.cargaderos_antigua}"
+                        navController.navigate(ruta) {
+                            popUpTo("activity6") { inclusive = true }
+                        }
+                    }
                 )
             }
         }
     }
 }
+
 @Composable
-fun DosLineasDiagonalParalelas(maxX:Float) {
+fun DosLineasDiagonalParalelas(maxX: Float) {
     Canvas(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
-        // Primera diagonal ↘︎
         drawLine(
             color = Color.Black,
             start = Offset(-900f, -900f),
             end = Offset(maxX, maxX),
             strokeWidth = 20f
         )
-        // Segunda diagonal ↘︎ desplazada
         drawLine(
             color = Color.Black,
             start = Offset(-1020f, -900f),
-            end = Offset(maxX, maxX+120),
+            end = Offset(maxX, maxX + 120),
             strokeWidth = 20f
         )
     }
