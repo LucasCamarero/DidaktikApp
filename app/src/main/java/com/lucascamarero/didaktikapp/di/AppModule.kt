@@ -3,6 +3,7 @@ package com.lucascamarero.didaktikapp.di
 import android.content.Context
 import androidx.room.Room
 import com.lucascamarero.didaktikapp.data.db.BarakaldoDatabase
+import com.lucascamarero.didaktikapp.data.db.DatabaseInitializer
 import com.lucascamarero.didaktikapp.data.db.daos.ContenidoDao
 import com.lucascamarero.didaktikapp.data.db.daos.ProgresoDao
 import dagger.Module
@@ -10,6 +11,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 @Module
@@ -22,13 +27,22 @@ object AppModule {
     fun provideDatabase(
         @ApplicationContext context: Context
     ): BarakaldoDatabase {
-        return Room.databaseBuilder(
+        val database = Room.databaseBuilder(
             context,
             BarakaldoDatabase::class.java,
             "barakaldo_db"
         )
+            .addCallback(DatabaseInitializer())
             .fallbackToDestructiveMigration() // Útil para desarrollo si cambias tablas
             .build()
+        
+        // Inicializar la base de datos en un coroutine scope
+        val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        applicationScope.launch {
+            DatabaseInitializer.initializeDatabase(database)
+        }
+        
+        return database
     }
 
     // 2. Enseñar a Hilt a crear el ProgresoDao (extrayéndolo de la DB)

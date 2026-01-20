@@ -68,7 +68,7 @@ class Game3ViewModel @Inject constructor(
 
     private fun updateDatabase(personaId: Int) {
         viewModelScope.launch {
-            progresoDao.updateProgresoCompletado(
+            progresoDao.upsertProgresoCompletado(
                 actividadId = 2,
                 personaId = personaId,
                 date = LocalDateTime.now().toString()
