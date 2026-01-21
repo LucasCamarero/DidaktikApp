@@ -17,10 +17,11 @@ class ProgresoRepository @Inject constructor(
 
     /**
      * DML UPDATE: Marca una actividad específica como completada.
+     * Usa UPSERT para asegurar que la fila existe antes de actualizarla.
      */
     suspend fun markActivityAsCompleted(actividadId: Int, personaId: Int) {
         val currentDate = System.currentTimeMillis().toString() // Usar un formato de fecha real
-        progresoDao.updateProgresoCompletado(actividadId, personaId, currentDate)
+        progresoDao.upsertProgresoCompletado(actividadId, personaId, currentDate)
     }
 
     /**
@@ -47,7 +48,4 @@ class ProgresoRepository @Inject constructor(
         progresoDao.insertInitialProgreso(initialProgresoList)
     }
 
-    suspend fun updateProgresoCompletado(actividadId: Int, personaId: Int) {
-        // lógica llamando al dao
-    }
 }
