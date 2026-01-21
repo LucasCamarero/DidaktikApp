@@ -1,32 +1,19 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -40,6 +27,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
@@ -50,12 +38,9 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.Firebase
-import com.google.firebase.ai.ai
-import com.google.firebase.ai.type.GenerativeBackend
 import com.lucascamarero.didaktikapp.R
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+// 1. IMPORTAMOS TU COMPONENTE
+import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import kotlin.math.absoluteValue
 
 
@@ -68,6 +53,7 @@ data class BoxInfo(
 ){
     var isCorrecto: Boolean by mutableStateOf(false)
 }
+
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Activity5Screen(navController: NavController) {
@@ -76,83 +62,112 @@ fun Activity5Screen(navController: NavController) {
     val totalPieces = pieceMapv2.size
     //Guarda el orden una sola vez
     val shuffledPieces = remember { pieceMapv2.indices.shuffled() }
-    //evita navegar varias veces
-    var finished by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        //matriz del tablero (3x4)
-        val arrayBox = remember { Array(3) { Array(4) { BoxInfo() } } }
-        //contar cuántas piezas están bien colocadas
-        var correctPieces by remember { mutableStateOf(0) }
-        //navegación automática al completar puzzle
-        if (correctPieces == pieceMapv2.size && !finished) {
-            finished = true
-            scope.launch {
-                delay(5000)
-                navController.navigate("EJ5Info")
-            }
+
+    // ===================================================================
+    // EVITA QUE GIRE HORIZONTALMENTE
+    // ===================================================================
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val activity = context as? Activity
+        // Forzamos vertical al entrar
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        onDispose {
+            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        // ===== TABLERO SUPERIOR =====
-        Column {
-            for (row in arrayBox.indices) {
-                Row {
-                    for (col in arrayBox[row].indices) {
-                        Box(
-                            modifier = Modifier
-                                .size(100.dp)
-                                .alpha(0.5f)
-                                .drawBehind {
-                                    drawImage(
-                                        image = image,
-                                        srcOffset = IntOffset(
-                                            col * size.width.toInt(),
-                                            row * size.height.toInt()
-                                        ),
-                                        srcSize = IntSize(
-                                            size.width.toInt(),
-                                            size.height.toInt()
-                                        ),
-                                        dstSize = IntSize(
-                                            size.width.toInt(),
-                                            size.height.toInt()
+    }
+
+    // Usamos Box para capas (Juego al fondo, Mensaje arriba)
+    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF0F2F5))) {
+
+        // variables del juego
+        val arrayBox = remember { Array(3) { Array(4) { BoxInfo() } } }
+        var correctPieces by remember { mutableStateOf(0) }
+        val isGameFinished = correctPieces == pieceMapv2.size
+
+        // ===================================================================
+        // CAPA 1: EL JUEGO (FONDO)
+        // ===================================================================
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // ===== TABLERO SUPERIOR =====
+            Column {
+                for (row in arrayBox.indices) {
+                    Row {
+                        for (col in arrayBox[row].indices) {
+                            Box(
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .alpha(0.5f)
+                                    .drawBehind {
+                                        drawImage(
+                                            image = image,
+                                            srcOffset = IntOffset(
+                                                col * size.width.toInt(),
+                                                row * size.height.toInt()
+                                            ),
+                                            srcSize = IntSize(
+                                                size.width.toInt(),
+                                                size.height.toInt()
+                                            ),
+                                            dstSize = IntSize(
+                                                size.width.toInt(),
+                                                size.height.toInt()
+                                            )
                                         )
-                                    )
-                                }
-                                .onGloballyPositioned { coords ->
-                                    val box = arrayBox[row][col]
-                                    arrayBox[row][col] = box.copy(
-                                        x = coords.positionInWindow().x,
-                                        y = coords.positionInWindow().y
-                                    )
-                                }
-                        )
+                                    }
+                                    .onGloballyPositioned { coords ->
+                                        val box = arrayBox[row][col]
+                                        arrayBox[row][col] = box.copy(
+                                            x = coords.positionInWindow().x,
+                                            y = coords.positionInWindow().y
+                                        )
+                                    }
+                            )
+                        }
                     }
                 }
             }
-        }
-        Spacer(modifier = Modifier.height(40.dp))
-        // ===== PIEZAS ABAJO =====
-        Box {
-            shuffledPieces.forEach  { piece ->
-                DraggablePieceMapAgujeros(
-                    pieceIndex = piece,
-                    image = image,
-                    arrayBox = arrayBox,
-                    onPlacedCorrectly = {
-                        correctPieces++
-                    },
-                    onRemovedCorrectly = {
-                        correctPieces--
-                    }
-                )
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            // ===== PIEZAS ABAJO =====
+            Box {
+                shuffledPieces.forEach  { piece ->
+                    DraggablePieceMapAgujeros(
+                        pieceIndex = piece,
+                        image = image,
+                        arrayBox = arrayBox,
+                        onPlacedCorrectly = {
+                            correctPieces++
+                        },
+                        onRemovedCorrectly = {
+                            correctPieces--
+                        }
+                    )
+                }
             }
+        }
+
+        // ===================================================================
+        // CAPA 2: MENSAJE FINAL (POP-UP)
+        // ===================================================================
+        if (isGameFinished) {
+            MensajeFinalActivity(
+                titulo = "¡PUZZLE COMPLETADO!",
+                mensaje = "Has reconstruido el Cargadero de Minas correctamente.",
+                botonText = "VER HISTORIA", // Nos lleva a la pantalla de info
+                onButtonClick = {
+                    navController.navigate("EJ5Info")
+                }
+            )
         }
     }
 }
+
 @Composable
 fun PuzzlePieceShape(
     modifier: Modifier = Modifier,
@@ -173,8 +188,12 @@ fun PuzzlePieceShape(
         val w = size.width
         val h = size.height //Tamaño de la pieza
         val knobSize = w * 0.2f //Tamaño de las orejas del puzzle
+
+
         val path = Path().apply { //Define la forma exacta de la pieza
             moveTo(0f, 0f)
+
+
             // borde superior
             //Decide si hay:
             if (topHead) { // Cabeza
@@ -182,6 +201,8 @@ fun PuzzlePieceShape(
                 lineTo(w * 0.4f, knobSize)
                 cubicTo(w * 0.45f, 0f, w * 0.55f, 0f, w * 0.6f, knobSize)
                 lineTo(w, 0f)
+
+
             } else if (topHole) { //Hueco
                 lineTo(w * 0.4f, 0f)
                 cubicTo(w * 0.45f, +knobSize, w * 0.55f, +knobSize, w * 0.6f, 0f)
@@ -189,6 +210,8 @@ fun PuzzlePieceShape(
             } else { //Linea recta
                 lineTo(w, 0f)
             }
+
+
             // borde derecho
             if (rightHead) {
                 lineTo(w, h * 0.4f)
@@ -201,6 +224,8 @@ fun PuzzlePieceShape(
             } else {
                 lineTo(w, h)
             }
+
+
             // borde inferior
             if (bottomHead) {
                 lineTo(w * 0.6f, h)
@@ -210,14 +235,26 @@ fun PuzzlePieceShape(
                 lineTo(w * 0.6f, h+knobSize)
                 cubicTo(w * 0.55f, h , w * 0.45f, h , w * 0.4f, h+knobSize)
                 lineTo(0f, h)
+
+
+
+
+
+
             } else {
                 lineTo(0f, h)
             }
+
+
             // borde izquierdo
             if (leftHead) {
+
+
                 lineTo(knobSize, h * 0.6f)
                 cubicTo(0f, h * 0.55f, 0f, h * 0.45f,knobSize , h * 0.4f)
                 //cubicTo(w , h * 0.45f, w , h * 0.55f, w+knobSize, h * 0.6f)
+
+
                 lineTo(0f, 0f)
             } else if (leftHole) {
                 lineTo(0f, h * 0.6f)
@@ -226,8 +263,14 @@ fun PuzzlePieceShape(
             } else {
                 lineTo(0f, 0f)
             }
+
+
             close()
         }
+
+
+
+
         clipPath(path) { //Recorta la imagen con la forma del rompecabezas
             drawImage(
                 image = image,
@@ -297,11 +340,17 @@ fun DraggablePieceMapAgujeros(
     onRemovedCorrectly: () -> Unit
 ) {
     val density = LocalDensity.current
+
+
     var offsetX by remember { mutableStateOf(0.dp) }
     var offsetY by remember { mutableStateOf(0.dp) }
     var isTouching by remember { mutableStateOf(false) }
-    var wasCorrect by remember { mutableStateOf(false) } // CLAVE
+    var wasCorrect by remember { mutableStateOf(false) } // 🔥 CLAVE
+
+
     val shape = pieceMapv2[pieceIndex]
+
+
     PuzzlePieceShape(
         modifier = Modifier
             .offset(x = offsetX, y = offsetY)
@@ -314,22 +363,32 @@ fun DraggablePieceMapAgujeros(
                 }
             }
             .onGloballyPositioned { coords ->
+
+
                 val canvasRect = coords.boundsInWindow()
                 val targetBox = arrayBox[shape.row][shape.column]
+
+
                 val isCorrect =
                     (canvasRect.topLeft.y - targetBox.y).absoluteValue < 10 &&
                             (canvasRect.topLeft.x - targetBox.x).absoluteValue < 10
+
+
                 if (isCorrect && !wasCorrect) {
                     wasCorrect = true
                     isTouching = true
                     onPlacedCorrectly() //  SUMA
                 }
+
+
                 if (!isCorrect && wasCorrect) {
                     wasCorrect = false
                     isTouching = false
                     onRemovedCorrectly() // RESTA
                 }
             },
+
+
         topHead = shape.topHead,
         topHole = shape.topHole,
         rightHead = shape.rightHead,
@@ -344,88 +403,59 @@ fun DraggablePieceMapAgujeros(
         isTouching = isTouching
     )
 }
+
+@Preview  // ✅ Esta función no tiene parámetros, funciona
 @Composable
-fun ventanaInfo(navController: NavController) {
-    LazyColumn(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        item {
-            InfoSection( // Llamada al componente reutilizable InfoSection con sus parámetros
-                titulo = "Por aquí llegaban los trenes con el hierro", // Título de la primera sección
-                imagenId = R.drawable.copia_de_descarga_25, // ID del recurso de imagen para la primera sección
-                // Pregunta para el modelo de IA
-                pregunta = "Contestame a la pregunta en castellano y corto, que no sea mas de 4 lineas: ¿Por cargadero de Baracaldo llegaban los trenes con el hierro?",
-                // Texto alternativo que se muestra si hay error en la consulta a IA
-                textoAlt = "Por qué: En esta foto se ve muy bien la estructura alargada que conecta la tierra con el cargadero. Puedes explicar que los trenes circulaban por esa parte superior para descargar el mineral directamente desde los vagones"
-            )
-            Divider(
-                color = Color.Black, // Color negro para la línea
-                thickness = 8.dp, // Grosor de 8 dp (density-independent pixels)
-                modifier = Modifier.padding(horizontal = 16.dp) // Margen horizontal de 16 dp a cada lado
-            )
-            InfoSection( // Segunda sección de información
-                titulo = "El hierro se cargaba en los barcos que iban a otros países",
-                imagenId = R.drawable.copia_de_descarga_26,
-                pregunta = "Contestame a la pregunta en castellano y corto, que no sea mas de 4 lineas: ¿El hierro se cargaba en los barcos que iban a otros países?",
-                textoAlt = "Por qué: Al ser una toma desde arriba, se ve claramente la posición del cargadero dentro del río (la Ría del Nervión). Es la imagen perfecta para que el alumnado imagine un gran barco atracado junto a la estructura de madera esperando a ser llenado de hierro para viajar a Inglaterra o Francia"
-            )
-            Divider(
-                color = Color.Black,
-                thickness = 8.dp,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            InfoSection( // Tercera sección de información
-                titulo = "Los cargaderos ayudaron a que Barakaldo creciera mucho",
-                imagenId = R.drawable.copia_de_descarga_27,
-                pregunta = "Contestame a la pregunta en castellano y corto, que no sea mas de 4 lineas: ¿Los cargaderos ayudaron a que Barakaldo creciera mucho?",
-                textoAlt = "Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera y hierro. Representa el \"corazón\" de la industria que trajo trabajo, personas y riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy"
-            )
-            Button( // Botón para navegar a la pantalla final
-                onClick = {
-                    navController.navigate(
-                        "finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.ferrocarril_actual}"
-                    )
-                }
-            ) {
-                Text("Ventana final")
-            }
-        }
-    }
+fun PreviewVentanaInfo() {
+    // Puedes crear un NavController mock o usar rememberNavController()
+    val mockNavController = rememberNavController()
+    ventanaInfo(navController = mockNavController)
 }
 @Composable
-fun InfoSection(
-    titulo: String,        // Título de la sección
-    imagenId: Int,         // ID del recurso de imagen
-    pregunta: String,      // Pregunta para la IA
-    textoAlt: String  // Texto alternativo en caso de error
-) {
-    var isLoading by remember { mutableStateOf(false) } // Estado que indica si está cargando la respuesta de la IA
-    var texto by remember { mutableStateOf("") } // Estado que almacena el texto generado por la IA
-    Text(titulo, fontWeight = FontWeight.Bold) // Texto del título en negrita
-    Image(
-        painter = painterResource(imagenId),
-        contentDescription = "",
-        Modifier.size(300.dp)
-    )
-    Text(texto)
-    // LaunchedEffect: Ejecuta un efecto secundario cuando entra en composición
-    // Unit como clave significa que se ejecuta solo una vez
-    LaunchedEffect(Unit) {
-        if (!isLoading && texto.isEmpty()) { // Condición: solo ejecutar si no está cargando y el texto está vacío
-            isLoading = true // Marcar como cargando
-            try {
-                val model = Firebase.ai(backend = GenerativeBackend.googleAI()) // Configurar el modelo de IA de Firebase (Gemini)
-                    .generativeModel("gemini-2.5-flash-lite")
-
-                val response = model.generateContent(pregunta) // Generar contenido usando el modelo de IA
-                texto = response.text.toString() // Almacenar el texto de respuesta
-            } catch (e: Exception) {
-                texto = textoAlt // En caso de error, usar el texto alternativo
-            } finally {
-                isLoading = false // Siempre marcar como no cargando, haya éxito o error
-            }
+fun ventanaInfo(navController: NavController){
+    LazyColumn(Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        item {
+            Text("Por aquí llegaban los trenes con el hierro",
+                fontWeight = FontWeight.Bold)
+            Image(painter = painterResource(R.drawable.copia_de_descarga_25),
+                contentDescription = "",
+                Modifier.size(300.dp))
+            Text("Por qué: En esta foto se ve muy bien la estructura alargada que conecta" +
+                    " la tierra con el cargadero. Puedes explicar que los trenes circulaban por esa " +
+                    "parte superior para descargar el mineral directamente desde los vagones")
+            Divider(
+                color = Color.Black,  // Color de la línea
+                thickness = 8.dp,    // Grosor
+                modifier = Modifier.padding(horizontal = 16.dp)// Margen
+            )
+            Text("El hierro se cargaba en los barcos que iban a otros países",
+                fontWeight = FontWeight.Bold)
+            Image(painter = painterResource(R.drawable.copia_de_descarga_26),
+                contentDescription = "",
+                Modifier.size(300.dp))
+            Text("Por qué: Al ser una toma desde arriba, se ve claramente la posición del" +
+                    " cargadero dentro del río (la Ría del Nervión). Es la imagen perfecta para que " +
+                    "el alumnado imagine un gran barco atracado junto a la estructura de madera esperando " +
+                    "a ser llenado de hierro para viajar a Inglaterra o Francia")
+            Divider(
+                color = Color.Black,  // Color de la línea
+                thickness = 8.dp,    // Grosor
+                modifier = Modifier.padding(horizontal = 16.dp)  // Margen
+            )
+            Text("Los cargaderos ayudaron a que Barakaldo creciera mucho",
+                fontWeight = FontWeight.Bold)
+            Image(painter = painterResource(R.drawable.copia_de_descarga_27),
+                contentDescription = "",
+                Modifier.size(300.dp))
+            Text("Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera" +
+                    " y hierro. Representa el \"corazón\" de la industria que trajo trabajo, personas y" +
+                    " riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy")
+            Button({
+                navController.navigate(
+                    "finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.ferrocarril_actual}")
+            }) {Text("Ventana final") }
         }
     }
 }
