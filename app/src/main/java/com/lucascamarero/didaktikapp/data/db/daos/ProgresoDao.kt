@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.lucascamarero.didaktikapp.data.db.entities.ProgresoUsuarioEntity
-import com.lucascamarero.didaktikapp.data.db.mapper.ProgresoRutaJoin
+import com.lucascamarero.didaktikapp.data.db.mappers.ProgresoRutaJoin
 import kotlinx.coroutines.flow.Flow
 
 /**

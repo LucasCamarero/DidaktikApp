@@ -1,4 +1,4 @@
-package com.lucascamarero.didaktikapp.data.db.mapper
+package com.lucascamarero.didaktikapp.data.db.mappers
 import androidx.room.ColumnInfo
 
 /**
