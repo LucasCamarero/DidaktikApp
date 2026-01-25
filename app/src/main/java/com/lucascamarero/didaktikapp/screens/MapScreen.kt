@@ -166,6 +166,7 @@ fun MapScreen(
                          * Gestión de la interacción con el marcador.
                          */
                         marker.setOnMarkerClickListener { _, _ ->
+                            /*
                             when {
                                 // Navegar a la actividad actual
                                 point.id == nextActivity -> {
@@ -189,6 +190,11 @@ fun MapScreen(
                                     }
                                 }
                             }
+                            */
+
+                            // NUEVA LÓGICA (TEMPORAL): Navegar directamente
+                            navController.navigate("startactivity/${point.id}")
+
                             true
                         }
 

@@ -1,5 +1,7 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -23,65 +26,58 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.lucascamarero.didaktikapp.R
+// 1. IMPORTAMOS EL COMPONENTE
+import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import com.lucascamarero.didaktikapp.viewmodels.Game2ViewModel
 import kotlin.math.roundToInt
 
 @Composable
 fun Activity2Screen(
     navController: NavController,
-    viewModel: Game2ViewModel = hiltViewModel() // Inyección correcta del ViewModel
+    viewModel: Game2ViewModel = hiltViewModel()
 ) {
-    // --- UI PRINCIPAL ---
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(24.dp))
+    // ===================================================================
+    // 1. CONFIGURACIÓN DE PANTALLA (BLOQUEO VERTICAL)
+    // ===================================================================
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val activity = context as? Activity
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        onDispose {
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
 
-        // TÍTULO
-        Text(
-            text = "Quiz sobre la Iglesia de San Vicente (${viewModel.currentPhaseIndex + 1}/4)",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp),
-            textAlign = TextAlign.Center
-        )
+    // Usamos un Box para superponer el mensaje sobre el juego
+    Box(modifier = Modifier.fillMaxSize()) {
 
-        if (viewModel.isGameFinished) {
-            // PANTALLA FINAL
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("¡Juego Terminado!", fontSize = 28.sp, color = Color(0xFF2E7D32))
-                    Spacer(modifier = Modifier.height(16.dp))
+        // ===================================================================
+        // CAPA 1: INTERFAZ DEL JUEGO (SIEMPRE VISIBLE)
+        // ===================================================================
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF0F2F5))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
 
-                    Button(onClick = { viewModel.restartGame() }) {
-                        Text("REINICIAR JUEGO")
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Button(
-                        onClick = { navController.popBackStack() },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                    ) {
-                        Text("SALIR AL MAPA")
-                    }
-                }
-            }
-        } else {
+            // TÍTULO
+            Text(
+                text = "Quiz sobre la Iglesia de San Vicente (${viewModel.currentPhaseIndex + 1}/4)",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp),
+                textAlign = TextAlign.Center
+            )
 
             // --- PARTE 1: IMAGEN (ZONA DE DROP) ---
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(3f) // Ocupa el 60% del espacio disponible
+                    .weight(3f)
                     .padding(vertical = 8.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -123,20 +119,21 @@ fun Activity2Screen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(2f) // Ocupa el 40% del espacio
+                    .weight(2f)
                     .padding(top = 8.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 // Mensaje de feedback
                 Text(
                     text = viewModel.feedbackMessage,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    color = if (viewModel.isCorrectAnswer) Color(0xFF2E7D32)
-                    else if (viewModel.feedbackMessage.contains("Incorrecto")) Color.Red
-                    else Color.Black,
+                    color = when {
+                        viewModel.isCorrectAnswer -> Color(0xFF2E7D32)
+                        viewModel.feedbackMessage.contains("Incorrecto") -> Color.Red
+                        else -> Color.Black
+                    },
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
 
@@ -157,7 +154,6 @@ fun Activity2Screen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        // Dividimos las opciones en filas de 2
                         val rows = viewModel.currentPhase.options.chunked(2)
                         rows.forEach { rowWords ->
                             Row(
@@ -178,10 +174,29 @@ fun Activity2Screen(
                 }
             }
         }
+
+        // ===================================================================
+        // CAPA 2: MENSAJE FINAL (SUPERPUESTO)
+        // ===================================================================
+        if (viewModel.isGameFinished) {
+            MensajeFinalActivity(
+                titulo = "¡EXCELENTE!",
+                mensaje = "Has completado el quiz sobre la Iglesia de San Vicente correctamente.",
+                botonText = "VER RECOMPENSA",
+                onButtonClick = {
+                    // Navegamos a la pantalla final de la actividad 2
+                    // RECUERDA: Cambiar los R.drawable por las fotos correctas de San Vicente
+                    val ruta = "endactivity/2/${R.drawable.act1_premio1}/${R.drawable.act1_premio2}"
+                    navController.navigate(ruta) {
+                        popUpTo("activity2") { inclusive = true }
+                    }
+                }
+            )
+        }
     }
 }
 
-// --- COMPONENTE ARRASTRABLE ---
+// --- COMPONENTE ARRASTRABLE (Se mantiene igual) ---
 @Composable
 fun DraggableOption(
     text: String,
@@ -207,12 +222,11 @@ fun DraggableOption(
                     onDragStart = { isDragging = true },
                     onDragEnd = {
                         isDragging = false
-                        // DETECCIÓN DE CAÍDA: Si se arrastra hacia arriba (Y negativo)
                         // Ajusta -100 según la distancia necesaria en tu pantalla
                         if (offsetY < -100) {
                             onDrop(text)
                         }
-                        // Efecto resorte: vuelve al sitio original
+                        // Efecto resorte
                         offsetX = 0f
                         offsetY = 0f
                     },

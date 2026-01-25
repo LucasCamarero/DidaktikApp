@@ -33,7 +33,7 @@ class CounterViewModel @Inject constructor( // 2. Añade @Inject constructor
     fun marcarActividadComoCompletada(actividadId: Int) {
         viewModelScope.launch {
             val fechaActual = System.currentTimeMillis().toString()
-            progresoDao.updateProgresoCompletado(actividadId, personaId, fechaActual)
+            progresoDao.upsertProgresoCompletado(actividadId, personaId, fechaActual)
         }
     }
 }

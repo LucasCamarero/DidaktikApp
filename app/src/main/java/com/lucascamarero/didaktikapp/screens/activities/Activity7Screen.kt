@@ -1,5 +1,7 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -38,10 +40,12 @@ import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.viewmodels.Game7Item
 import com.lucascamarero.didaktikapp.viewmodels.Game7ViewModel
 import com.lucascamarero.didaktikapp.viewmodels.SocialClass
-import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import com.lucascamarero.didaktikapp.R
+// 1. IMPORTAMOS TU COMPONENTE
+import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 
 @Composable
 fun Activity7Screen(
@@ -59,13 +63,17 @@ fun Activity7Screen(
     var draggedItem by remember { mutableStateOf<Game7Item?>(null) }
     var dragPosition by remember { mutableStateOf(Offset.Zero) }
 
-    // --- EFECTO DE NAVEGACIÓN AL GANAR ---
-    LaunchedEffect(uiState.isGameWon) {
-        if (uiState.isGameWon) {
-            delay(1500)
-            navController.navigate("endactivity/7") {
-                popUpTo("activity7") { inclusive = true }
-            }
+    // ===================================================================
+    // EVITA QUE GIRE HORIZONTALMENTE
+    // ===================================================================
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val activity = context as? Activity
+        // Forzamos vertical al entrar
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        onDispose {
+            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 
@@ -73,8 +81,12 @@ fun Activity7Screen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFF9C4)) // Fondo Crema
+            .background(Color(0xFFF0F2F5))
     ) {
+
+        // ===================================================================
+        // CAPA 1: JUEGO (FONDO)
+        // ===================================================================
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -140,8 +152,7 @@ fun Activity7Screen(
                 )
             }
 
-            // --- ZONA DE MENSAJES (CORREGIDA) ---
-            // CAMBIO: Usamos Column en lugar de Box para evitar el error de AnimatedVisibility
+            // --- ZONA DE MENSAJES ---
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -234,10 +245,29 @@ fun Activity7Screen(
                 position = dragPosition
             )
         }
+
+        // ===================================================================
+        // CAPA 2: MENSAJE FINAL (POP-UP)
+        // ===================================================================
+        if (uiState.isGameWon) {
+            MensajeFinalActivity(
+                titulo = "¡EXCELENTE!",
+                mensaje = "Has clasificado correctamente los elementos de las clases sociales del Barakaldo industrial.",
+                botonText = "VER RECOMPENSA",
+                onButtonClick = {
+                    // ID = 7
+                    // Asegúrate de usar las fotos correctas para el Palacio Munoa
+                    val ruta = "endactivity/7/${R.drawable.act1_premio1}/${R.drawable.act1_premio2}"
+                    navController.navigate(ruta) {
+                        popUpTo("activity7") { inclusive = true }
+                    }
+                }
+            )
+        }
     }
 }
 
-// --- 3. COMPONENTES AUXILIARES ---
+// --- 3. COMPONENTES AUXILIARES (Sin cambios) ---
 
 @Composable
 fun DraggableItemSource(
