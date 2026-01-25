@@ -13,6 +13,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * Composable que muestra un mensaje final superpuesto a la pantalla.
+ *
+ * Este componente se utiliza habitualmente como pantalla de cierre
+ * de una actividad o juego, mostrando un título, un mensaje descriptivo
+ * y un botón de acción para finalizar o continuar el flujo de la aplicación.
+ *
+ * El fondo se presenta oscurecido para centrar la atención del usuario
+ * en el contenido del mensaje.
+ *
+ * @param titulo Texto que se mostrará como título principal.
+ * @param mensaje Texto descriptivo o informativo que acompaña al título.
+ * @param botonText Texto que se mostrará en el botón de acción.
+ * Por defecto es "FINALIZAR".
+ * @param onButtonClick Acción que se ejecuta al pulsar el botón.
+ */
 @Composable
 fun MensajeFinalActivity(
     titulo: String,
@@ -39,7 +55,7 @@ fun MensajeFinalActivity(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // TÍTULO
+                // Título
                 Text(
                     text = titulo,
                     fontSize = 28.sp,
@@ -47,7 +63,7 @@ fun MensajeFinalActivity(
                     color = Color(0xFF2E7D32)
                 )
 
-                // MENSAJE
+                // Mensaje
                 Text(
                     text = mensaje,
                     textAlign = TextAlign.Center,
@@ -55,7 +71,7 @@ fun MensajeFinalActivity(
                     color = Color.Black // Aseguramos que se vea negro
                 )
 
-                // BOTÓN
+                // Botón
                 Button(
                     onClick = onButtonClick, // Aquí ejecutamos la acción que nos pasan
                     modifier = Modifier

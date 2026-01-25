@@ -9,8 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
-import com.lucascamarero.didaktikapp.ui.theme.Typography2
 import com.lucascamarero.didaktikapp.ui.theme.Typography3
 
 /**
@@ -28,19 +26,12 @@ import com.lucascamarero.didaktikapp.ui.theme.Typography3
 fun CreateTitle(
     message: String
 ) {
-    /**
-     * Contenedor que ocupa el ancho disponible y centra su contenido.
-     */
+    // Contenedor que ocupa el ancho disponible y centra su contenido.
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-
-        /**
-         * Texto de contorno.
-         *
-         * Se dibuja primero y utiliza un [Stroke] para simular el borde del texto.
-         */
+        // Texto de contorno. Se dibuja primero y utiliza un [Stroke] para simular el borde del texto.
         Text(
             text = message,
             modifier = Modifier.fillMaxWidth(),
@@ -52,11 +43,7 @@ fun CreateTitle(
             )
         )
 
-        /**
-         * Texto de relleno.
-         *
-         * Se superpone al texto de contorno para completar el efecto visual.
-         */
+        //Texto de relleno. Se superpone al texto de contorno para completar el efecto visual.
         Text(
             text = message,
             modifier = Modifier.fillMaxWidth(),
@@ -69,23 +56,28 @@ fun CreateTitle(
     }
 }
 
+/**
+ * Composable que muestra un título centrado con un efecto de texto contorneado.
+ *
+ * El efecto se consigue dibujando el mismo texto dos veces:
+ * - Una primera capa con un trazo grueso (contorno).
+ * - Una segunda capa con el texto relleno.
+ *
+ * Este componente es útil para destacar títulos principales en la interfaz.
+ *
+ * @param message Texto que se mostrará como título.
+ */
 @Composable
 fun CreateTitle2(
     message: String
 ) {
-    /**
-     * Contenedor que ocupa el ancho disponible y centra su contenido.
-     */
+    // Contenedor que ocupa el ancho disponible y centra su contenido.
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
 
-        /**
-         * Texto de contorno.
-         *
-         * Se dibuja primero y utiliza un [Stroke] para simular el borde del texto.
-         */
+        // Texto de contorno. Se dibuja primero y utiliza un [Stroke] para simular el borde del texto.
         Text(
             text = message,
             modifier = Modifier.fillMaxWidth(),
@@ -97,11 +89,7 @@ fun CreateTitle2(
             )
         )
 
-        /**
-         * Texto de relleno.
-         *
-         * Se superpone al texto de contorno para completar el efecto visual.
-         */
+        //Texto de relleno. Se superpone al texto de contorno para completar el efecto visual.
         Text(
             text = message,
             modifier = Modifier.fillMaxWidth(),

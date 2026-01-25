@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -64,11 +62,8 @@ fun TopBar(
     TopAppBar(
         title = {},
 
-        /**
-         * Contenido personalizado del área de navegación.
-         *
-         * Se utiliza un `Row` para distribuir los elementos horizontalmente.
-         */
+        // Contenido personalizado del área de navegación. Se utiliza un `Row` para distribuir
+        // los elementos horizontalmente.
         navigationIcon = {
             Row(
                 modifier = Modifier
@@ -78,11 +73,7 @@ fun TopBar(
                 verticalAlignment = Alignment.Bottom
             ) {
 
-                /**
-                 * Botón de ajustes.
-                 *
-                 * Abre o cierra el menú lateral.
-                 */
+                // Botón de ajustes. Abre o cierra el menú lateral.
                 IconButton(onMenuClick) {
                     Icon(
                         imageVector = Icons.Filled.Menu,
@@ -92,11 +83,7 @@ fun TopBar(
                     )
                 }
 
-                /**
-                 * Avatar de Jolin con badge de contador.
-                 *
-                 * El badge muestra el progreso actual del usuario.
-                 */
+                // Avatar de Jolin con badge de contador. El badge muestra el progreso actual del usuario.
                 BadgedBox(
                     badge = {
                         Badge(
@@ -118,11 +105,7 @@ fun TopBar(
                     )
                 }
 
-                /**
-                 * Botón Home.
-                 *
-                 * Navega a la pantalla principal del mapa.
-                 */
+                // Botón Home. Navega a la pantalla principal del mapa.
                 IconButton(onClick = { navController.navigate("map") }) {
                     Icon(
                         imageVector = Icons.Filled.Home,
@@ -134,9 +117,7 @@ fun TopBar(
             }
         },
 
-        /**
-         * Colores personalizados de la barra superior.
-         */
+        // Colores personalizados de la barra superior.
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             navigationIconContentColor = MaterialTheme.colorScheme.secondaryContainer,

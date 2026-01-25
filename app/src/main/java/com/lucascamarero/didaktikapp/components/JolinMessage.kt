@@ -6,11 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,16 +34,25 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lucascamarero.didaktikapp.R
-import com.lucascamarero.didaktikapp.ui.theme.Typography2
 import com.lucascamarero.didaktikapp.ui.theme.Typography3
 import kotlinx.coroutines.delay
 
 /**
- * Muestra el personaje de Jolín con una burbuja de diálogo y texto con efecto máquina de escribir.
+ * Composable que muestra al personaje Jolín acompañado de una burbuja de diálogo
+ * con texto animado mediante un efecto de máquina de escribir.
  *
- * @param message El mensaje de bienvenida que se mostrará.
- * @param onTextComplete Callback que se llama cuando todo el texto se ha mostrado.
- * @param onStartClick Callback que se llama al pulsar el botón de inicio (solo visible si el texto está completo).
+ * Este componente se utiliza como mensaje de bienvenida o introducción a un juego,
+ * guiando al usuario a través de la interfaz mediante un personaje animado.
+ *
+ * @param message Texto que se mostrará dentro de la burbuja de diálogo.
+ * @param onTextComplete Callback que se ejecuta cuando el texto ha terminado
+ * de mostrarse completamente.
+ * @param onStartClick Callback previsto para acciones posteriores cuando
+ * el texto ha finalizado.
+ * @param jolinSize Tamaño del personaje Jolín.
+ * @param bubbleSize Tamaño de la burbuja de diálogo.
+ * @param jolinOffsetX Desplazamiento horizontal del personaje.
+ * @param jolinOffsetY Desplazamiento vertical del personaje.
  */
 @SuppressLint("ResourceType")
 @Composable
@@ -96,8 +101,18 @@ fun JolinWelcomeMessage(
 }
 
 /**
- * Componente que muestra una burbuja de diálogo con texto que aparece letra por letra.
- * Es una versión limpia de la función original, ahora encapsulada aquí.
+ * Composable que muestra una burbuja de diálogo con texto animado
+ * que aparece progresivamente carácter a carácter.
+ *
+ * Se utiliza para simular un efecto de escritura automática,
+ * típico en diálogos guiados o narrativos.
+ *
+ * @param text Texto completo que se mostrará en la burbuja.
+ * @param fondoTexto Recurso gráfico utilizado como fondo del bocadillo.
+ * @param velocidadTexto Tiempo de espera entre la aparición de cada carácter.
+ * @param bubbleSiz Tamaño de la burbuja de diálogo.
+ * @param onTextComplete Callback que se ejecuta cuando el texto
+ * ha terminado de mostrarse.
  */
 @SuppressLint("ResourceType")
 @Composable
@@ -150,7 +165,15 @@ fun SpeechBubbleWithTypewriterText(
 }
 
 /**
- * Componente Lottie que reproduce una animación en bucle infinito.
+ * Composable que reproduce una animación Lottie en bucle infinito.
+ *
+ * Este componente encapsula la lógica necesaria para cargar
+ * y animar recursos Lottie, permitiendo su reutilización
+ * en distintos puntos de la interfaz.
+ *
+ * @param resId Recurso raw que contiene la animación Lottie.
+ * @param modifier Modificador opcional para personalizar
+ * el layout del componente.
  */
 @Composable
 fun LottieInfinite(
