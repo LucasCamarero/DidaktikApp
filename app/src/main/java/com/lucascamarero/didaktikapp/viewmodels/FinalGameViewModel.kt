@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import com.lucascamarero.didaktikapp.R
-import com.lucascamarero.didaktikapp.data.db.models.PhotoItem
+import com.lucascamarero.didaktikapp.models.PhotoItem
 
 class FinalGameViewModel : ViewModel() {
 

@@ -4,6 +4,21 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+/**
+ * Entidad de base de datos que representa el progreso de un usuario en una actividad.
+ *
+ * Esta entidad actúa como una tabla de relación entre personas (alumnos) y
+ * actividades, almacenando el estado de finalización y la fecha asociada.
+ *
+ * @property progreso_id Identificador único del registro de progreso.
+ * Se genera automáticamente.
+ * @property actividad_fk Identificador de la actividad asociada.
+ * @property persona_fk Identificador de la persona (alumno) asociada al progreso.
+ * @property completada Indicador de si la actividad ha sido completada.
+ * Valor esperado: 1 (sí) o 0 (no).
+ * @property fecha_completado Fecha en la que se completó la actividad.
+ * Puede ser nula si la actividad no ha sido completada.
+ */
 @Entity(
     tableName = "progreso_usuario",
     foreignKeys = [

@@ -4,6 +4,19 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+/**
+ * Entidad de base de datos que representa una actividad (juego) dentro de la aplicación.
+ *
+ * @property actividad_id Identificador único de la actividad.
+ * Se genera automáticamente.
+ * @property tipo_actividad Tipo de actividad o juego asociado
+ * (por ejemplo, "Puzzle", "Sopa de letras").
+ * @property archivo_actividad Identificador o ruta del archivo que define
+ * la lógica o contenido de la actividad.
+ * @property lugar_fk Identificador del lugar asociado a la actividad.
+ * @property premio_antigua_fk Identificador de la imagen de premio antigua.
+ * @property premio_actual_fk Identificador de la imagen de premio actual.
+ */
 @Entity(
     tableName = "actividad",
     foreignKeys = [
@@ -32,7 +45,7 @@ data class ActividadEntity(
     val actividad_id: Int = 0,
     val tipo_actividad: String, // Ej: 'Puzzle', 'Sopa de letras'
     val archivo_actividad: String,
-    val lugar_fk: Int, // FK a Lugar (Qué lugar tiene esta actividad)
-    val premio_antigua_fk: Int, // FK a Imagen (La foto antigua de premio)
-    val premio_actual_fk: Int // FK a Imagen (La foto actual de premio)
+    val lugar_fk: Int,
+    val premio_antigua_fk: Int,
+    val premio_actual_fk: Int
 )

@@ -163,9 +163,13 @@ fun StartOfActivityScreen(
     var isJolinTextComplete by remember { mutableStateOf(false) }
 
     val images = when (activityNumber) {
-        1 -> listOf(R.drawable.act1_img1, R.drawable.act1_img2)
-        2 -> listOf(R.drawable.activ3_img1)
-        6 -> listOf(R.drawable.act6_ferrocarril)
+        1 -> listOf(R.drawable.juego11_inicio, R.drawable.juego12_inicio)
+        2 -> listOf(R.drawable.juego21_inicio)
+        3 -> listOf(R.drawable.juego31_inicio)
+        4 -> listOf(R.drawable.juego41_inicio)
+        5 -> listOf(R.drawable.juego51_inicio)
+        6 -> listOf(R.drawable.juego61_inicio)
+        7 -> listOf(R.drawable.juego71_inicio)
         8 -> listOf(R.drawable.premio11, R.drawable.premio12)
         else -> listOf(data.imageResId)
     }
