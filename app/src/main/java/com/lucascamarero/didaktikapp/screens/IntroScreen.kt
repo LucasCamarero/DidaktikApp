@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,30 +57,27 @@ fun IntroScreen(
      */
     var isJolinTextComplete by rememberSaveable { mutableStateOf(false) }
 
-    /**
-     * Contenedor que permite adaptar el diseño en función del tamaño disponible.
-     */
+    // Contenedor que permite adaptar el diseño en función del tamaño disponible.
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
 
+        // Determina si la pantalla está en orientación horizontal.
         val isLandscape = maxWidth > maxHeight
 
         if (!languageIsSelected) {
-            /**
-             * Pantalla de selección de idioma.
-             */
+
+            //Pantalla de selección de idioma.
             LanguageSelection(
                 languageViewModel = languageViewModel,
                 onLanguageSelected = { languageIsSelected = true },
                 isLandscape = isLandscape
             )
         } else {
-            /**
-             * Contenido de bienvenida tras seleccionar idioma.
-             */
+
+            //Contenido de bienvenida tras seleccionar idioma.
             IntroContent(
                 isJolinTextComplete = isJolinTextComplete,
                 onTextComplete = { isJolinTextComplete = it },
@@ -190,15 +190,18 @@ private fun IntroContent(
                 CreateTitle(stringResource(id = R.string.intro_title))
             }
 
+            Spacer(modifier = Modifier.width(60.dp))
+
             if (isJolinTextComplete) {
                 Column(
                     modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
                 ) {
-                    Spacer(modifier = Modifier.height(40.dp))
                     CreateButton(
                         texto = stringResource(id = R.string.intro_button),
-                        onClick = onStartClick
+                        onClick = onStartClick,
+                        modifier = Modifier.offset(y = (-80).dp)
                     )
                 }
             }
@@ -228,6 +231,17 @@ private fun IntroContent(
             verticalArrangement = Arrangement.Top
         ) {
             CreateTitle(stringResource(id = R.string.intro_title))
+
+            if (isJolinTextComplete) {
+
+                Spacer(modifier = Modifier.height(40.dp))
+                CreateButton(
+                    texto = stringResource(id = R.string.intro_button),
+                    onClick = onStartClick
+                )
+
+            }
+
             JolinWelcomeMessage(
                 message = stringResource(id = R.string.intro),
                 onTextComplete = onTextComplete,
@@ -236,13 +250,7 @@ private fun IntroContent(
                 bubbleSize = 380.dp,
                 jolinOffsetY = 240.dp
             )
-            if (isJolinTextComplete) {
-                Spacer(modifier = Modifier.height(40.dp))
-                CreateButton(
-                    texto = stringResource(id = R.string.intro_button),
-                    onClick = onStartClick
-                )
-            }
+
         }
     }
 }
