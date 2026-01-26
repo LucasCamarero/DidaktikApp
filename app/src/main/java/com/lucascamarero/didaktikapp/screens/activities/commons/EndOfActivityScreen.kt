@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel // IMPORTANTE
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
@@ -27,10 +27,10 @@ import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
 @Composable
 fun EndOfActivityScreen(
     navController: NavController,
-    activityId: Int, // El ID de la actividad (1, 2, 3...)
-    imageBeforeRes: Int, // La foto antigua (R.drawable...)
-    imageAfterRes: Int,  // La foto actual (R.drawable...)
-    // Inyectamos el CounterViewModel aquí para manejar la lógica de completado
+    activityId: Int,
+    imageBeforeRes: Int,
+    imageAfterRes: Int,
+    // Inyectamos el ViewModel aquí
     counterViewModel: CounterViewModel = hiltViewModel()
 ) {
     Column(
@@ -106,9 +106,14 @@ fun EndOfActivityScreen(
         CreateButton(
             texto = "FINALIZAR RUTA",
             onClick = {
-                // Lógica centralizada
+                // 1. GUARDAMOS EN LA BASE DE DATOS
                 counterViewModel.marcarActividadComoCompletada(actividadId = activityId)
-                navController.navigate("map")
+
+                // 2. VOLVEMOS AL MAPA
+                // Usamos popUpTo para limpiar la pila y que no pueda volver atrás al juego
+                navController.navigate("map") {
+                    popUpTo("map") { inclusive = true }
+                }
             }
         )
     }

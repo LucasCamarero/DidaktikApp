@@ -57,8 +57,8 @@ fun MapScreen(
     /**
      * Número de actividades completadas, observado desde la base de datos.
      */
-    val count = counterViewModel.count.collectAsState().value + 4
-
+    val countState = counterViewModel.count.collectAsState()
+    val count = countState.value // Sin sumar nada
     /**
      * Identificador de la siguiente actividad disponible.
      */
