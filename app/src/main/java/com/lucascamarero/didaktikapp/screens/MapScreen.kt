@@ -1,5 +1,6 @@
 package com.lucascamarero.didaktikapp.screens
 
+import android.util.Log
 import android.graphics.drawable.BitmapDrawable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,10 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -22,13 +26,16 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.models.MapPoint
-import com.lucascamarero.didaktikapp.ui.theme.Typography3
 import com.lucascamarero.didaktikapp.utils.createNumberedMarker
 import com.lucascamarero.didaktikapp.viewmodels.CounterViewModel
+import com.lucascamarero.didaktikapp.viewmodels.MapViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -54,7 +61,8 @@ import org.osmdroid.views.overlay.Marker
 @Composable
 fun MapScreen(
     navController: NavController,
-    counterViewModel: CounterViewModel
+    counterViewModel: CounterViewModel,
+    mapViewModel: MapViewModel = hiltViewModel()
 ) {
     /**
      * Número de actividades completadas, observado desde la base de datos.
@@ -83,18 +91,9 @@ fun MapScreen(
 
     /**
      * Lista de puntos del mapa que representan las actividades.
-     *
-     * Actualmente están definidos de forma estática.
+     * Se obtienen desde la base de datos a través del MapViewModel.
      */
-    val mapPoints = listOf(
-        MapPoint(1, 43.257611, -2.979528, "Ermita Santa Águeda"),
-        MapPoint(2, 43.295750, -2.996722, "Iglesia de San Vicente"),
-        MapPoint(3, 43.296902, -2.987188, "Mercado de Abastos"),
-        MapPoint(4, 43.302592, -2.985833, "Edificio Ilgner"),
-        MapPoint(5, 43.315600, -3.010764, "Cargadero de minas"),
-        MapPoint(6, 43.305550, -2.982158, "Ferrocarril"),
-        MapPoint(7, 43.295125, -2.978303, "Palacio Munoa")
-    )
+    val mapPoints by mapViewModel.mapPoints.collectAsState()
 
     /**
      * Contenedor principal que superpone el mapa y el Snackbar.
@@ -103,106 +102,141 @@ fun MapScreen(
 
         /**
          * Vista del mapa integrada mediante AndroidView.
+         * Se actualiza cuando cambian los puntos del mapa desde la base de datos.
          */
+        val mapViewRef = remember { mutableStateOf<MapView?>(null) }
+        
         AndroidView(
             modifier = Modifier.fillMaxSize(),
             factory = { context ->
                 MapView(context).apply {
-
                     // Configuración del mapa base
                     setTileSource(TileSourceFactory.MAPNIK)
                     setMultiTouchControls(true)
-
                     controller.setZoom(15.0)
                     controller.setCenter(GeoPoint(43.29, -2.99))
+                    mapViewRef.value = this
+                }
+            },
+            update = { mapView ->
+                mapViewRef.value = mapView
+            }
+        )
 
-                    // Creación y configuración de los marcadores
-                    mapPoints.forEach { point ->
+        /**
+         * Actualizar marcadores cuando cambian los mapPoints o el count.
+         */
+        LaunchedEffect(mapPoints, count) {
+            // Esperar un poco para asegurar que el MapView esté listo
+            kotlinx.coroutines.delay(100)
+            
+            val mapView = mapViewRef.value
+            if (mapView == null) {
+                Log.w("MapScreen", "MapView no está disponible todavía")
+                return@LaunchedEffect
+            }
+            
+            Log.d("MapScreen", "Actualizando marcadores. mapPoints.size = ${mapPoints.size}, count = $count")
+            
+            // Trabajar en el hilo principal para actualizar la UI
+            withContext(Dispatchers.Main) {
+                // Limpiar marcadores existentes
+                mapView.overlays.clear()
+                Log.d("MapScreen", "Marcadores limpiados. Creando ${mapPoints.size} marcadores nuevos")
 
-                        val marker = Marker(this).apply {
-                            position = GeoPoint(point.lat, point.lng)
-                            title = point.name
-                            subDescription = "Actividad ${point.id}"
-                            setAnchor(
-                                Marker.ANCHOR_CENTER,
-                                Marker.ANCHOR_BOTTOM
+                // Crear y configurar los marcadores con los datos actuales
+                mapPoints.forEach { point ->
+                    Log.d("MapScreen", "Creando marcador para punto: id=${point.id}, name=${point.name}, lat=${point.lat}, lng=${point.lng}")
+                    
+                    val marker = Marker(mapView).apply {
+                        position = GeoPoint(point.lat, point.lng)
+                        title = point.name
+                        subDescription = "Actividad ${point.id}"
+                        setAnchor(
+                            Marker.ANCHOR_CENTER,
+                            Marker.ANCHOR_BOTTOM
+                        )
+                    }
+
+                    /**
+                     * Selección del icono del marcador según el estado de la actividad.
+                     */
+                    val currentNextActivity = count + 1
+                    val markerBitmap = when {
+                        // Actividad completada
+                        point.id <= count -> {
+                            createNumberedMarker(
+                                context = mapView.context,
+                                number = point.id,
+                                backgroundColor = completedBg,
+                                textColor = completedText
                             )
                         }
 
-                        /**
-                         * Selección del icono del marcador según el estado de la actividad.
-                         */
-                        val markerBitmap = when {
-                            // Actividad completada
-                            point.id <= count -> {
-                                createNumberedMarker(
-                                    context = context,
-                                    number = point.id,
-                                    backgroundColor = completedBg,
-                                    textColor = completedText
-                                )
-                            }
-
-                            // Actividad actual
-                            point.id == nextActivity -> {
-                                createNumberedMarker(
-                                    context = context,
-                                    number = point.id
-                                )
-                            }
-
-                            // Actividad bloqueada
-                            else -> {
-                                createNumberedMarker(
-                                    context = context,
-                                    number = point.id
-                                )
-                            }
+                        // Actividad actual
+                        point.id == currentNextActivity -> {
+                            createNumberedMarker(
+                                context = mapView.context,
+                                number = point.id
+                            )
                         }
 
-                        marker.icon = BitmapDrawable(resources, markerBitmap)
-
-                        /**
-                         * Gestión de la interacción con el marcador.
-                         */
-                        marker.setOnMarkerClickListener { _, _ ->
-                            /*
-                            when {
-                                // Navegar a la actividad actual
-                                point.id == nextActivity -> {
-                                    navController.navigate("startactivity/${point.id}") {
-                                        launchSingleTop = true
-                                    }
-                                }
-
-                                // Permitir repetir actividades completadas
-                                point.id <= count -> {
-                                    navController.navigate("startactivity/${point.id}")
-                                }
-
-                                // Mostrar mensaje si la actividad está bloqueada
-                                else -> {
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message = introMessage + " $nextActivity",
-                                            duration = SnackbarDuration.Short
-                                        )
-                                    }
-                                }
-                            }
-                            */
-
-                            // NUEVA LÓGICA (TEMPORAL): Navegar directamente
-                            navController.navigate("startactivity/${point.id}")
-
-                            true
+                        // Actividad bloqueada
+                        else -> {
+                            createNumberedMarker(
+                                context = mapView.context,
+                                number = point.id
+                            )
                         }
-
-                        overlays.add(marker)
                     }
+
+                    marker.icon = BitmapDrawable(mapView.resources, markerBitmap)
+
+                    /**
+                     * Gestión de la interacción con el marcador.
+                     */
+                    marker.setOnMarkerClickListener { _, _ ->
+                        /*
+                        when {
+                            // Navegar a la actividad actual
+                            point.id == nextActivity -> {
+                                navController.navigate("startactivity/${point.id}") {
+                                    launchSingleTop = true
+                                }
+                            }
+
+                            // Permitir repetir actividades completadas
+                            point.id <= count -> {
+                                navController.navigate("startactivity/${point.id}")
+                            }
+
+                            // Mostrar mensaje si la actividad está bloqueada
+                            else -> {
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = introMessage + " $nextActivity",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                            }
+                        }
+                        */
+
+                        // NUEVA LÓGICA (TEMPORAL): Navegar directamente
+                        navController.navigate("startactivity/${point.id}")
+
+                        true
+                    }
+
+                    mapView.overlays.add(marker)
+                    Log.d("MapScreen", "Marcador ${point.id} agregado. Total de overlays: ${mapView.overlays.size}")
                 }
+                
+                // Invalidar el mapa para que se redibuje
+                mapView.invalidate()
+                Log.d("MapScreen", "Mapa invalidado. Total de marcadores: ${mapView.overlays.size}")
             }
-        )
+        }
 
         /**
          * Snackbar personalizado centrado en pantalla.
