@@ -38,6 +38,17 @@
         muy importante para la gente del pueblo, porque allí se reunían para cantar, comer y
         compartir momentos juntos. Con el tiempo, Barakaldo fue cambiando, pero la ermita todavía
         nos recuerda cómo empezó todo.</string>
+    <string name="texto11">Arrastra los elementos a su posición original</string>
+    <string name="texto12">¡MUY BIEN! Has completado el paisaje.</string>
+    <string name="texto13">FALTAN ÍTEMS O ESTÁN MAL COLOCADOS.</string>
+    <string name="texto14">¿Qué cosas crees que todavía siguen igual?</string>
+    <string name="texto15">¡FELICIDADES! Has desbloqueado el recuerdo.</string>
+    <string name="texto16">Respuesta incorrecta. Inténtalo de nuevo.</string>
+    <string name="texto17">COMPROBAR RESPUESTA</string>
+    <string name="texto18">CONTINUAR</string>
+    <string name="texto19">a) La ermita sigue en pie</string>
+    <string name="texto20">b) Ya no hay montes</string>
+    <string name="texto21">c) No hay fiestas</string>
     <string name="pregunta1">¿Qué cosas crees que todavía siguen igual?</string>
     <string name="respuesta1_a">a) La ermita sigue en pie</string>
     <string name="respuesta1_b">b) Ya no hay montes</string>

@@ -1,7 +1,6 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
-import android.app.Activity
-import android.content.pm.ActivityInfo
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,8 +17,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -37,33 +36,15 @@ fun Activity1Screen(
     navController: NavController,
     viewModel: GameViewModel = hiltViewModel()
 ) {
-    /*
-    // ===================================================================
-    // 1. BLOQUEO DE ROTACIÓN (Solo Vertical)
-    // ===================================================================
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val activity = context as? Activity
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        onDispose {
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-    }*/
-
     Box(modifier = Modifier.fillMaxSize()
         .background(Color(0xFFF0F2F5))
     ) {
-
-
-        // ===================================================================
         // ESCENARIO 1: JUEGO (Drag & Drop + Quiz)
-        // ===================================================================
-
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // IMAGEN ESCENARIO
+            // Imagen escenario
             Image(
                 painter = painterResource(id = R.drawable.act1_bg_game2),
                 contentDescription = "Escenario",
@@ -75,7 +56,7 @@ fun Activity1Screen(
                     .clip(RoundedCornerShape(12.dp))
             )
 
-            // TEXTO DE ESTADO
+            // texto
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -84,7 +65,8 @@ fun Activity1Screen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = viewModel.statusText,
+                    text = stringResource(id = viewModel.statusTextResId),
+                    //text = viewModel.statusText,
                     color = viewModel.statusColor,
                     fontSize = if (viewModel.isQuizMode) 18.sp else 16.sp,
                     fontWeight = FontWeight.Bold,
@@ -121,9 +103,9 @@ fun Activity1Screen(
                         .weight(0.8f),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    QuizOption(text = "a) La ermita sigue en pie", id = 1, selectedId = viewModel.selectedQuizOption) { viewModel.selectedQuizOption = 1 }
-                    QuizOption(text = "b) Ya no hay montes", id = 2, selectedId = viewModel.selectedQuizOption) { viewModel.selectedQuizOption = 2 }
-                    QuizOption(text = "c) No hay fiestas", id = 3, selectedId = viewModel.selectedQuizOption) { viewModel.selectedQuizOption = 3 }
+                    QuizOption(textResId = R.string.texto19, id = 1, selectedId = viewModel.selectedQuizOption) { viewModel.selectedQuizOption = 1 }
+                    QuizOption(textResId = R.string.texto20, id = 2, selectedId = viewModel.selectedQuizOption) { viewModel.selectedQuizOption = 2 }
+                    QuizOption(textResId = R.string.texto21, id = 3, selectedId = viewModel.selectedQuizOption) { viewModel.selectedQuizOption = 3 }
                 }
             }
 
@@ -141,12 +123,14 @@ fun Activity1Screen(
                 ),
                 shape = RoundedCornerShape(28.dp)
             ) {
-                val buttonText = when {
-                    !viewModel.isDragSuccess -> "COMPROBAR RESPUESTA"
-                    !viewModel.isQuizMode -> "CONTINUAR"
-                    else -> "COMPROBAR RESPUESTA"
+                val buttonTextResId = when {
+                    !viewModel.isDragSuccess -> R.string.texto17
+                    !viewModel.isQuizMode -> R.string.texto18
+                    else -> R.string.texto17
                 }
-                Text(text = buttonText, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = stringResource(id = buttonTextResId),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.height(32.dp))
         }
@@ -208,7 +192,7 @@ fun Activity1Screen(
 
 // --- COMPONENTES AUXILIARES ---
 @Composable
-fun QuizOption(text: String, id: Int, selectedId: Int, onSelect: () -> Unit) {
+fun QuizOption(@StringRes textResId: Int, id: Int, selectedId: Int, onSelect: () -> Unit) {
     val isSelected = (id == selectedId)
     Row(
         modifier = Modifier
@@ -227,6 +211,6 @@ fun QuizOption(text: String, id: Int, selectedId: Int, onSelect: () -> Unit) {
             colors = RadioButtonDefaults.colors(selectedColor = Color(0xFF0088CC))
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text, fontSize = 16.sp, color = Color.Black)
+        Text(text = stringResource(id = textResId), fontSize = 16.sp, color = Color.Black)
     }
 }

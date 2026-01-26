@@ -38,6 +38,17 @@
         zen herritarrentzat, bertan biltzen baitziren abesteko, jateko eta uneak elkarrekin
         partekatzeko. Denborarekin, Barakaldo aldatu egin zen, baina ermitak oraindik ere
         gogorarazten digu nola hasi zen dena.</string>
+    <string name="texto11">Arrastatu elementuak jatorrizko posiziora itzuli</string>
+    <string name="texto12">OSO ONA! Paisaia osatu duzu.</string>
+    <string name="texto13">ELEMENTUAK FALTA DAUDE EDO GAIZKI JARRI DAUDE.</string>
+    <string name="texto14">Zein gauza uste duzu berdin jarraitzen dutela?</string>
+    <string name="texto15">ZORIONAK! Oroitzapena desblokeatu duzu.</string>
+    <string name="texto16">Erantzun okerra. Saiatu berriro.</string>
+    <string name="texto17">EGIAZTATU ERANTZUNA</string>
+    <string name="texto18">JARRAITU</string>
+    <string name="texto19">a) Ermita zutik dago oraindik</string>
+    <string name="texto20">b) Ez dago mendi gehiago</string>
+    <string name="texto21">c) Ez dago alderdirik</string>
     <string name="pregunta1">Zein gauza uste duzu berdin jarraitzen dutela?</string>
     <string name="respuesta1_a">a) Ermita zutik dago oraindik</string>
     <string name="respuesta1_b">b) Ez dago mendi gehiago</string>
