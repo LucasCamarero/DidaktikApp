@@ -7,6 +7,7 @@ import androidx.room.Query
 import com.lucascamarero.didaktikapp.data.db.entities.ActividadEntity
 import com.lucascamarero.didaktikapp.data.db.entities.ImagenEntity
 import com.lucascamarero.didaktikapp.data.db.entities.LugarEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ContenidoDao {
@@ -27,6 +28,10 @@ interface ContenidoDao {
     /** Obtiene los 7 lugares de la ruta. */
     @Query("SELECT * FROM lugar ORDER BY lugar_id ASC")
     suspend fun getAllLugares(): List<LugarEntity>
+
+    /** Obtiene los 7 lugares de la ruta como Flow para observación reactiva. */
+    @Query("SELECT * FROM lugar ORDER BY lugar_id ASC")
+    fun getAllLugaresFlow(): Flow<List<LugarEntity>>
 
     /** Obtiene los detalles de una actividad específica (para iniciar el juego). */
     @Query("SELECT * FROM actividad WHERE actividad_id = :actividadId")

@@ -49,14 +49,14 @@ class DatabaseInitializer : RoomDatabase.Callback() {
                 db.execSQL("INSERT INTO imagen (imagen_id, path_archivo, descripcion_corta, tipo_uso) VALUES ($i, 'premio${num}2', 'Premio actual $num', 'Premio Actual')")
             }
             
-            // 2. Insertar lugares (7 lugares)
-            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (1, 'La Ermita de Santa Agueda', 'Lugar 1', '43.2992,-2.9884', 1)")
-            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (2, 'La iglesia de San Vicente', 'Lugar 2', '43.2992,-2.9884', 2)")
-            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (3, 'El Acertijo del Puente', 'Lugar 3', '43.2992,-2.9884', 3)")
-            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (4, 'El Edificio Ilgner', 'Lugar 4', '43.2992,-2.9884', 4)")
-            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (5, 'Rompecabezas', 'Lugar 5', '43.2992,-2.9884', 5)")
-            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (6, 'El ferrocarril', 'Lugar 6', '43.2992,-2.9884', 6)")
-            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (7, 'Palacio Munoa', 'Lugar 7', '43.2992,-2.9884', 7)")
+            // 2. Insertar lugares (7 lugares) con coordenadas correctas
+            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (1, 'Ermita Santa Águeda', 'Lugar 1', '43.257611,-2.979528', 1)")
+            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (2, 'Iglesia de San Vicente', 'Lugar 2', '43.295750,-2.996722', 2)")
+            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (3, 'Mercado de Abastos', 'Lugar 3', '43.296902,-2.987188', 3)")
+            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (4, 'Edificio Ilgner', 'Lugar 4', '43.302592,-2.985833', 4)")
+            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (5, 'Cargadero de minas', 'Lugar 5', '43.315600,-3.010764', 5)")
+            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (6, 'Ferrocarril', 'Lugar 6', '43.305550,-2.982158', 6)")
+            db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (7, 'Palacio Munoa', 'Lugar 7', '43.295125,-2.978303', 7)")
             
             // 3. Insertar actividades (7 actividades)
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (1, 'Puzzle', 'activity1', 1, 8, 15)")
@@ -132,13 +132,13 @@ class DatabaseInitializer : RoomDatabase.Callback() {
 
             // 2. Insertar lugares (7 lugares) - asumiendo que las imágenes tienen IDs 1-21
             val lugares = listOf(
-                LugarEntity(nombre = "La Ermita de Santa Agueda", descripcion = "Lugar 1", coordenadas = "43.2992,-2.9884", imagen_principal_fk = 1),
-                LugarEntity(nombre = "La iglesia de San Vicente", descripcion = "Lugar 2", coordenadas = "43.2992,-2.9884", imagen_principal_fk = 2),
-                LugarEntity(nombre = "El Acertijo del Puente", descripcion = "Lugar 3", coordenadas = "43.2992,-2.9884", imagen_principal_fk = 3),
-                LugarEntity(nombre = "El Edificio Ilgner", descripcion = "Lugar 4", coordenadas = "43.2992,-2.9884", imagen_principal_fk = 4),
-                LugarEntity(nombre = "Rompecabezas", descripcion = "Lugar 5", coordenadas = "43.2992,-2.9884", imagen_principal_fk = 5),
-                LugarEntity(nombre = "El ferrocarril", descripcion = "Lugar 6", coordenadas = "43.2992,-2.9884", imagen_principal_fk = 6),
-                LugarEntity(nombre = "Palacio Munoa", descripcion = "Lugar 7", coordenadas = "43.2992,-2.9884", imagen_principal_fk = 7),
+                LugarEntity(nombre = "Ermita Santa Águeda", descripcion = "Lugar 1", coordenadas = "43.257611,-2.979528", imagen_principal_fk = 1),
+                LugarEntity(nombre = "Iglesia de San Vicente", descripcion = "Lugar 2", coordenadas = "43.295750,-2.996722", imagen_principal_fk = 2),
+                LugarEntity(nombre = "Mercado de Abastos", descripcion = "Lugar 3", coordenadas = "43.296902,-2.987188", imagen_principal_fk = 3),
+                LugarEntity(nombre = "Edificio Ilgner", descripcion = "Lugar 4", coordenadas = "43.302592,-2.985833", imagen_principal_fk = 4),
+                LugarEntity(nombre = "Cargadero de minas", descripcion = "Lugar 5", coordenadas = "43.315600,-3.010764", imagen_principal_fk = 5),
+                LugarEntity(nombre = "Ferrocarril", descripcion = "Lugar 6", coordenadas = "43.305550,-2.982158", imagen_principal_fk = 6),
+                LugarEntity(nombre = "Palacio Munoa", descripcion = "Lugar 7", coordenadas = "43.295125,-2.978303", imagen_principal_fk = 7),
             )
             contenidoDao.insertLugares(lugares)
 
