@@ -43,7 +43,6 @@ import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.components.CreateTitle
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
-import com.lucascamarero.didaktikapp.components.LockScreenOrientation
 import com.lucascamarero.didaktikapp.models.ActivityDataSource
 import com.lucascamarero.didaktikapp.models.ActivityData
 import kotlinx.coroutines.launch
@@ -66,11 +65,6 @@ fun StartOfActivityScreen(
     navController: NavController,
     activityNumber: Int
 ) {
-    /**
-     * Bloquea la orientación de la pantalla en modo vertical (portrait).
-     */
-    LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-
     /**
      * Datos de la actividad obtenidos desde el origen de datos
      * en función del número de actividad.

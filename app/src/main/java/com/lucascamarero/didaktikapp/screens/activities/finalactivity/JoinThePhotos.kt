@@ -21,7 +21,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CreateTitle2
-import com.lucascamarero.didaktikapp.components.LockScreenOrientation
 import com.lucascamarero.didaktikapp.ui.theme.Typography3
 import com.lucascamarero.didaktikapp.viewmodels.FinalGameViewModel
 
@@ -30,9 +29,6 @@ fun JoinThePhotos(
     navController: NavController,
     viewModel: FinalGameViewModel = viewModel()
 ) {
-    // 🔒 BLOQUEO SOLO EN VERTICAL
-    LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-
     Box(
         modifier = Modifier
             .fillMaxSize()

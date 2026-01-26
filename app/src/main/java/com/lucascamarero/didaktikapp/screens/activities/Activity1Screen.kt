@@ -37,6 +37,7 @@ fun Activity1Screen(
     navController: NavController,
     viewModel: GameViewModel = hiltViewModel()
 ) {
+    /*
     // ===================================================================
     // 1. BLOQUEO DE ROTACIÓN (Solo Vertical)
     // ===================================================================
@@ -47,9 +48,11 @@ fun Activity1Screen(
         onDispose {
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-    }
+    }*/
 
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF0F2F5))) {
+    Box(modifier = Modifier.fillMaxSize()
+        .background(Color(0xFFF0F2F5))
+    ) {
 
 
         // ===================================================================
