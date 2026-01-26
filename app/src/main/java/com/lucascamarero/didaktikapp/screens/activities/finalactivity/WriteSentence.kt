@@ -31,7 +31,6 @@ import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.components.CreateTitle2
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
-import com.lucascamarero.didaktikapp.components.LockScreenOrientation
 import com.lucascamarero.didaktikapp.viewmodels.FinalGameViewModel
 
 @Composable
@@ -45,9 +44,6 @@ fun WriteSentence(
     val userText = viewModel.userSentence
 
     var isJolinTextComplete by remember { mutableStateOf(false) }
-
-    // 🔒 BLOQUEO SOLO EN VERTICAL
-    LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
     LazyColumn(
         modifier = Modifier

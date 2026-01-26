@@ -16,7 +16,6 @@ import com.lucascamarero.didaktikapp.data.db.BarakaldoDatabase
 import com.lucascamarero.didaktikapp.ui.theme.DidaktikAppTheme
 import com.lucascamarero.didaktikapp.screens.SplashScreen
 import com.lucascamarero.didaktikapp.screens.IntroScreen
-import com.lucascamarero.didaktikapp.screens.activities.Activity6Screen
 import com.lucascamarero.didaktikapp.viewmodels.LanguageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -57,21 +56,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /**
-         * Configuración obligatoria del User Agent para osmdroid.
-         * Evita errores al cargar recursos de mapas.
-         */
+        // Configuración obligatoria del User Agent para osmdroid. Evita errores al cargar
+        // recursos de mapas.
         org.osmdroid.config.Configuration.getInstance().userAgentValue =
             packageName
 
-        /**
-         * Habilita el dibujo de la UI detrás de las barras del sistema.
-         */
+        // Habilita el dibujo de la UI detrás de las barras del sistema.
         enableEdgeToEdge()
 
-        /**
-         * Define la jerarquía de la interfaz usando Jetpack Compose.
-         */
+        // Define la jerarquía de la interfaz usando Jetpack Compose.
         setContent {
             DidaktikAppTheme(dynamicColor = false) {
                 Surface {
@@ -95,7 +88,6 @@ class MainActivity : AppCompatActivity() {
                     /**
                      * Control del flujo inicial de navegación basado en estados.
                      */
-
                     /*
                     when {
                         showSplash -> {
@@ -114,8 +106,8 @@ class MainActivity : AppCompatActivity() {
                                 languageViewModel = languageViewModel
                             )
                         }
-                    }*/
-
+                    }
+                    */
                     ScreenManager(
                         languageViewModel = languageViewModel
                     )

@@ -27,12 +27,6 @@ import kotlinx.coroutines.delay
  * principal y, tras un breve retardo adicional, invoca el callback
  * [onTimeout] para continuar el flujo de navegación.
  *
- * Flujo de ejecución:
- * 1. Se inicializa una animación de escala desde un valor mínimo.
- * 2. Se cargan y reproducen dos composiciones Lottie.
- * 3. Se adapta el layout según las dimensiones disponibles.
- * 4. Tras finalizar la animación y el retardo, se ejecuta [onTimeout].
- *
  * @param onTimeout Función callback que se ejecuta al finalizar
  * el tiempo de visualización del SplashScreen.
  */
@@ -70,10 +64,7 @@ fun SplashScreen(onTimeout: () -> Unit) {
         iterations = 1
     )
 
-    /**
-     * Controla la animación de escala y el tiempo de espera
-     * antes de continuar la navegación.
-     */
+    // Controla la animación de escala y el tiempo de espera antes de continuar la navegación.
     LaunchedEffect(Unit) {
         scale.animateTo(
             targetValue = 1.5f,
@@ -86,19 +77,14 @@ fun SplashScreen(onTimeout: () -> Unit) {
         onTimeout()
     }
 
-    /**
-     * Contenedor principal que permite adaptar el layout
-     * según el tamaño disponible.
-     */
+    // Contenedor principal que permite adaptar el layout según el tamaño disponible.
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center
     ) {
-        /**
-         * Determina si la pantalla está en orientación horizontal.
-         */
+        // Determina si la pantalla está en orientación horizontal.
         val isLandscape = maxWidth > maxHeight
 
         if (isLandscape) {

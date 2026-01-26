@@ -6,26 +6,49 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.lucascamarero.didaktikapp.data.db.daos.ContenidoDao
 import com.lucascamarero.didaktikapp.data.db.daos.PersonaDao
 import com.lucascamarero.didaktikapp.data.db.daos.ProgresoDao
-import com.lucascamarero.didaktikapp.data.db.entities.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 /**
- * Inicializador de la base de datos.
- * Se encarga de poblar la base de datos con datos iniciales si está vacía.
+ * Callback de inicialización de la base de datos.
+ *
+ * Esta clase se encarga de poblar la base de datos con datos iniciales
+ * cuando se crea por primera vez. Se utiliza principalmente para:
+ * - Insertar datos base necesarios para el funcionamiento de la aplicación.
+ * - Garantizar la existencia de contenido inicial (lugares, actividades, imágenes).
+ *
+ * La inicialización puede realizarse mediante SQL directo o mediante DAOs,
+ * dependiendo del contexto y las restricciones de integridad.
  */
 class DatabaseInitializer : RoomDatabase.Callback() {
 
+    /**
+     * Scope de corrutinas utilizado para operaciones de inicialización
+     * en segundo plano.
+     */
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+    /**
+     * Método invocado automáticamente cuando la base de datos se crea
+     * por primera vez.
+     *
+     * @param db Instancia de la base de datos SQLite subyacente.
+     */
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
-        // Inicializar usando SQL directo para garantizar IDs específicos
         initializeWithSQL(db)
     }
-    
+
+    /**
+     * Inicializa la base de datos utilizando sentencias SQL directas.
+     *
+     * Este enfoque se utiliza para garantizar identificadores concretos
+     * en tablas con claves foráneas dependientes, evitando problemas
+     * con `autoGenerate`.
+     *
+     * @param db Instancia de la base de datos SQLite.
+     */
     private fun initializeWithSQL(db: SupportSQLiteDatabase) {
         try {
             // 1. Insertar imágenes (21 imágenes)
@@ -36,13 +59,13 @@ class DatabaseInitializer : RoomDatabase.Callback() {
             db.execSQL("INSERT INTO imagen (imagen_id, path_archivo, descripcion_corta, tipo_uso) VALUES (5, 'fondopuzzle', 'Lugar 5', 'Principal')")
             db.execSQL("INSERT INTO imagen (imagen_id, path_archivo, descripcion_corta, tipo_uso) VALUES (6, 'act6_ferrocarril', 'Lugar 6', 'Principal')")
             db.execSQL("INSERT INTO imagen (imagen_id, path_archivo, descripcion_corta, tipo_uso) VALUES (7, 'act7_img1', 'Lugar 7', 'Principal')")
-            
+
             // Premios antiguos (8-14)
             for (i in 8..14) {
                 val num = i - 7
                 db.execSQL("INSERT INTO imagen (imagen_id, path_archivo, descripcion_corta, tipo_uso) VALUES ($i, 'premio${num}1', 'Premio antiguo $num', 'Premio Antiguo')")
             }
-            
+
             // Premios actuales (15-21)
             for (i in 15..21) {
                 val num = i - 14
@@ -66,13 +89,13 @@ class DatabaseInitializer : RoomDatabase.Callback() {
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (5, 'Puzzle', 'activity5', 5, 12, 19)")
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (6, 'Puzzle', 'activity6', 6, 13, 20)")
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (7, 'Clasificación', 'activity7', 7, 14, 21)")
-            
+
             // 4. Insertar persona de prueba (persona_id = 1)
             db.execSQL("INSERT INTO persona (persona_id, username, password_hash, tipo_persona) VALUES (1, 'testuser', 'testhash', 'Usuario')")
-            
+
             // 5. Insertar usuario asociado
             db.execSQL("INSERT INTO usuario (persona_fk, nombre_completo_diploma) VALUES (1, 'Usuario de Prueba')")
-            
+
             Log.d("DatabaseInitializer", "Base de datos inicializada con SQL directo")
         } catch (e: Exception) {
             Log.e("DatabaseInitializer", "Error inicializando base de datos: ${e.message}", e)
@@ -80,6 +103,15 @@ class DatabaseInitializer : RoomDatabase.Callback() {
     }
 
     companion object {
+
+        /**
+         * Inicializa la base de datos si aún no contiene datos.
+         *
+         * Comprueba previamente si existen actividades para evitar
+         * reinicializaciones innecesarias.
+         *
+         * @param database Instancia de la base de datos principal.
+         */
         suspend fun initializeDatabase(database: BarakaldoDatabase) {
             val contenidoDao = database.contenidoDao()
             val personaDao = database.personaDao()
@@ -93,7 +125,7 @@ class DatabaseInitializer : RoomDatabase.Callback() {
             }
 
             Log.d("DatabaseInitializer", "Inicializando base de datos...")
-            
+
             initializeDatabaseData(contenidoDao, personaDao, progresoDao)
         }
 

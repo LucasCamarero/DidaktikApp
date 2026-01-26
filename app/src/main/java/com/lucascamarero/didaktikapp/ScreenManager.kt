@@ -1,6 +1,7 @@
 package com.lucascamarero.didaktikapp
 
 import android.app.Activity
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -34,6 +35,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.lucascamarero.didaktikapp.components.LanguageCard
@@ -121,6 +124,39 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
     val context = LocalContext.current
     val activity = context as? Activity
 
+    // 🔹 OBSERVAR DESTINO ACTIVO
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    // 🔹 CONTROL CENTRALIZADO DE ORIENTACIÓN
+    DisposableEffect(backStackEntry) {
+
+        val route = backStackEntry?.destination?.route
+
+        activity?.requestedOrientation = when {
+            route == "map" ->
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR
+
+            route?.startsWith("startactivity") == true ->
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+            route?.startsWith("activity") == true ->
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+            route?.startsWith("endactivity") == true ->
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+            route in listOf(
+                "jointhephotos",
+                "writesentence"
+            ) ->
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+            else ->
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR
+        }
+
+        onDispose { }
+    }
     /**
      * Drawer lateral de navegación.
      *

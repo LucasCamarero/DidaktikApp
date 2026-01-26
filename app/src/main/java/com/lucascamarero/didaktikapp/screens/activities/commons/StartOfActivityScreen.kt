@@ -1,17 +1,13 @@
 package com.lucascamarero.didaktikapp.screens.activities.commons
 
-import android.app.Activity
 import android.content.pm.ActivityInfo
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,9 +24,7 @@ import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,55 +35,155 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.components.CreateTitle
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
-import com.lucascamarero.didaktikapp.components.LockScreenOrientation
 import com.lucascamarero.didaktikapp.models.ActivityDataSource
 import com.lucascamarero.didaktikapp.models.ActivityData
 import kotlinx.coroutines.launch
 
-// --- Componente de Imagen con Estilo Polaroid y Carrusel ---
+/**
+ * Pantalla inicial de una actividad (juego).
+ *
+ * Muestra el título, una imagen o imágenes,
+ * un mensaje introductorio del personaje Jolín y un botón para iniciar el juego.
+ *
+ * La pantalla está forzada a orientación vertical y utiliza un diseño
+ * desplazable para adaptarse a diferentes tamaños de pantalla.
+ *
+ * @param navController Controlador de navegación para cambiar de pantalla.
+ * @param activityNumber Identificador numérico de la actividad a cargar.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun StartOfActivityScreen(
+    navController: NavController,
+    activityNumber: Int
+) {
+    /**
+     * Datos de la actividad obtenidos desde el origen de datos
+     * en función del número de actividad.
+     */
+    val data = ActivityDataSource.getActivityData(activityNumber)
+
+    /**
+     * Indica si el texto del mensaje de Jolín ha finalizado completamente.
+     * Controla la visibilidad del botón de inicio.
+     */
+    var isJolinTextComplete by remember { mutableStateOf(false) }
+
+    /**
+     * Lista de recursos de imagen asociados a la actividad.
+     * Algunas actividades incluyen varias imágenes para mostrarse en carrusel.
+     */
+    val images = when (activityNumber) {
+        1 -> listOf(R.drawable.juego11_inicio, R.drawable.juego12_inicio)
+        2 -> listOf(R.drawable.juego21_inicio)
+        3 -> listOf(R.drawable.juego31_inicio)
+        4 -> listOf(R.drawable.juego41_inicio)
+        5 -> listOf(R.drawable.juego51_inicio)
+        6 -> listOf(R.drawable.juego61_inicio)
+        7 -> listOf(R.drawable.juego71_inicio)
+        8 -> listOf(R.drawable.premio11, R.drawable.premio12)
+        else -> listOf(data.imageResId)
+    }
+
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        // Contenedor vertical desplazable que aloja todos los elementos
+        // de la pantalla en orden secuencial.
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(25.dp))
+
+            CreateTitle(data.title)
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            PolaroidImage(
+                data = data,
+                imageResIds = images
+            )
+
+            if (isJolinTextComplete) {
+                Spacer(modifier = Modifier.height(26.dp))
+
+                CreateButton(
+                    texto = stringResource(id = R.string.intro_play_button),
+                    onClick = { navController.navigate(data.gameRoute) }
+                )
+            }
+
+            JolinWelcomeMessage(
+                message = data.description,
+                onTextComplete = { isJolinTextComplete = it },
+                onStartClick = { navController.navigate(data.gameRoute) }
+            )
+        }
+    }
+}
+
+/**
+ * Componente que muestra una imagen o carrusel de imágenes
+ * con estilo visual tipo Polaroid.
+ *
+ * Incluye navegación manual mediante flechas laterales y
+ * animaciones de desplazamiento entre imágenes.
+ *
+ * @param data Información de la actividad asociada a las imágenes.
+ * @param imageResIds Lista de identificadores de recursos de imagen.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PolaroidImage(
     data: ActivityData,
-    imageResIds: List<Int> // Lista de imágenes para el carrusel
+    imageResIds: List<Int>
 ) {
+    /**
+     * Número total de páginas del carrusel.
+     */
     val pageCount = imageResIds.size
-    val scope = rememberCoroutineScope() // Necesario para cambiar de página programáticamente
 
+    /**
+     * Scope de corrutinas utilizado para animar el cambio de página.
+     */
+    val scope = rememberCoroutineScope()
+
+    /**
+     * Estado del paginador horizontal.
+     */
     val pagerState = rememberPagerState(initialPage = 0) {
         pageCount
     }
 
     Box(
         modifier = Modifier
-            // 💡 1. REDUCIMOS EL TAMAÑO TOTAL DEL POLAROID
-            .size(280.dp, 250.dp) // Ejemplo: Reducido de 340x315 a 300x280
+            .size(280.dp, 250.dp)
             .clip(RoundedCornerShape(4.dp))
             .background(Color.White)
-            .padding(10.dp), // Reducimos el padding general
+            .padding(10.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) { // Centramos la columna para el carrusel
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            // 1. Carrusel de Imágenes con Flechas de Navegación Superpuestas
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(260.dp) // Mantenemos una altura decente para la imagen
+                    .height(260.dp)
             ) {
-                // A. Horizontal Pager (Carrusel)
                 HorizontalPager(
                     state = pagerState,
                     modifier = Modifier
@@ -104,12 +198,12 @@ fun PolaroidImage(
                     )
                 }
 
-                // 2. FLECHA IZQUIERDA
                 IconButton(
                     onClick = {
                         scope.launch {
-                            // Calcula la página anterior o vuelve a la última si está en la primera
-                            val prevPage = if (pagerState.currentPage > 0) pagerState.currentPage - 1 else pageCount - 1
+                            val prevPage =
+                                if (pagerState.currentPage > 0) pagerState.currentPage - 1
+                                else pageCount - 1
                             pagerState.animateScrollToPage(prevPage)
                         }
                     },
@@ -120,17 +214,17 @@ fun PolaroidImage(
                     Icon(
                         imageVector = Icons.Filled.ArrowBackIos,
                         contentDescription = "Anterior",
-                        tint = Color.White.copy(alpha = 0.8f), // Tono para que destaque sobre la imagen
+                        tint = Color.White.copy(alpha = 0.8f),
                         modifier = Modifier.size(24.dp)
                     )
                 }
 
-                // 3. FLECHA DERECHA
                 IconButton(
                     onClick = {
                         scope.launch {
-                            // Calcula la página siguiente o vuelve a la primera si está en la última
-                            val nextPage = if (pagerState.currentPage < pageCount - 1) pagerState.currentPage + 1 else 0
+                            val nextPage =
+                                if (pagerState.currentPage < pageCount - 1) pagerState.currentPage + 1
+                                else 0
                             pagerState.animateScrollToPage(nextPage)
                         }
                     },
@@ -141,115 +235,10 @@ fun PolaroidImage(
                     Icon(
                         imageVector = Icons.Filled.ArrowForwardIos,
                         contentDescription = "Siguiente",
-                        tint = Color.White.copy(alpha = 0.8f), // Tono para que destaque sobre la imagen
+                        tint = Color.White.copy(alpha = 0.8f),
                         modifier = Modifier.size(24.dp)
                     )
                 }
-            }
-
-        }
-    }
-}
-
-
-// --- PANTALLA PRINCIPAL DE INTRODUCCIÓN AL JUEGO ---
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun StartOfActivityScreen(
-    navController: NavController,
-    activityNumber: Int
-) {
-    val data = ActivityDataSource.getActivityData(activityNumber)
-    var isJolinTextComplete by remember { mutableStateOf(false) }
-
-    val images = when (activityNumber) {
-        1 -> listOf(R.drawable.act1_img1, R.drawable.act1_img2)
-        2 -> listOf(R.drawable.activ3_img1)
-        6 -> listOf(R.drawable.act6_ferrocarril)
-        8 -> listOf(R.drawable.premio11, R.drawable.premio12)
-        else -> listOf(data.imageResId)
-    }
-
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primaryContainer)
-    ) {
-        val isLandscape = maxWidth > maxHeight
-
-        if (isLandscape) {
-            Column(
-                modifier = Modifier.fillMaxSize().padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CreateTitle(data.title)
-
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // LADO IZQUIERDO: Imagen
-                    Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                        PolaroidImage(data = data, imageResIds = images)
-                    }
-
-                    // LADO DERECHO: Texto + Jolín + Botón
-                    Box(
-                        modifier = Modifier.weight(1.2f).fillMaxHeight(),
-                        contentAlignment = Alignment.Center // Centra todo el bloque de Jolín
-                    ) {
-                        // 1. El bloque completo (Burbuja + Personaje)
-                        JolinWelcomeMessage(
-                            message = data.description,
-                            onTextComplete = { isJolinTextComplete = it },
-                            onStartClick = { navController.navigate(data.gameRoute) },
-                            jolinSize = 130.dp,
-                            bubbleSize = 210.dp,
-                            jolinOffsetY = 0.dp
-                        )
-
-                        // 2. El BOTÓN (Posicionado manualmente a la izquierda de Jolín)
-                        if (isJolinTextComplete) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(bottom = 20.dp, end = 140.dp), // Ajusta 'end' para moverlo a la izquierda de Jolín
-                                contentAlignment = Alignment.BottomCenter
-                            ) {
-                                CreateButton(
-                                    texto = stringResource(id = R.string.intro_play_button),
-                                    onClick = { navController.navigate(data.gameRoute) }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            // --- DISEÑO VERTICAL (Sin cambios significativos) ---
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CreateTitle(data.title)
-                PolaroidImage(data = data, imageResIds = images)
-                Spacer(modifier = Modifier.height(16.dp))
-
-                if (isJolinTextComplete) {
-                    CreateButton(
-                        texto = stringResource(id = R.string.intro_play_button),
-                        onClick = { navController.navigate(data.gameRoute) }
-                    )
-                }
-
-                JolinWelcomeMessage(
-                    message = data.description,
-                    onTextComplete = { isJolinTextComplete = it },
-                    onStartClick = { navController.navigate(data.gameRoute) }
-                )
             }
         }
     }
