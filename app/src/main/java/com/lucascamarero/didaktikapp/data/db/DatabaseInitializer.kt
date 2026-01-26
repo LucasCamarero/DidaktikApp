@@ -9,6 +9,7 @@ import com.lucascamarero.didaktikapp.data.db.daos.ProgresoDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import com.lucascamarero.didaktikapp.data.db.entities.*
 
 /**
  * Callback de inicialización de la base de datos.
