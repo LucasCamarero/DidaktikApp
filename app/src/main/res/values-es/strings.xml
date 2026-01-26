@@ -11,8 +11,9 @@
     <string name="exit_app">Salir</string>
     <string name="restart">Reiniciar los juegos</string>
     <string name="snackbar">Antes tienes que completar los 7 juegos</string>
+    <string name="snackbar1">Ya has completado el juego</string>
     <string name="snackbar2">Antes tienes que completar los 7 juegos y el juego final</string>
-
+    <string name="intro_map">Primero completa la actividad</string>
     <!-- Botones -->
     <string name="intro_button">Comenzar</string>
     <string name="intro_play_button">Empezar juego</string>
@@ -42,6 +43,7 @@
     <string name="respuesta1_b">b) Ya no hay montes</string>
     <string name="respuesta1_c">c) No hay fiestas</string>
     <!-- Juego 2 -->
+    <string name="title2">La iglesia de San Vicente</string>
     <string name="texto2_intro">La iglesia de San Vicente ha sido el corazón del pueblo durante
         muchos años. Aquí se reunía la gente para rezar, celebrar fiestas y encontrarse con sus
         vecinos. Observa con atención la foto de la iglesia y fíjate en los elementos que la
@@ -49,6 +51,7 @@
         Central… Cada uno tiene su función y nos ayuda a conocer cómo era la vida en aquel
         tiempo.</string>
     <!-- Juego 3 -->
+    <string name="title3">El acertijo del puente</string>
     <string name="texto3_intro">En el mercado de Barakaldo la gente compraba alimentos y se
         encontraba con sus vecinos. Aquí se vendían productos muy típicos: las alubias de
         Barakaldo, los talos, el bacalao al pil-pil y dulces caseros. El mercado era un lugar lleno
@@ -63,12 +66,14 @@
     <string name="respuesta3_3">BACALAO</string>
     <string name="respuesta3_4">PASTEL</string>
     <!-- Juego 4 -->
+    <string name="title4">El edificio Ilgner</string>
     <string name="texto4_intro">El edificio Ilgner fue muy importante para Barakaldo. Aquí se
         producía electricidad para las fábricas y talleres. Gracias a la energía, las máquinas
         podían funcionar y la ciudad creció mucho. En este lugar trabajaban ingenieros, mecánicos
         y electricistas. El edificio sigue en pie y nos recuerda cómo empezó la industria
         moderna.</string>
     <!-- Juego 5 -->
+    <string name="title5">Rompecabezas</string>
     <string name="texto5_intro">Hace muchos años, Barakaldo era un lugar lleno de fábricas y
         trenes. Desde las montañas cercanas se sacaba hierro, y los cargaderos eran construcciones
         enormes que servían para cargar el mineral en los barcos. Los trenes traían el hierro y
@@ -78,11 +83,13 @@
     <string name="mensaje5_2">El hierro se cargaba en los barcos que iban a otros países.</string>
     <string name="mensaje5_3">Los cargaderos ayudaron a que Barakaldo creciera mucho.</string>
     <!-- Juego 6 -->
+    <string name="title6">El ferrocarril</string>
     <string name="texto6_intro">En el Barakaldo industrial, los trenes transportaban el hierro
         desde las minas hasta los cargaderos, donde se subía a los barcos. Gracias al ferrocarril,
         muchas fábricas podían trabajar sin parar, y los trabajadores viajaban cada día en estos
         trenes. El tren fue uno de los motores que hizo crecer a Barakaldo.</string>
     <!-- Juego 7 -->
+    <string name="title7">Palacio Munoa</string>
     <string name="texto7_intro">El Palacio Munoa fue la casa de una familia muy rica. Mientras
         muchas personas trabajaban en las fábricas, aquí se celebraban fiestas y bailes. Tenía
         jardines, cuadros y muebles elegantes. Hoy el Palacio Munoa es un parque abierto para
@@ -91,9 +98,9 @@
     <string name="titulo5_columna2">Burgueses</string>
     <!-- Juego final -->
     <string name="final_name">Juego final</string>
-    <string name="asocia">Asocia las imágenes</string>
-    <string name="asocia1">✅ Asociación correcta</string>
-    <string name="asocia2">❌ Asociación incorrecta</string>
+    <string name="asocia">Empareja las imágenes</string>
+    <string name="asocia1">Correcto</string>
+    <string name="asocia2">Incorrecto</string>
     <string name="textofinal_intro">Barakaldo ha cambiado mucho desde sus orígenes rurales hasta
         hoy. Tenemos fábricas antiguas, iglesias, palacios y parques que nos cuentan su historia.
         Todos estos lugares forman parte de nuestro patrimonio, y debemos cuidarlos para que las
@@ -101,8 +108,7 @@
     <string name="reflexion_titulo">Reflexión</string>
     <string name="reflexion_explicacion">Ahora piensa en los lugares que has visto en las imágenes y
         escribe una frase explicando por qué es importante cuidar estos lugares y respetar la
-        naturaleza.</string>
-    <string name="reflexionfinal">"Yo cuidaría... porque..."</string>
+        naturaleza. Por ejemplo: "Yo cuidaría... porque..."</string>
     <string name="textocaja">Escribe tu frase aquí</string>
     <!-- Diploma -->
     <string name="diploma_button">Obtener diploma</string>

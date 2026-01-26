@@ -41,11 +41,11 @@ fun CreateButton(
             .height(60.dp),
         border = BorderStroke(
             width = 4.dp,
-            color = MaterialTheme.colorScheme.scrim
+            color = MaterialTheme.colorScheme.tertiaryContainer
         ),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.scrim
+            contentColor = MaterialTheme.colorScheme.tertiaryContainer
         ),
         contentPadding = PaddingValues(
             horizontal = 26.dp,

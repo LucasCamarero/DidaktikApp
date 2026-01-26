@@ -11,12 +11,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.components.CreateTitle2
+import com.lucascamarero.didaktikapp.ui.theme.Typography3
+import com.lucascamarero.didaktikapp.viewmodels.FinalGameViewModel
 
 @Composable
-fun Diploma(navController: NavController) {
+fun Diploma(
+    navController: NavController,
+    viewModel: FinalGameViewModel = viewModel()
+) {
 
     val currentLocale =
         AppCompatDelegate.getApplicationLocales()[0]?.language ?: "eu"
@@ -36,18 +46,37 @@ fun Diploma(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.padding(top = 20.dp))
+        }
 
-            Text(
-                text = stringResource(R.string.diploma_name),
-                style = MaterialTheme.typography.titleSmall
-            )
+        item {
+            CreateTitle2(stringResource(R.string.diploma_name))
+        }
 
-            Spacer(modifier = Modifier.height(26.dp))
+        item {
+            Spacer(modifier = Modifier.padding(top = 25.dp))
+        }
 
+        item {
             Image(
                 painter = painterResource(id = diplomaImage),
                 contentDescription = "Diploma",
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.padding(top = 30.dp))
+        }
+
+        item {
+            Text(
+                text = viewModel.userSentence.toUpperCase(),
+                style = Typography3.titleLarge.copy(
+                    lineHeight = 48.sp
+                ),
+                color = MaterialTheme.colorScheme.scrim,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
         }

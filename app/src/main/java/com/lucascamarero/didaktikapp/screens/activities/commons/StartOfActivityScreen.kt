@@ -53,6 +53,7 @@ import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.CreateButton
 import com.lucascamarero.didaktikapp.components.CreateTitle
 import com.lucascamarero.didaktikapp.components.JolinWelcomeMessage
+import com.lucascamarero.didaktikapp.components.LockScreenOrientation
 import com.lucascamarero.didaktikapp.models.ActivityDataSource
 import com.lucascamarero.didaktikapp.models.ActivityData
 import kotlinx.coroutines.launch
