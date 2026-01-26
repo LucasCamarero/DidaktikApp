@@ -92,22 +92,18 @@ fun StartOfActivityScreen(
         else -> listOf(data.imageResId)
     }
 
-    BoxWithConstraints(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)
     ) {
-        val isSmallScreen = maxWidth < 360.dp
-
         // Contenedor vertical desplazable que aloja todos los elementos
         // de la pantalla en orden secuencial.
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = if (isSmallScreen) 8.dp else 16.dp,
-                    vertical = 8.dp),
-                //.padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(25.dp))
