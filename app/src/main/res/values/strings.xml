@@ -97,15 +97,20 @@
         bizilagunekin elkartzen zen. Produktu tipikoak saltzen ziren bertan: Barakaldoko
         babarrunak, taloak (arto tortillak), pil-pil saltsan egindako bakailaoa eta etxeko gozoak.
         Merkatua usain, kolore eta soinuz betetako lekua zen. Begiratu hitz-bilaketako pistak eta
-        aurkitu janari hauei dagozkien hitzak.</string>
+        aurkitu janari hauei dagozkien hitzak (hitzak erderaz).</string>
     <string name="pista3_1">Barakaldoko lekale tipikoa da, gisatuetan jaten dena.</string>
     <string name="pista3_2">Festetan jaten da eta artoz egiten da.</string>
     <string name="pista3_3">Arraina pil-pil saltsan prestatua</string>
     <string name="pista3_4">Barakaldoko gozo tipikoa</string>
-    <string name="respuesta3_1">BABARRUNAK</string>
-    <string name="respuesta3_2">TALOAK</string>
-    <string name="respuesta3_3">BAKAILAOA</string>
-    <string name="respuesta3_4">TARTA</string>
+    <string name="respuesta3_1">ALUBIAS</string>
+    <string name="respuesta3_2">TALOS</string>
+    <string name="respuesta3_3">BACALAO</string>
+    <string name="respuesta3_4">PASTEL</string>
+    <string name="texto47">Hitz Bilaketa: Barakaldoko Zaporeak</string>
+    <string name="texto48">GOGORUA!</string>
+    <string name="texto49">Bertako gastronomiaren produktu tipiko guztiak aurkitu dituzu.</string>
+    <string name="texto50">IKUSI SARIA</string>
+    <string name="texto51">PISTAK</string>
     <!-- Juego 4 -->
     <string name="title4">Ilgner eraikina</string>
     <string name="texto4_intro">Ilgner eraikina oso garrantzitsua izan zen Barakaldorentzat.

@@ -1,7 +1,5 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
-import android.app.Activity
-import android.content.pm.ActivityInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -19,51 +17,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
-// 1. IMPORTAMOS TU COMPONENTE
 import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import com.lucascamarero.didaktikapp.viewmodels.Game3ViewModel
 
-// --- COLORES ---
-val PrimaryBlue = Color(0xFF1A3B5D)
-val FoundYellow = Color(0xFFFFC107)
-val SelectionHighlight = Color(0xFFFFF176)
-val BackgroundGray = Color(0xFFF0F2F5)
-val SuccessGreen = Color(0xFF4CAF50)
-
+/**
+ * Pantalla principal de la Actividad 3.
+ *
+ * Contiene:
+ * - El título de la actividad
+ * - El panel de pistas
+ * - La sopa de letras interactiva
+ * - El mensaje final cuando el juego se completa
+ *
+ * @param navController Controlador de navegación
+ * @param viewModel ViewModel que gestiona el estado y la lógica del juego
+ */
 @Composable
 fun Activity3Screen(
     navController: NavController,
     viewModel: Game3ViewModel = hiltViewModel()
 ) {
-    // ===================================================================
-    // 1. CONFIGURACIÓN DE PANTALLA (BLOQUEO VERTICAL)
-    // ===================================================================
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val activity = context as? Activity
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        onDispose {
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-    }
-
+    /** Identificador del usuario que realiza la actividad */
     val personaId = 1
+
+    /** Estado del scroll vertical de la pantalla */
     val scrollState = rememberScrollState()
+
+    /** Lista reactiva de palabras encontradas */
     val foundWordsList = viewModel.foundWords
 
-    // Usamos Box para superponer el mensaje final
-    Box(modifier = Modifier.fillMaxSize().background(BackgroundGray)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+    ) {
 
-        // ===================================================================
-        // CAPA 1: JUEGO (SOPA DE LETRAS) - SIEMPRE DE FONDO
-        // ===================================================================
+        // CAPA 1: JUEGO (SOPA DE LETRAS)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -71,40 +67,37 @@ fun Activity3Screen(
                 .padding(bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // TÍTULO DE LA ACTIVIDAD
+
+            // Título de la actividad
             Text(
-                text = "Sopa de Letras: Sabores de Barakaldo",
+                text = stringResource(id = R.string.texto47),
                 style = MaterialTheme.typography.headlineSmall.copy(
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 ),
                 modifier = Modifier.padding(top = 24.dp, bottom = 16.dp),
-                color = PrimaryBlue
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
 
-            // PANEL DE PISTAS
+            // Panel de pistas del juego
             WordSearchCluePanel(foundWordsList.toSet())
             Spacer(modifier = Modifier.height(20.dp))
 
-            // SOPA DE LETRAS INTERACTIVA
+            //Sopa de letras interactiva
             WordSearchGrid(viewModel, personaId)
 
-            // Espacio extra al final para que se pueda hacer scroll cómodo
             Spacer(modifier = Modifier.height(60.dp))
         }
 
-        // ===================================================================
-        // CAPA 2: MENSAJE FINAL (POP-UP)
-        // ===================================================================
+        // Mensaje final mostrado cuando el juego se completa
         if (viewModel.isGameFinished) {
             MensajeFinalActivity(
-                titulo = "¡SABROSO!",
-                mensaje = "Has encontrado todos los productos típicos de la gastronomía local.",
-                botonText = "VER RECOMPENSA",
+                titulo = stringResource(id = R.string.texto48),
+                mensaje = stringResource(id = R.string.texto49),
+                botonText = stringResource(id = R.string.texto50),
                 onButtonClick = {
-                    // ID = 3
-                    // Asegúrate de usar las fotos correctas para la Actividad 3
-                    val ruta = "endactivity/3/${R.drawable.act1_premio1}/${R.drawable.act1_premio2}"
+                    val ruta =
+                        "endactivity/3/${R.drawable.premio31}/${R.drawable.premio12}"
                     navController.navigate(ruta) {
                         popUpTo("activity3") { inclusive = true }
                     }
@@ -114,13 +107,24 @@ fun Activity3Screen(
     }
 }
 
-
-// -------------------------------------------------------------------
-// 2. COMPONENTE DE LA CUADRÍCULA (SOPA DE LETRAS) - SIN CAMBIOS
-// -------------------------------------------------------------------
+/**
+ * Composable que representa la sopa de letras.
+ *
+ * Gestiona:
+ * - La detección de gestos de arrastre
+ * - El marcado de letras seleccionadas
+ * - El resaltado de palabras encontradas
+ *
+ * @param viewModel ViewModel que contiene el estado del juego
+ * @param personaId Identificador del usuario
+ */
 @Composable
 fun WordSearchGrid(viewModel: Game3ViewModel, personaId: Int) {
+
+    /** Tamaño fijo del grid */
     val gridSize = 320.dp
+
+    /** Conjunto de palabras ya encontradas */
     val foundWordsSet = viewModel.foundWords.toSet()
 
     Card(
@@ -133,7 +137,7 @@ fun WordSearchGrid(viewModel: Game3ViewModel, personaId: Int) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .pointerInput(Unit) {
                     detectDragGestures(
                         onDragEnd = { viewModel.endSelection(personaId) },
@@ -152,7 +156,11 @@ fun WordSearchGrid(viewModel: Game3ViewModel, personaId: Int) {
             viewModel.grid.forEachIndexed { r, rowStr ->
                 Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                     rowStr.forEachIndexed { c, char ->
+
+                        /** Indica si la celda está seleccionada actualmente */
                         val isSelected = viewModel.currentSelection.contains(r to c)
+
+                        /** Indica si la celda pertenece a una palabra ya encontrada */
                         val isFound = viewModel.targetWords.any {
                             it.word in foundWordsSet &&
                                     r >= it.startRow && r <= it.endRow &&
@@ -165,19 +173,22 @@ fun WordSearchGrid(viewModel: Game3ViewModel, personaId: Int) {
                                 .weight(1f)
                                 .background(
                                     when {
-                                        isFound -> FoundYellow.copy(alpha = 0.8f)
-                                        isSelected -> SelectionHighlight.copy(alpha = 0.8f)
-                                        else -> Color.White
+                                        isFound -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f)
+                                        isSelected -> MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f)
+                                        else -> MaterialTheme.colorScheme.background
                                     }
                                 )
-                                .border(0.5.dp, Color.LightGray.copy(alpha = 0.5f)),
+                                .border(
+                                    0.5.dp,
+                                    MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.5f)
+                                ),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = char.toString(),
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 16.sp,
-                                color = PrimaryBlue
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         }
                     }
@@ -187,20 +198,24 @@ fun WordSearchGrid(viewModel: Game3ViewModel, personaId: Int) {
     }
 }
 
-
-// -------------------------------------------------------------------
-// 3. COMPONENTE DEL PANEL DE PISTAS - SIN CAMBIOS
-// -------------------------------------------------------------------
+/**
+ * Panel que muestra las pistas del juego y su estado
+ * (pendiente o completada).
+ *
+ * @param foundWords Conjunto de palabras ya encontradas
+ */
 @Composable
 fun WordSearchCluePanel(foundWords: Set<String>) {
-    val clues = remember {
-        listOf(
-            ClueData("Legumbre muy típica de Barakaldo, se come en guisos", "ALUBIAS"),
-            ClueData("Se come en fiestas y se hace de maíz", "TALO"),
-            ClueData("Pescado que se cocina al pil-pil", "BACALAO"),
-            ClueData("Dulce típico de repostería de Barakaldo", "PASTEL")
-        )
-    }
+
+    /**
+     * Lista de pistas y respuestas asociadas
+     */
+    val clues = listOf(
+        ClueData(stringResource(id = R.string.pista3_1), stringResource(id = R.string.respuesta3_1)),
+        ClueData(stringResource(id = R.string.pista3_2), stringResource(id = R.string.respuesta3_2)),
+        ClueData(stringResource(id = R.string.pista3_3), stringResource(id = R.string.respuesta3_3)),
+        ClueData(stringResource(id = R.string.pista3_4), stringResource(id = R.string.respuesta3_4)),
+    )
 
     Card(
         modifier = Modifier
@@ -211,13 +226,15 @@ fun WordSearchCluePanel(foundWords: Set<String>) {
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+
+            // Título del panel de pistas
             Text(
-                text = "PISTAS:",
+                text = stringResource(id = R.string.texto51),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold
                 ),
-                color = PrimaryBlue,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(bottom = 10.dp)
             )
 
@@ -234,21 +251,40 @@ fun WordSearchCluePanel(foundWords: Set<String>) {
     }
 }
 
-// -------------------------------------------------------------------
-// 4. COMPONENTE INDIVIDUAL DE LA PISTA - SIN CAMBIOS
-// -------------------------------------------------------------------
+/**
+ * Modelo que representa una pista y su palabra asociada.
+ *
+ * @property description Texto descriptivo de la pista
+ * @property word Palabra solución asociada
+ */
 data class ClueData(val description: String, val word: String)
 
+/**
+ * Elemento visual que representa una pista individual.
+ *
+ * Muestra:
+ * - Un icono de check si la pista está completada
+ * - Un indicador circular si está pendiente
+ * - El texto de la pista con estilos según su estado
+ *
+ * @param text Texto descriptivo de la pista
+ * @param word Palabra asociada
+ * @param completed Indica si la pista ya ha sido resuelta
+ */
 @Composable
 fun ClueItemImproved(text: String, word: String, completed: Boolean) {
-    val textColor = if (completed) Color.Gray else Color.Black
+
+    /** Color del texto según el estado de la pista */
+    val textColor =
+        if (completed) MaterialTheme.colorScheme.scrim
+        else MaterialTheme.colorScheme.tertiary
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (completed) {
             Icon(
                 imageVector = Icons.Filled.CheckCircle,
                 contentDescription = "Encontrada",
-                tint = SuccessGreen,
+                tint = MaterialTheme.colorScheme.scrim,
                 modifier = Modifier.size(24.dp)
             )
         } else {
@@ -256,7 +292,7 @@ fun ClueItemImproved(text: String, word: String, completed: Boolean) {
                 modifier = Modifier
                     .size(10.dp)
                     .clip(CircleShape)
-                    .background(Color.Gray)
+                    .background(MaterialTheme.colorScheme.onTertiaryContainer)
             )
             Spacer(modifier = Modifier.width(14.dp))
         }

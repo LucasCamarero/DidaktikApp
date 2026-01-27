@@ -98,15 +98,20 @@
         neighbors. Typical products were sold here: Barakaldo beans, talos (corn tortillas), cod
         in pil-pil sauce, and homemade sweets. The market was a place full of smells, colors, and
         sounds. Look at the clues in the word search and find the words that correspond to these
-        foods.</string>
+        foods (words in Spanish).</string>
     <string name="pista3_1">A very typical legume from Barakaldo, it is eaten in stews</string>
     <string name="pista3_2">It is eaten at parties and is made from corn.</string>
     <string name="pista3_3">Fish cooked in pil-pil sauce</string>
     <string name="pista3_4">Typical sweet pastry from Barakaldo</string>
-    <string name="respuesta3_1">BEANS</string>
+    <string name="respuesta3_1">ALUBIAS</string>
     <string name="respuesta3_2">TALOS</string>
-    <string name="respuesta3_3">COD</string>
-    <string name="respuesta3_4">CAKE</string>
+    <string name="respuesta3_3">BACALAO</string>
+    <string name="respuesta3_4">PASTEL</string>
+    <string name="texto47">Word Search: Flavors of Barakaldo</string>
+    <string name="texto48">TASTY!</string>
+    <string name="texto49">You have found all the typical products of the local gastronomy.</string>
+    <string name="texto50">VIEW REWARD</string>
+    <string name="texto51">CLUES</string>
     <!-- Juego 4 -->
     <string name="title4">The Ilgner building</string>
     <string name="texto4_intro">The Ilgner building was very important for Barakaldo. Here,

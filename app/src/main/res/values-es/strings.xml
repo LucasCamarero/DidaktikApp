@@ -107,6 +107,11 @@
     <string name="respuesta3_2">TALOS</string>
     <string name="respuesta3_3">BACALAO</string>
     <string name="respuesta3_4">PASTEL</string>
+    <string name="texto47">Sopa de Letras: Sabores de Barakaldo</string>
+    <string name="texto48">¡SABROSO!</string>
+    <string name="texto49">Has encontrado todos los productos típicos de la gastronomía local.</string>
+    <string name="texto50">VER RECOMPENSA</string>
+    <string name="texto51">PISTAS</string>
     <!-- Juego 4 -->
     <string name="title4">El edificio Ilgner</string>
     <string name="texto4_intro">El edificio Ilgner fue muy importante para Barakaldo. Aquí se
