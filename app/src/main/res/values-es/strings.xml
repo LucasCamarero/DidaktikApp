@@ -70,6 +70,28 @@
         forman: el Coro, el Altar, el Vía Crucis, el Sagrario, la Puerta Principal, la Nave
         Central… Cada uno tiene su función y nos ayuda a conocer cómo era la vida en aquel
         tiempo.</string>
+    <string name="texto25">Cuestionario sobre la Iglesia de San Vicente</string>
+    <string name="texto26">Altar</string>
+    <string name="texto27">Coro</string>
+    <string name="texto28">Sagrario</string>
+    <string name="texto29">Via Crucis</string>
+    <string name="texto30">Púlpito</string>
+    <string name="texto31">Banco</string>
+    <string name="texto32">Confesionario</string>
+    <string name="texto33">Caliz</string>
+    <string name="texto34">Vela</string>
+    <string name="texto35">Cruz</string>
+    <string name="texto36">Cuadro</string>
+    <string name="texto37">Estatua</string>
+    <string name="texto38">Arrastra la palabra correcta a la imagen.</string>
+    <string name="texto39">¡Correcto! Muy bien.</string>
+    <string name="texto40">¡Incorrecto! Inténtalo de nuevo.</string>
+    <string name="texto41">Incorrecto</string>
+    <string name="texto42">Suelta aquí la palabra</string>
+    <string name="texto43">SIGUIENTE</string>
+    <string name="texto44">¡EXCELENTE!</string>
+    <string name="texto45">Has completado el quiz sobre la Iglesia de San Vicente correctamente.</string>
+    <string name="texto46">VER RECOMPENSA</string>
     <!-- Juego 3 -->
     <string name="title3">El acertijo del puente</string>
     <string name="texto3_intro">En el mercado de Barakaldo la gente compraba alimentos y se

@@ -70,6 +70,28 @@
         it up: the Choir, the Altar, the Stations of the Cross, the Tabernacle, the Main Door,
         the Central Nave… Each one has its function and helps us understand what life was like
         in that time.</string>
+    <string name="texto25">Quiz about the Church of San Vicente</string>
+    <string name="texto26">Altar</string>
+    <string name="texto27">Choir</string>
+    <string name="texto28">Sanctuary</string>
+    <string name="texto29">Way of the Cross</string>
+    <string name="texto30">Pulpit</string>
+    <string name="texto31">Bench</string>
+    <string name="texto32">Confessional</string>
+    <string name="texto33">Chalice</string>
+    <string name="texto34">Candle</string>
+    <string name="texto35">Cross</string>
+    <string name="texto36">Picture</string>
+    <string name="texto37">Statue</string>
+    <string name="texto38">Drag the correct word to the image.</string>
+    <string name="texto39">Correct! Very good.</string>
+    <string name="texto40">Incorrect! Try again.</string>
+    <string name="texto41">Incorrect</string>
+    <string name="texto42">Drop the word here</string>
+    <string name="texto43">NEXT</string>
+    <string name="texto44">EXCELLENT!</string>
+    <string name="texto45">You have successfully completed the quiz about the Church of San Vicente.</string>
+    <string name="texto46">VIEW REWARD</string>
     <!-- Juego 3 -->
     <string name="title3">The riddle of the bridge</string>
     <string name="texto3_intro">In the Barakaldo market, people bought food and met their

@@ -238,7 +238,7 @@ fun Activity1Screen(
                 botonText = stringResource(id = R.string.texto24),
                 onButtonClick = {
                     val ruta =
-                        "endactivity/1/${R.drawable.act1_premio1}/${R.drawable.act1_premio2}"
+                        "endactivity/1/${R.drawable.premio41}/${R.drawable.premio32}"
                     navController.navigate(ruta) {
                         // Evita volver al juego al pulsar atrás desde la pantalla final
                         popUpTo("activity1") { inclusive = true }

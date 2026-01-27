@@ -69,6 +69,28 @@
         arretaz elizaren argazkiari eta erreparatu hura osatzen duten elementuei: Korua, Aldarea,
         Gurutz-bidea, Sagrarioa, Ate Nagusia, Nabe Nagusia… Bakoitzak bere funtzioa du eta garai
         hartako bizitza nolakoa zen ulertzen laguntzen digu.</string>
+    <string name="texto25">San Bizente elizari buruzko galdetegia</string>
+    <string name="texto26">Aldarea</string>
+    <string name="texto27">Abesbatza</string>
+    <string name="texto28">Santutegia</string>
+    <string name="texto29">Gurutze Bidea</string>
+    <string name="texto30">Pulpitoa</string>
+    <string name="texto31">Bankua</string>
+    <string name="texto32">Konfesionala</string>
+    <string name="texto33">kaliza</string>
+    <string name="texto34">Kandela</string>
+    <string name="texto35">Gurutzea</string>
+    <string name="texto36">Taula</string>
+    <string name="texto37">Estatua</string>
+    <string name="texto38">Arrastatu hitz zuzena irudira.</string>
+    <string name="texto39">Bai, bai! Oso ondo.</string>
+    <string name="texto40">Okerra! Saiatu berriro.</string>
+    <string name="texto41">Okerra</string>
+    <string name="texto42">Jarri hitza hemen</string>
+    <string name="texto43">JARRAITZEN</string>
+    <string name="texto44">BIKAINA!</string>
+    <string name="texto45">San Bizente elizari buruzko galdetegia arrakastaz bete duzu.</string>
+    <string name="texto46">IKUSI SARIA</string>
     <!-- Juego 3 -->
     <string name="title3">Zubiaren enigma</string>
     <string name="texto3_intro">Barakaldoko merkatuan, jendeak janaria erosten zuen eta
