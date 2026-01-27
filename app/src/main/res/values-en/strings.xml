@@ -30,6 +30,12 @@
         surprise and a diploma await you for becoming true Barakaldo explorers!
 
         Ready? Let´s go! Let´s discover Barakaldo, from rural to modern!</string>
+    <!-- Pantalla común final -->
+    <string name="textocf1">LEVEL COMPLETED!</string>
+    <string name="textocf2">You have unlocked two images</string>
+    <string name="textocf3">BEFORE</string>
+    <string name="textocf4">NOW</string>
+    <string name="textocf5">FINISH ROUTE</string>
     <!-- Juego 1 -->
     <string name="title1">The hermitage of Saint Agatha</string>
     <string name="texto1_intro">Many years ago, Barakaldo was a town surrounded by fields,

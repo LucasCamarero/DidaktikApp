@@ -30,6 +30,12 @@
         espera una sorpresa y un diploma por convertiros en verdaderos exploradores barakaldeses!
 
         ¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!</string>
+    <!-- Pantalla común final -->
+    <string name="textocf1">¡NIVEL COMPLETADO!</string>
+    <string name="textocf2">Has desbloqueado dos imágenes</string>
+    <string name="textocf3">ANTES</string>
+    <string name="textocf4">AHORA</string>
+    <string name="textocf5">FINALIZAR RUTA</string>
     <!-- Juego 1 -->
     <string name="title1">La Ermita de Santa Agueda</string>
     <string name="texto1_intro">Hace muchos años, Barakaldo era un pueblo rodeado de campos,

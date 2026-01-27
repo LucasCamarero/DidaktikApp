@@ -30,6 +30,12 @@
         bat eta diploma bat zain dituzu benetako Barakaldoko esploratzaile bihurtzeagatik!
 
         Prest? Goazen! Ezagutu dezagun Barakaldo, landa-eremutik modernora!</string>
+    <!-- Pantalla común final -->
+    <string name="textocf1">MAILA OSATUTA!</string>
+    <string name="textocf2">Bi irudi desblokeatu dituzu</string>
+    <string name="textocf3">AURRETIK</string>
+    <string name="textocf4">ORAIN</string>
+    <string name="textocf5">AMAITU IBILBIDEA</string>
     <!-- Juego 1 -->
     <string name="title1">Santa Agatearen ermita</string>
     <string name="texto1_intro">Duela urte asko, Barakaldo zelai, baserri eta mendiz inguratutako
