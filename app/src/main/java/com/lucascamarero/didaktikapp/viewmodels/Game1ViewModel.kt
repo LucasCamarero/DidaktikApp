@@ -15,10 +15,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.hypot
 
-// =======================================================
-// DATA
-// =======================================================
-
+/**
+ * Modelo de datos que representa un elemento interactivo del juego.
+ *
+ * Cada elemento puede ser arrastrado por el usuario hasta una posición objetivo
+ * y quedar bloqueado cuando se coloca correctamente.
+ *
+ * @property id Identificador único del elemento.
+ * @property imageRes Recurso drawable que representa visualmente el elemento.
+ * @property currentPosition Posición actual del elemento en pantalla.
+ * @property targetPosition Posición objetivo donde debe colocarse el elemento.
+ * @property isLocked Indica si el elemento ya ha sido colocado correctamente.
+ */
 data class GameItem(
     val id: Int,
     val imageRes: Int,
@@ -27,42 +35,76 @@ data class GameItem(
     val isLocked: Boolean = false
 )
 
-// =======================================================
-// VIEW MODEL
-// =======================================================
-
+/**
+ * ViewModel que gestiona el estado y la lógica del juego de la actividad.
+ *
+ * Controla:
+ * - La lógica de drag & drop
+ * - El flujo del quiz
+ * - El estado visual del texto informativo
+ * - La persistencia del progreso del usuario
+ *
+ * No depende de la UI directamente y sobrevive a cambios de configuración.
+ *
+ * @property repository Repositorio encargado de persistir el progreso del usuario.
+ */
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val repository: ProgresoRepository
 ) : ViewModel() {
 
-    // -----------------------------
-    // GAME STATE
-    // -----------------------------
-
+    /**
+     * Lista observable de elementos del juego.
+     * Se utiliza para representar los objetos arrastrables y sus posiciones.
+     */
     val items = mutableStateListOf<GameItem>()
 
+    /**
+     * Recurso de texto que representa el mensaje actual del estado del juego.
+     */
     var statusTextResId by mutableStateOf(R.string.texto11)
 
-    //var statusColor by mutableStateOf(Color(0xFF1A3B5D))
-    var statusColor by mutableStateOf(MaterialTheme.colorScheme.background)
+    /**
+     * Color asociado al estado actual del mensaje mostrado al usuario.
+     */
+    var statusColor by mutableStateOf(Color(0xFF1A3B5D))
 
+    /**
+     * Indica si el usuario ha completado correctamente el ejercicio de arrastre.
+     */
     var isDragSuccess by mutableStateOf(false)
+
+    /**
+     * Indica si el juego se encuentra en modo quiz.
+     */
     var isQuizMode by mutableStateOf(false)
+
+    /**
+     * Indica si el usuario ha desbloqueado la recompensa final.
+     */
     var isRewardUnlocked by mutableStateOf(false)
+
+    /**
+     * Opción seleccionada actualmente en el quiz.
+     */
     var selectedQuizOption by mutableStateOf(0)
 
-    // -----------------------------
-    // SESSION DATA (TEMPORAL)
-    // -----------------------------
-
+    /**
+     * Identificador del usuario actual (temporal).
+     */
     private val currentUserId = 1
+
+    /**
+     * Identificador de la actividad actual (temporal).
+     */
     private val currentActivityId = 1
 
-    // -----------------------------
-    // INIT
-    // -----------------------------
-
+    /**
+     * Inicialización del estado del juego.
+     *
+     * Se crean los elementos iniciales y se distribuyen en la parte inferior
+     * de la pantalla.
+     */
     init {
         items.add(
             GameItem(
@@ -89,10 +131,10 @@ class GameViewModel @Inject constructor(
         distributeItemsInBottomRow()
     }
 
-    // =======================================================
-    // GAME LOGIC
-    // =======================================================
-
+    /**
+     * Distribuye los elementos del juego de forma equidistante
+     * en la parte inferior de la pantalla.
+     */
     private fun distributeItemsInBottomRow() {
         val totalWidth = 1000f
         val startY = 1500f
@@ -106,6 +148,12 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Actualiza la posición de un elemento durante una operación de arrastre.
+     *
+     * @param id Identificador del elemento que se está arrastrando.
+     * @param dragAmount Desplazamiento aplicado desde el último evento de drag.
+     */
     fun updateItemPosition(id: Int, dragAmount: Offset) {
         if (isDragSuccess) return
 
@@ -118,6 +166,9 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Gestiona la acción principal del botón según el estado actual del juego.
+     */
     fun onMainButtonClick() {
         when {
             isRewardUnlocked -> Unit
@@ -127,10 +178,10 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    // -----------------------------
-    // DRAG VALIDATION
-    // -----------------------------
-
+    /**
+     * Valida si los elementos han sido colocados correctamente
+     * dentro de una tolerancia determinada.
+     */
     private fun validateDrag() {
         var correctCount = 0
         val tolerance = 200.0
@@ -160,16 +211,18 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    // -----------------------------
-    // QUIZ
-    // -----------------------------
-
+    /**
+     * Inicia el modo quiz tras completar correctamente el ejercicio de arrastre.
+     */
     private fun startQuiz() {
         isQuizMode = true
         statusTextResId = R.string.texto14
         statusColor = Color(0xFF1A3B5D)
     }
 
+    /**
+     * Valida la respuesta seleccionada por el usuario en el quiz.
+     */
     private fun validateQuizAnswer() {
         if (selectedQuizOption == 1) {
             isRewardUnlocked = true
@@ -182,10 +235,9 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    // =======================================================
-    // PERSISTENCE
-    // =======================================================
-
+    /**
+     * Guarda el progreso del usuario en la base de datos.
+     */
     private fun saveProgressToDatabase() {
         viewModelScope.launch {
             try {
