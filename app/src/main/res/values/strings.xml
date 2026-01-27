@@ -118,6 +118,16 @@
         funtziona zezaketen, eta hiria nabarmen hazi zen. Ingeniariek, mekanikariek eta
         elektrizistek lan egin zuten hemen. Eraikinak zutik dirau oraindik eta gogorarazten digu
         nola hasi zen industria modernoa.</string>
+    <string name="texto52">Aukeratu Ilgner eraikina argitu dezaketen objektuak.</string>
+    <string name="texto53">"Hori bai! Sistema elektrikoa funtzionatzen ari da."</string>
+    <string name="texto54">Elementu okerra edo tresnak falta dira, saiatu berriro.</string>
+    <string name="texto55">okerra</string>
+    <string name="texto56">falta</string>
+    <string name="texto57">KONEKTATUTA!</string>
+    <string name="texto58">PIZTU</string>
+    <string name="texto59">ENERGIA BERRESKURATUTA!</string>
+    <string name="texto60">Ilgner eraikinaren sistema elektrikoa behar bezala konektatu duzu.</string>
+    <string name="texto61">IKUSI EMAITZA</string>
     <!-- Juego 5 -->
     <string name="title5">Puzzlea</string>
     <string name="texto5_intro">Duela urte asko, Barakaldo fabrika eta trenez betetako lekua zen.

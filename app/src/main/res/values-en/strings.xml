@@ -119,6 +119,16 @@
         machines could operate, and the city grew considerably. Engineers, mechanics, and
         electricians worked here. The building still stands and reminds us how modern industry
         began.</string>
+    <string name="texto52">Choose the objects that can light up the Ilgner building.</string>
+    <string name="texto53">"That's right! The electrical system is working."</string>
+    <string name="texto54">Incorrect item or missing tools, please try again.</string>
+    <string name="texto55">incorrect</string>
+    <string name="texto56">missing</string>
+    <string name="texto57">CONNECTED!</string>
+    <string name="texto58">TURN ON</string>
+    <string name="texto59">POWER RESTORED!</string>
+    <string name="texto60">You have correctly connected the electrical system of the Ilgner Building.</string>
+    <string name="texto61">SEE RESULT</string>
     <!-- Juego 5 -->
     <string name="title5">Puzzle</string>
     <string name="texto5_intro">Many years ago, Barakaldo was a place full of factories and

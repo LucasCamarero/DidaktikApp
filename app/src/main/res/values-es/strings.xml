@@ -119,6 +119,16 @@
         podían funcionar y la ciudad creció mucho. En este lugar trabajaban ingenieros, mecánicos
         y electricistas. El edificio sigue en pie y nos recuerda cómo empezó la industria
         moderna.</string>
+    <string name="texto52">Elige los objetos que puedan encender el edificio Ilgner.</string>
+    <string name="texto53">"¡Correcto! El sistema eléctrico está funcionando."</string>
+    <string name="texto54">Objeto incorrecto o faltan herramientas, vuelva a intentarlo.</string>
+    <string name="texto55">incorrecto</string>
+    <string name="texto56">faltan</string>
+    <string name="texto57">¡CONECTADO!</string>
+    <string name="texto58">ENCENDER</string>
+    <string name="texto59">¡ENERGÍA RESTAURADA!</string>
+    <string name="texto60">Has conectado correctamente el sistema eléctrico del Edificio Ilgner.</string>
+    <string name="texto61">VER RESULTADO</string>
     <!-- Juego 5 -->
     <string name="title5">Rompecabezas</string>
     <string name="texto5_intro">Hace muchos años, Barakaldo era un lugar lleno de fábricas y
