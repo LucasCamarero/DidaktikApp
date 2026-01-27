@@ -138,6 +138,20 @@
     <string name="mensaje5_1">Hona iristen ziren burdina zeramaten trenak.</string>
     <string name="mensaje5_2">Burdina beste herrialde batzuetara zihoazen itsasontzietan kargatzen zen.</string>
     <string name="mensaje5_3">Kargalekuek Barakaldo asko hazten lagundu zuten.</string>
+    <string name="texto62">PUZZLEA OSATUTA!</string>
+    <string name="texto63">Meategiko kargamentu-kaia behar bezala berreraiki duzu.</string>
+    <string name="texto64">IKUSI HISTORIA</string>
+    <string name="texto65">Zergatik: Argazki honek argi erakusten du lurra kargatzeko kaiarekin
+        lotzen duen egitura luzanga. Trenak goiko atal honetatik zehar ibiltzen ziren mea zuzenean
+        bagoietatik deskargatzeko.</string>
+    <string name="texto66">Zergatik: Goiko planoa denez, ibaiaren barruko karga-kaiaren kokapena
+        (Nerbioiko itsasadarra) argi ikusten da. Imajinatu itsasontzi handi bat zurezko egituraren
+        ondoan atrakatuta, burdin mineralarekin kargatzeko zain, Ingalaterrara edo Frantziara
+        bidaiatzeko.</string>
+    <string name="texto67">Zergatik: Irudi honek egurrezko eta burdinazko eraikuntzaren indarra
+        eta eskala erakusten ditu. Lanpostuak, jendea eta aberastasuna ekarri zituen industriaren
+        bihotza irudikatzen du, Barakaldo gaur egun den hiri handi bihurtuz.</string>
+    <string name="texto68">Amaiera leihoa</string>
     <!-- Juego 6 -->
     <string name="title6">Trenbidea</string>
     <string name="texto6_intro">Barakaldo industrialaren erdigunean, trenek burdin mea meategietatik

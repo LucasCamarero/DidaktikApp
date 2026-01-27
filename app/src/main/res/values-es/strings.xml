@@ -139,6 +139,20 @@
     <string name="mensaje5_1">Por aquí llegaban los trenes con el hierro.</string>
     <string name="mensaje5_2">El hierro se cargaba en los barcos que iban a otros países.</string>
     <string name="mensaje5_3">Los cargaderos ayudaron a que Barakaldo creciera mucho.</string>
+    <string name="texto62">¡PUZZLE COMPLETADO!</string>
+    <string name="texto63">Has reconstruido el Cargadero de Minas correctamente.</string>
+    <string name="texto64">VER HISTORIA</string>
+    <string name="texto65">Por qué: En esta foto se ve muy bien la estructura alargada que conecta
+        la tierra con el cargadero. Los trenes circulaban por esa parte superior para descargar
+        el mineral directamente desde los vagones</string>
+    <string name="texto66">Por qué: Al ser una toma desde arriba, se ve claramente la posición del
+        cargadero dentro del río (la Ría del Nervión). Imagina un gran barco atracado junto a la
+        estructura de madera esperando a ser llenado de hierro para viajar a Inglaterra o
+        Francia</string>
+    <string name="texto67">Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción
+        de madera y hierro. Representa el corazón de la industria que trajo trabajo, personas y
+        riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy</string>
+    <string name="texto68">Ventana final</string>
     <!-- Juego 6 -->
     <string name="title6">El ferrocarril</string>
     <string name="texto6_intro">En el Barakaldo industrial, los trenes transportaban el hierro

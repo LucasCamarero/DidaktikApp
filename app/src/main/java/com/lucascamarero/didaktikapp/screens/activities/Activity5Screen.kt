@@ -1,8 +1,6 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,8 +8,8 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,23 +25,30 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.lucascamarero.didaktikapp.R
-// 1. IMPORTAMOS TU COMPONENTE
 import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import kotlin.math.absoluteValue
 
-
+/**
+ * Representa la información de cada casilla del tablero del puzzle.
+ *
+ * @property x Posición X absoluta en pantalla.
+ * @property y Posición Y absoluta en pantalla.
+ * @property col Columna lógica dentro del tablero.
+ * @property row Fila lógica dentro del tablero.
+ * @property isCorrecto Indica si la pieza colocada en esta casilla es correcta.
+ */
 data class BoxInfo(
     //Guarda información de cada espacio del tablero
     val x: Float = 0f, //Posición X en pantalla
@@ -54,6 +59,17 @@ data class BoxInfo(
     var isCorrecto: Boolean by mutableStateOf(false)
 }
 
+/**
+ * Pantalla principal de la Actividad 5.
+ *
+ * Contiene la lógica completa del puzzle:
+ * - Renderiza el tablero superior.
+ * - Muestra las piezas desordenadas.
+ * - Controla el progreso del juego.
+ * - Muestra el mensaje final al completar el puzzle.
+ *
+ * @param navController Controlador de navegación de Jetpack Navigation.
+ */
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Activity5Screen(navController: NavController) {
@@ -63,22 +79,8 @@ fun Activity5Screen(navController: NavController) {
     //Guarda el orden una sola vez
     val shuffledPieces = remember { pieceMapv2.indices.shuffled() }
 
-    // ===================================================================
-    // EVITA QUE GIRE HORIZONTALMENTE
-    // ===================================================================
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val activity = context as? Activity
-        // Forzamos vertical al entrar
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        onDispose {
-            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-    }
-
     // Usamos Box para capas (Juego al fondo, Mensaje arriba)
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF0F2F5))) {
+    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer)) {
 
         // variables del juego
         val arrayBox = remember { Array(3) { Array(4) { BoxInfo() } } }
@@ -157,9 +159,9 @@ fun Activity5Screen(navController: NavController) {
         // ===================================================================
         if (isGameFinished) {
             MensajeFinalActivity(
-                titulo = "¡PUZZLE COMPLETADO!",
-                mensaje = "Has reconstruido el Cargadero de Minas correctamente.",
-                botonText = "VER HISTORIA", // Nos lleva a la pantalla de info
+                titulo = stringResource(id = R.string.texto62),
+                mensaje = stringResource(id = R.string.texto63),
+                botonText = stringResource(id = R.string.texto64), // Nos lleva a la pantalla de info
                 onButtonClick = {
                     navController.navigate("EJ5Info")
                 }
@@ -168,6 +170,27 @@ fun Activity5Screen(navController: NavController) {
     }
 }
 
+/**
+ * Dibuja una pieza de puzzle personalizada utilizando Canvas.
+ *
+ * La forma de la pieza se define dinámicamente mediante cabezas y huecos
+ * en cada uno de sus lados, y se recorta una sección de la imagen original
+ * para ajustarse a dicha forma.
+ *
+ * @param modifier Modificador de Compose aplicado al Canvas.
+ * @param topHead Indica si el borde superior tiene cabeza.
+ * @param topHole Indica si el borde superior tiene hueco.
+ * @param rightHead Indica si el borde derecho tiene cabeza.
+ * @param rightHole Indica si el borde derecho tiene hueco.
+ * @param bottomHead Indica si el borde inferior tiene cabeza.
+ * @param bottomHole Indica si el borde inferior tiene hueco.
+ * @param leftHead Indica si el borde izquierdo tiene cabeza.
+ * @param leftHole Indica si el borde izquierdo tiene hueco.
+ * @param image Imagen base del puzzle.
+ * @param row Fila de la imagen que corresponde a la pieza.
+ * @param column Columna de la imagen que corresponde a la pieza.
+ * @param isTouching Indica si la pieza está correctamente posicionada.
+ */
 @Composable
 fun PuzzlePieceShape(
     modifier: Modifier = Modifier,
@@ -188,11 +211,8 @@ fun PuzzlePieceShape(
         val w = size.width
         val h = size.height //Tamaño de la pieza
         val knobSize = w * 0.2f //Tamaño de las orejas del puzzle
-
-
         val path = Path().apply { //Define la forma exacta de la pieza
             moveTo(0f, 0f)
-
 
             // borde superior
             //Decide si hay:
@@ -201,8 +221,6 @@ fun PuzzlePieceShape(
                 lineTo(w * 0.4f, knobSize)
                 cubicTo(w * 0.45f, 0f, w * 0.55f, 0f, w * 0.6f, knobSize)
                 lineTo(w, 0f)
-
-
             } else if (topHole) { //Hueco
                 lineTo(w * 0.4f, 0f)
                 cubicTo(w * 0.45f, +knobSize, w * 0.55f, +knobSize, w * 0.6f, 0f)
@@ -210,7 +228,6 @@ fun PuzzlePieceShape(
             } else { //Linea recta
                 lineTo(w, 0f)
             }
-
 
             // borde derecho
             if (rightHead) {
@@ -225,7 +242,6 @@ fun PuzzlePieceShape(
                 lineTo(w, h)
             }
 
-
             // borde inferior
             if (bottomHead) {
                 lineTo(w * 0.6f, h)
@@ -235,26 +251,15 @@ fun PuzzlePieceShape(
                 lineTo(w * 0.6f, h+knobSize)
                 cubicTo(w * 0.55f, h , w * 0.45f, h , w * 0.4f, h+knobSize)
                 lineTo(0f, h)
-
-
-
-
-
-
             } else {
                 lineTo(0f, h)
             }
 
-
             // borde izquierdo
             if (leftHead) {
-
-
                 lineTo(knobSize, h * 0.6f)
                 cubicTo(0f, h * 0.55f, 0f, h * 0.45f,knobSize , h * 0.4f)
                 //cubicTo(w , h * 0.45f, w , h * 0.55f, w+knobSize, h * 0.6f)
-
-
                 lineTo(0f, 0f)
             } else if (leftHole) {
                 lineTo(0f, h * 0.6f)
@@ -263,13 +268,8 @@ fun PuzzlePieceShape(
             } else {
                 lineTo(0f, 0f)
             }
-
-
             close()
         }
-
-
-
 
         clipPath(path) { //Recorta la imagen con la forma del rompecabezas
             drawImage(
@@ -288,6 +288,24 @@ fun PuzzlePieceShape(
         }
     }
 }
+
+/**
+ * Describe la geometría lógica de una pieza del puzzle.
+ *
+ * Define qué lados tienen cabeza o hueco y su posición correcta
+ * dentro del tablero.
+ *
+ * @property topHead Cabeza en el borde superior.
+ * @property topHole Hueco en el borde superior.
+ * @property rightHead Cabeza en el borde derecho.
+ * @property rightHole Hueco en el borde derecho.
+ * @property bottomHead Cabeza en el borde inferior.
+ * @property bottomHole Hueco en el borde inferior.
+ * @property leftHead Cabeza en el borde izquierdo.
+ * @property leftHole Hueco en el borde izquierdo.
+ * @property row Fila correcta de la pieza.
+ * @property column Columna correcta de la pieza.
+ */
 data class PieceShapev4(
     val topHead: Boolean = false,
     val topHole: Boolean = false,
@@ -300,11 +318,13 @@ data class PieceShapev4(
     val row: Int = -1,
     val column: Int = -1,
 )
-/*
-* Describe cómo es cada pieza:
-Qué lados tienen cabeza o hueco
-A qué fila y columna pertenece
-*/
+
+/**
+ * Mapa estático que define todas las piezas del puzzle.
+ *
+ * Cada entrada describe la forma y la posición correcta de una pieza
+ * dentro del tablero.
+ */
 val pieceMapv2: List<PieceShapev4> = listOf( //Define las 4 piezas del puzzle
     // Fila 0, Columna 0
     PieceShapev4(topHead = false, topHole = false, rightHead = true, rightHole = false,bottomHead=false,bottomHole=true,leftHead=false,leftHole=false,row=0,column=0 ),
@@ -331,6 +351,19 @@ val pieceMapv2: List<PieceShapev4> = listOf( //Define las 4 piezas del puzzle
     //Fila 2, Columna 3
     PieceShapev4(topHead = true, topHole = false, rightHead = false, rightHole = false,bottomHead=false,bottomHole=false,leftHead=false,leftHole=true,row=2,column=3)
 )
+
+/**
+ * Composable que representa una pieza arrastrable del puzzle.
+ *
+ * Permite al usuario mover la pieza libremente y detecta cuando
+ * esta se posiciona correctamente o se retira de su lugar correcto.
+ *
+ * @param pieceIndex Índice de la pieza dentro del mapa de piezas.
+ * @param image Imagen base del puzzle.
+ * @param arrayBox Matriz con la información de las casillas del tablero.
+ * @param onPlacedCorrectly Callback invocado al colocar correctamente la pieza.
+ * @param onRemovedCorrectly Callback invocado al retirar una pieza bien colocada.
+ */
 @Composable
 fun DraggablePieceMapAgujeros(
     pieceIndex: Int,
@@ -340,16 +373,11 @@ fun DraggablePieceMapAgujeros(
     onRemovedCorrectly: () -> Unit
 ) {
     val density = LocalDensity.current
-
-
     var offsetX by remember { mutableStateOf(0.dp) }
     var offsetY by remember { mutableStateOf(0.dp) }
     var isTouching by remember { mutableStateOf(false) }
     var wasCorrect by remember { mutableStateOf(false) } // 🔥 CLAVE
-
-
     val shape = pieceMapv2[pieceIndex]
-
 
     PuzzlePieceShape(
         modifier = Modifier
@@ -363,16 +391,11 @@ fun DraggablePieceMapAgujeros(
                 }
             }
             .onGloballyPositioned { coords ->
-
-
                 val canvasRect = coords.boundsInWindow()
                 val targetBox = arrayBox[shape.row][shape.column]
-
-
                 val isCorrect =
                     (canvasRect.topLeft.y - targetBox.y).absoluteValue < 10 &&
                             (canvasRect.topLeft.x - targetBox.x).absoluteValue < 10
-
 
                 if (isCorrect && !wasCorrect) {
                     wasCorrect = true
@@ -380,14 +403,12 @@ fun DraggablePieceMapAgujeros(
                     onPlacedCorrectly() //  SUMA
                 }
 
-
                 if (!isCorrect && wasCorrect) {
                     wasCorrect = false
                     isTouching = false
                     onRemovedCorrectly() // RESTA
                 }
             },
-
 
         topHead = shape.topHead,
         topHole = shape.topHole,
@@ -404,58 +425,121 @@ fun DraggablePieceMapAgujeros(
     )
 }
 
-@Preview  // ✅ Esta función no tiene parámetros, funciona
+/**
+ * Pantalla informativa asociada a la actividad.
+ *
+ * Muestra explicaciones visuales y textuales relacionadas con el contenido
+ * educativo de la actividad, y permite navegar a la pantalla final.
+ *
+ * @param navController Controlador de navegación de Jetpack Navigation.
+ */
 @Composable
-fun PreviewVentanaInfo() {
-    // Puedes crear un NavController mock o usar rememberNavController()
-    val mockNavController = rememberNavController()
-    ventanaInfo(navController = mockNavController)
-}
-@Composable
-fun ventanaInfo(navController: NavController){
-    LazyColumn(Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+fun ventanaInfo(navController: NavController) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         item {
-            Text("Por aquí llegaban los trenes con el hierro",
-                fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(R.drawable.copia_de_descarga_25),
-                contentDescription = "",
-                Modifier.size(300.dp))
-            Text("Por qué: En esta foto se ve muy bien la estructura alargada que conecta" +
-                    " la tierra con el cargadero. Puedes explicar que los trenes circulaban por esa " +
-                    "parte superior para descargar el mineral directamente desde los vagones")
-            Divider(
-                color = Color.Black,  // Color de la línea
-                thickness = 8.dp,    // Grosor
-                modifier = Modifier.padding(horizontal = 16.dp)// Margen
+            Spacer(Modifier.height(20.dp))
+
+            Text(
+                stringResource(id = R.string.mensaje5_1),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.scrim
             )
-            Text("El hierro se cargaba en los barcos que iban a otros países",
-                fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(R.drawable.copia_de_descarga_26),
-                contentDescription = "",
-                Modifier.size(300.dp))
-            Text("Por qué: Al ser una toma desde arriba, se ve claramente la posición del" +
-                    " cargadero dentro del río (la Ría del Nervión). Es la imagen perfecta para que " +
-                    "el alumnado imagine un gran barco atracado junto a la estructura de madera esperando " +
-                    "a ser llenado de hierro para viajar a Inglaterra o Francia")
-            Divider(
-                color = Color.Black,  // Color de la línea
-                thickness = 8.dp,    // Grosor
-                modifier = Modifier.padding(horizontal = 16.dp)  // Margen
+
+            Spacer(Modifier.height(20.dp))
+
+            Image(
+                painter = painterResource(R.drawable.copia_de_descarga_25),
+                contentDescription = null,
+                modifier = Modifier.size(300.dp)
             )
-            Text("Los cargaderos ayudaron a que Barakaldo creciera mucho",
-                fontWeight = FontWeight.Bold)
-            Image(painter = painterResource(R.drawable.copia_de_descarga_27),
-                contentDescription = "",
-                Modifier.size(300.dp))
-            Text("Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción de madera" +
-                    " y hierro. Representa el \"corazón\" de la industria que trajo trabajo, personas y" +
-                    " riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy")
-            Button({
-                navController.navigate(
-                    "finActividad/${R.drawable.cargaderos_antigua}/${R.drawable.ferrocarril_actual}")
-            }) {Text("Ventana final") }
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(stringResource(id = R.string.texto65), fontSize = 15.sp)
+
+            Spacer(Modifier.height(30.dp))
+
+            Divider(
+                color = MaterialTheme.colorScheme.scrim,
+                thickness = 2.dp,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(
+                stringResource(id = R.string.mensaje5_2),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.scrim
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Image(
+                painter = painterResource(R.drawable.copia_de_descarga_26),
+                contentDescription = null,
+                modifier = Modifier.size(300.dp)
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(stringResource(id = R.string.texto66), fontSize = 15.sp)
+
+            Spacer(Modifier.height(30.dp))
+
+            Divider(
+                color = MaterialTheme.colorScheme.scrim,
+                thickness = 2.dp,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(
+                stringResource(id = R.string.mensaje5_3),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.scrim
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Image(
+                painter = painterResource(R.drawable.copia_de_descarga_27),
+                contentDescription = null,
+                modifier = Modifier.size(300.dp)
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(stringResource(id = R.string.texto67), fontSize = 15.sp)
+
+            Spacer(Modifier.height(30.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate(
+                        "finActividad/${R.drawable.premio71}/${R.drawable.premio22}"
+                    )
+                }
+            ) {
+                Text(stringResource(id = R.string.texto68))
+            }
+
+            Spacer(Modifier.height(20.dp))
         }
     }
 }
