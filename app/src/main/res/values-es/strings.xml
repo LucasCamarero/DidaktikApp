@@ -49,6 +49,9 @@
     <string name="texto19">a) La ermita sigue en pie</string>
     <string name="texto20">b) Ya no hay montes</string>
     <string name="texto21">c) No hay fiestas</string>
+    <string name="texto22">¡MUY BIEN!</string>
+    <string name="texto23">Has completado la actividad de la Ermita de Santa Águeda correctamente.</string>
+    <string name="texto24">VER RECOMPENSA</string>
     <string name="pregunta1">¿Qué cosas crees que todavía siguen igual?</string>
     <string name="respuesta1_a">a) La ermita sigue en pie</string>
     <string name="respuesta1_b">b) Ya no hay montes</string>

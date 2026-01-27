@@ -37,14 +37,14 @@ fun Activity1Screen(
     viewModel: GameViewModel = hiltViewModel()
 ) {
     Box(modifier = Modifier.fillMaxSize()
-        .background(Color(0xFFF0F2F5))
+        .background(MaterialTheme.colorScheme.background)
     ) {
         // ESCENARIO 1: JUEGO (Drag & Drop + Quiz)
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Imagen escenario
+            // imagen escenario
             Image(
                 painter = painterResource(id = R.drawable.act1_bg_game2),
                 contentDescription = "Escenario",
@@ -66,7 +66,6 @@ fun Activity1Screen(
             ) {
                 Text(
                     text = stringResource(id = viewModel.statusTextResId),
-                    //text = viewModel.statusText,
                     color = viewModel.statusColor,
                     fontSize = if (viewModel.isQuizMode) 18.sp else 16.sp,
                     fontWeight = FontWeight.Bold,
@@ -74,9 +73,9 @@ fun Activity1Screen(
                 )
             }
 
-            // ZONA DINÁMICA (Cajas para soltar o Preguntas Quiz)
+            // Zona dinámica (Cajas para soltar o Preguntas Quiz)
             if (!viewModel.isQuizMode) {
-                // MODO DRAG & DROP
+                // Modo cajas para soltar
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -90,12 +89,12 @@ fun Activity1Screen(
                                 .weight(1f)
                                 .fillMaxHeight()
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFFE0E0E0))
+                                .background(MaterialTheme.colorScheme.primaryContainer)
                         )
                     }
                 }
             } else {
-                // MODO QUIZ
+                // Modo quiz
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -111,7 +110,7 @@ fun Activity1Screen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // BOTÓN DE ACCIÓN
+            // botón de acción
             Button(
                 onClick = { viewModel.onMainButtonClick() },
                 modifier = Modifier
@@ -119,7 +118,7 @@ fun Activity1Screen(
                     .padding(horizontal = 32.dp)
                     .height(56.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (viewModel.isDragSuccess && !viewModel.isQuizMode) Color(0xFF4CAF50) else Color(0xFF0088CC)
+                    containerColor = if (viewModel.isDragSuccess && !viewModel.isQuizMode) MaterialTheme.colorScheme.scrim else MaterialTheme.colorScheme.onPrimaryContainer
                 ),
                 shape = RoundedCornerShape(28.dp)
             ) {
@@ -135,9 +134,9 @@ fun Activity1Screen(
             Spacer(modifier = Modifier.height(32.dp))
         }
 
-        // ELEMENTOS ARRASTRABLES (SOLO VISIBLES EN MODO DRAG & DROP)
+        // elementos arrastrables (solo visibles en modo arrastrar)
         if (!viewModel.isQuizMode) {
-            // 1. DIBUJAR LOS TARGETS
+            // dibuja los targets
             viewModel.items.forEach { item ->
                 Box(
                     modifier = Modifier
@@ -148,7 +147,7 @@ fun Activity1Screen(
                 )
             }
 
-            // 2. DIBUJAR LOS OBJETOS MOVIBLES
+            // dibuja los objetos móviles
             viewModel.items.forEach { item ->
                 Image(
                     painter = painterResource(id = item.imageRes),
@@ -167,21 +166,17 @@ fun Activity1Screen(
             }
         }
 
-
-        // ===================================================================
         // ESCENARIO 2: JUEGO TERMINADO -> MENSAJE DE ÉXITO
-        // ===================================================================
         if (viewModel.isRewardUnlocked) {
-            // 2. USAMOS EL COMPONENTE REUTILIZABLE
+
             MensajeFinalActivity(
-                titulo = "¡MUY BIEN!",
-                mensaje = "Has completado la actividad de la Ermita de Santa Águeda correctamente.",
-                botonText = "VER RECOMPENSA", // Texto sugerente para ir a las fotos
+                titulo = stringResource(id = R.string.texto22),
+                mensaje = stringResource(id = R.string.texto23),
+                botonText = stringResource(id = R.string.texto24),
                 onButtonClick = {
-                    // 3. NAVEGAMOS A LA RUTA GENÉRICA CON LAS FOTOS DE LA ACTIVIDAD 1
                     val ruta = "endactivity/1/${R.drawable.act1_premio1}/${R.drawable.act1_premio2}"
                     navController.navigate(ruta) {
-                        // Evita volver al juego si pulsas atrás desde la pantalla final
+                        // evita volver al juego si pulsas atrás desde la pantalla final
                         popUpTo("activity1") { inclusive = true }
                     }
                 }
@@ -190,7 +185,7 @@ fun Activity1Screen(
     }
 }
 
-// --- COMPONENTES AUXILIARES ---
+
 @Composable
 fun QuizOption(@StringRes textResId: Int, id: Int, selectedId: Int, onSelect: () -> Unit) {
     val isSelected = (id == selectedId)
@@ -199,8 +194,8 @@ fun QuizOption(@StringRes textResId: Int, id: Int, selectedId: Int, onSelect: ()
             .fillMaxWidth()
             .height(55.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(if (isSelected) Color(0xFFBBDEFB) else Color.White)
-            .border(1.dp, if (isSelected) Color(0xFF0088CC) else Color.LightGray, RoundedCornerShape(8.dp))
+            .background(if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.onPrimary)
+            .border(1.dp, if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onTertiaryContainer, RoundedCornerShape(8.dp))
             .clickable { onSelect() }
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -208,9 +203,9 @@ fun QuizOption(@StringRes textResId: Int, id: Int, selectedId: Int, onSelect: ()
         RadioButton(
             selected = isSelected,
             onClick = { onSelect() },
-            colors = RadioButtonDefaults.colors(selectedColor = Color(0xFF0088CC))
+            colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.onPrimaryContainer)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = stringResource(id = textResId), fontSize = 16.sp, color = Color.Black)
+        Text(text = stringResource(id = textResId), fontSize = 16.sp, color = MaterialTheme.colorScheme.tertiary)
     }
 }

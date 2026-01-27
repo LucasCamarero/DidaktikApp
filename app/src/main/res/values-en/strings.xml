@@ -49,6 +49,9 @@
     <string name="texto19">a) The hermitage is still standing</string>
     <string name="texto20">b) There are no more mountains</string>
     <string name="texto21">c) There are no parties</string>
+    <string name="texto22">VERY GOOD!</string>
+    <string name="texto23">You have successfully completed the activity at the Hermitage of Santa Águeda.</string>
+    <string name="texto24">VIEW REWARD</string>
     <string name="pregunta1">What things do you think are still the same?</string>
     <string name="respuesta1_a">a) The hermitage is still standing</string>
     <string name="respuesta1_b">b) There are no more mountains</string>

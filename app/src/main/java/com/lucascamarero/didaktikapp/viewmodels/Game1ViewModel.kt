@@ -44,7 +44,8 @@ class GameViewModel @Inject constructor(
 
     var statusTextResId by mutableStateOf(R.string.texto11)
 
-    var statusColor by mutableStateOf(Color(0xFF1A3B5D))
+    //var statusColor by mutableStateOf(Color(0xFF1A3B5D))
+    var statusColor by mutableStateOf(MaterialTheme.colorScheme.background)
 
     var isDragSuccess by mutableStateOf(false)
     var isQuizMode by mutableStateOf(false)
