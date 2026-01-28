@@ -321,7 +321,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                             }
                         )
                     }
-
+                    /*
                     item {
                         /**
                          * Opción para reiniciar el juego.
@@ -337,7 +337,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                             }
                         )
                     }
-
+                    */
                     item {
                         Divider(
                             thickness = 1.dp,
