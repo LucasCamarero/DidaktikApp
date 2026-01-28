@@ -1,13 +1,28 @@
 package com.lucascamarero.didaktikapp.viewmodels
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.models.PhotoItem
 
+/**
+ * ViewModel que gestiona la lógica del juego final de asociación de imágenes.
+ *
+ * Controla:
+ * - la lista de fotos mezcladas
+ * - la selección actual
+ * - las parejas acertadas
+ * - los mensajes de feedback
+ * - la frase final introducida por el usuario
+ */
 class FinalGameViewModel : ViewModel() {
 
+    /**
+     * Lista de fotos del juego.
+     *
+     * Cada pareja comparte el mismo `pairId`.
+     * La lista se mezcla aleatoriamente al inicializar el ViewModel.
+     */
     val photos: List<PhotoItem> = listOf(
         PhotoItem(1, 1, R.drawable.premio11),
         PhotoItem(2, 1, R.drawable.premio12),
@@ -25,22 +40,50 @@ class FinalGameViewModel : ViewModel() {
         PhotoItem(14, 7, R.drawable.premio72),
     ).shuffled()
 
+    /**
+     * Primera foto seleccionada por el usuario.
+     *
+     * Se utiliza para comparar con la segunda selección.
+     */
     var firstSelected by mutableStateOf<PhotoItem?>(null)
         private set
 
+    /**
+     * Conjunto de IDs de las fotos que ya han sido emparejadas correctamente.
+     */
     var matched by mutableStateOf(setOf<Int>())
         private set
 
+    /**
+     * Mensaje de texto libre (actualmente no utilizado directamente).
+     */
     var message by mutableStateOf("")
         private set
 
+    /**
+     * Identificador del recurso string que representa el mensaje de feedback
+     * tras intentar emparejar dos fotos.
+     */
     var messageResId by mutableStateOf<Int?>(null)
         private set
 
-    // frase que introduce el usuario al final del juego
+    /**
+     * Frase introducida por el usuario al finalizar el juego.
+     */
     var userSentence by mutableStateOf("")
         private set
 
+    /**
+     * Gestiona el clic sobre una foto.
+     *
+     * Implementa la lógica de emparejamiento:
+     * - primera selección
+     * - comprobación de pareja correcta o incorrecta
+     * - actualización de estado y mensajes
+     *
+     * @param photo foto seleccionada
+     * @return `true` si el juego ha sido completado (todas las parejas acertadas)
+     */
     fun onPhotoClicked(photo: PhotoItem): Boolean {
         if (matched.contains(photo.id)) return false
 
@@ -63,12 +106,29 @@ class FinalGameViewModel : ViewModel() {
         return matched.size == 14
     }
 
+    /**
+     * Indica si una foto está actualmente seleccionada.
+     *
+     * @param photo foto a comprobar
+     * @return `true` si es la foto seleccionada
+     */
     fun isSelected(photo: PhotoItem): Boolean =
         firstSelected?.id == photo.id
 
+    /**
+     * Indica si una foto ya ha sido emparejada correctamente.
+     *
+     * @param photo foto a comprobar
+     * @return `true` si ya pertenece a una pareja correcta
+     */
     fun isMatched(photo: PhotoItem): Boolean =
         matched.contains(photo.id)
 
+    /**
+     * Actualiza la frase introducida por el usuario al final del juego.
+     *
+     * @param text nuevo texto introducido
+     */
     fun onSentenceChange(text: String) {
         userSentence = text
     }
