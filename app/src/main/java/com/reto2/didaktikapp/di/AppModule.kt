@@ -49,7 +49,7 @@ object AppModule {
 
         /////////////////////////////////////////////
         // BORRAR LA BASE DE DATOS EN CADA ARRANQUE
-        //context.deleteDatabase("barakaldo_db")
+        context.deleteDatabase("barakaldo_db")
         /////////////////////////////////////////////
 
         val database = Room.databaseBuilder(
