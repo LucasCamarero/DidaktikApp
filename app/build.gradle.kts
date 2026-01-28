@@ -9,13 +9,13 @@ plugins {
 }
 
 android {
-    namespace = "com.lucascamarero.didaktikapp"
+    namespace = "com.reto2.didaktikapp"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.lucascamarero.didaktikapp"
+        applicationId = "com.reto2.didaktikapp"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
