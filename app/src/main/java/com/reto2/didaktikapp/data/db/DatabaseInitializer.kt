@@ -82,7 +82,7 @@ class DatabaseInitializer : RoomDatabase.Callback() {
             db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (6, 'Ferrocarril', 'Lugar 6', '43.305550,-2.982158', 6)")
             db.execSQL("INSERT INTO lugar (lugar_id, nombre, descripcion, coordenadas, imagen_principal_fk) VALUES (7, 'Palacio Munoa', 'Lugar 7', '43.295125,-2.978303', 7)")
             
-            // 3. Insertar actividades (7 actividades)
+            // 3. Insertar actividades (8 actividades, incluyendo juego final)
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (1, 'Puzzle', 'activity1', 1, 8, 15)")
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (2, 'Sopa de letras', 'activity2', 2, 9, 16)")
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (3, 'Sopa de letras', 'activity3', 3, 10, 17)")
@@ -90,6 +90,8 @@ class DatabaseInitializer : RoomDatabase.Callback() {
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (5, 'Puzzle', 'activity5', 5, 12, 19)")
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (6, 'Puzzle', 'activity6', 6, 13, 20)")
             db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (7, 'Clasificación', 'activity7', 7, 14, 21)")
+            // Actividad 8: juego final de reflexión/escritura, asociada al último lugar y reutilizando los premios del lugar 7
+            db.execSQL("INSERT INTO actividad (actividad_id, tipo_actividad, archivo_actividad, lugar_fk, premio_antigua_fk, premio_actual_fk) VALUES (8, 'Reflexión final', 'writesentence', 7, 14, 21)")
 
             // 4. Insertar persona de prueba (persona_id = 1)
             db.execSQL("INSERT INTO persona (persona_id, username, password_hash, tipo_persona) VALUES (1, 'testuser', 'testhash', 'Usuario')")
@@ -175,7 +177,7 @@ class DatabaseInitializer : RoomDatabase.Callback() {
             )
             contenidoDao.insertLugares(lugares)
 
-            // 3. Insertar actividades (7 actividades) - asumiendo que lugares tienen IDs 1-7
+            // 3. Insertar actividades (8 actividades) - asumiendo que lugares tienen IDs 1-7
             val actividades = listOf(
                 ActividadEntity(tipo_actividad = "Puzzle", archivo_actividad = "activity1", lugar_fk = 1, premio_antigua_fk = 8, premio_actual_fk = 15),
                 ActividadEntity(tipo_actividad = "Sopa de letras", archivo_actividad = "activity2", lugar_fk = 2, premio_antigua_fk = 9, premio_actual_fk = 16),
@@ -184,6 +186,8 @@ class DatabaseInitializer : RoomDatabase.Callback() {
                 ActividadEntity(tipo_actividad = "Puzzle", archivo_actividad = "activity5", lugar_fk = 5, premio_antigua_fk = 12, premio_actual_fk = 19),
                 ActividadEntity(tipo_actividad = "Puzzle", archivo_actividad = "activity6", lugar_fk = 6, premio_antigua_fk = 13, premio_actual_fk = 20),
                 ActividadEntity(tipo_actividad = "Clasificación", archivo_actividad = "activity7", lugar_fk = 7, premio_antigua_fk = 14, premio_actual_fk = 21),
+                // Actividad 8: juego final de reflexión/escritura, ligada al mismo lugar y premios que la 7
+                ActividadEntity(tipo_actividad = "Reflexión final", archivo_actividad = "writesentence", lugar_fk = 7, premio_antigua_fk = 14, premio_actual_fk = 21),
             )
             contenidoDao.insertActividades(actividades)
 
