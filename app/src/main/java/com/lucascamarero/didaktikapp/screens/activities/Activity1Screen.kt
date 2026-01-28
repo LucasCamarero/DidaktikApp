@@ -24,6 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
@@ -34,29 +36,41 @@ import kotlin.math.roundToInt
 /**
  * Pantalla principal de la Actividad 1.
  *
- * Esta pantalla gestiona toda la interfaz del juego:
- * - Escenario visual
- * - Ejercicio de drag & drop
+ * Gestiona todo el flujo del juego:
+ * - Escenario visual principal
+ * - Ejercicio de arrastre (drag & drop)
+ * - Zona de paneles contenedores
  * - Modo quiz
  * - Botón de acción principal
  * - Mensaje final de recompensa
  *
- * El estado y la lógica se delegan al [GameViewModel].
+ * La lógica de negocio y el estado del juego se delegan completamente
+ * al [GameViewModel], manteniendo esta pantalla enfocada en la UI.
  *
  * @param navController Controlador de navegación para cambiar de pantalla.
- * @param viewModel ViewModel que gestiona el estado del juego.
+ * @param viewModel ViewModel que gestiona el estado y la lógica del juego.
  */
 @Composable
 fun Activity1Screen(
     navController: NavController,
     viewModel: GameViewModel = hiltViewModel()
 ) {
+
+    /**
+     * Contenedor raíz de la pantalla.
+     *
+     * Permite superponer:
+     * - Escenario principal
+     * - Objetos arrastrables
+     * - Zonas objetivo
+     * - Mensaje final
+     */
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // ESCENARIO 1: JUEGO (Drag & Drop + Quiz)
+
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -65,16 +79,17 @@ fun Activity1Screen(
             // Imagen principal del escenario del juego.
             Image(
                 painter = painterResource(id = R.drawable.act1_bg_game2),
-                contentDescription = "Escenario",
+                contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp, 16.dp, 16.dp, 0.dp)
+                    .padding(16.dp)
                     .weight(2f)
                     .clip(RoundedCornerShape(12.dp))
             )
 
-            // Contenedor del texto informativo del estado del juego.
+            // Texto informativo que muestra el estado actual del juego.
+            // El contenido y el color dependen del estado gestionado por el ViewModel.
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,85 +106,94 @@ fun Activity1Screen(
                 )
             }
 
-            /*
-             * Zona dinámica que alterna entre:
-             * - Área de cajas para soltar (drag & drop)
-             * - Opciones del quiz
-             */
+            // ZONA DE PANELES AZULES CON OBJETOS ARRASTRABLES
             if (!viewModel.isQuizMode) {
-                // Modo cajas para soltar
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .weight(0.5f),
+                        .height(130.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    viewModel.items.forEach { _ ->
+                    viewModel.items.forEach { item ->
+                        var localOffset by remember { mutableStateOf(Offset.Zero) }
+
                         Box(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxHeight()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(MaterialTheme.colorScheme.primaryContainer)
-                        )
+                                .background(
+                                    color = MaterialTheme.colorScheme.primaryContainer,
+                                    shape = RoundedCornerShape(12.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(id = item.imageRes),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(90.dp)
+                                    .zIndex(1f)
+                                    .offset {
+                                        IntOffset(
+                                            localOffset.x.roundToInt(),
+                                            localOffset.y.roundToInt()
+                                        )
+                                    }
+                                    .pointerInput(Unit) {
+                                        detectDragGestures { change, dragAmount ->
+                                            change.consume()
+
+                                            // Movimiento visual inmediato
+                                            localOffset += dragAmount
+
+                                            // Delegación de la lógica al ViewModel
+                                            viewModel.updateItemPosition(item.id, dragAmount)
+                                        }
+                                    }
+                            )
+                        }
                     }
                 }
             } else {
-                // Modo quiz
+                // MODO QUIZ
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                        .weight(0.8f),
+                        .padding(horizontal = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    QuizOption(
-                        textResId = R.string.texto19,
-                        id = 1,
-                        selectedId = viewModel.selectedQuizOption
-                    ) { viewModel.selectedQuizOption = 1 }
-
-                    QuizOption(
-                        textResId = R.string.texto20,
-                        id = 2,
-                        selectedId = viewModel.selectedQuizOption
-                    ) { viewModel.selectedQuizOption = 2 }
-
-                    QuizOption(
-                        textResId = R.string.texto21,
-                        id = 3,
-                        selectedId = viewModel.selectedQuizOption
-                    ) { viewModel.selectedQuizOption = 3 }
+                    QuizOption(R.string.texto19, 1, viewModel.selectedQuizOption) {
+                        viewModel.selectedQuizOption = 1
+                    }
+                    QuizOption(R.string.texto20, 2, viewModel.selectedQuizOption) {
+                        viewModel.selectedQuizOption = 2
+                    }
+                    QuizOption(R.string.texto21, 3, viewModel.selectedQuizOption) {
+                        viewModel.selectedQuizOption = 3
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Botón principal de acción.
             Button(
                 onClick = { viewModel.onMainButtonClick() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
                     .height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor =
-                        if (viewModel.isDragSuccess && !viewModel.isQuizMode)
-                            MaterialTheme.colorScheme.scrim
-                        else
-                            MaterialTheme.colorScheme.onPrimaryContainer
-                ),
                 shape = RoundedCornerShape(28.dp)
             ) {
-                val buttonTextResId = when {
-                    !viewModel.isDragSuccess -> R.string.texto17
-                    !viewModel.isQuizMode -> R.string.texto18
-                    else -> R.string.texto17
-                }
-
                 Text(
-                    text = stringResource(id = buttonTextResId),
+                    text = stringResource(
+                        when {
+                            !viewModel.isDragSuccess -> R.string.texto17
+                            !viewModel.isQuizMode -> R.string.texto18
+                            else -> R.string.texto17
+                        }
+                    ),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -178,11 +202,8 @@ fun Activity1Screen(
             Spacer(modifier = Modifier.height(32.dp))
         }
 
-        // Elementos arrastrables y zonas objetivo.
-        // Solo visibles mientras el juego está en modo drag & drop.
+        // ZONAS OBJETIVO (DROP TARGETS)
         if (!viewModel.isQuizMode) {
-
-            // Dibuja las zonas objetivo
             viewModel.items.forEach { item ->
                 Box(
                     modifier = Modifier
@@ -193,54 +214,21 @@ fun Activity1Screen(
                             )
                         }
                         .size(90.dp)
-                        .border(
-                            3.dp,
-                            Color.White.copy(alpha = 0.6f),
-                            CircleShape
-                        )
-                        .background(
-                            Color.Green.copy(alpha = 0.2f),
-                            CircleShape
-                        )
-                )
-            }
-
-            // Dibuja los objetos móviles arrastrables
-            viewModel.items.forEach { item ->
-                Image(
-                    painter = painterResource(id = item.imageRes),
-                    contentDescription = "Objeto",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .offset {
-                            IntOffset(
-                                item.currentPosition.x.roundToInt(),
-                                item.currentPosition.y.roundToInt()
-                            )
-                        }
-                        .size(90.dp)
-                        .pointerInput(Unit) {
-                            detectDragGestures { change, dragAmount ->
-                                change.consume()
-                                viewModel.updateItemPosition(item.id, dragAmount)
-                            }
-                        }
+                        .border(3.dp, Color.White, CircleShape)
+                        .background(Color.Green.copy(alpha = 0.25f), CircleShape)
                 )
             }
         }
-
-        // Escenario final mostrado cuando el usuario completa correctamente toda la actividad
-        // y desbloquea la recompensa.
+        // MENSAJE FINAL DE RECOMPENSA
         if (viewModel.isRewardUnlocked) {
             MensajeFinalActivity(
                 titulo = stringResource(id = R.string.texto22),
                 mensaje = stringResource(id = R.string.texto23),
                 botonText = stringResource(id = R.string.texto24),
                 onButtonClick = {
-                    val ruta =
+                    navController.navigate(
                         "endactivity/1/${R.drawable.premio41}/${R.drawable.premio32}"
-                    navController.navigate(ruta) {
-                        // Evita volver al juego al pulsar atrás desde la pantalla final
+                    ) {
                         popUpTo("activity1") { inclusive = true }
                     }
                 }
@@ -264,7 +252,7 @@ fun QuizOption(
     selectedId: Int,
     onSelect: () -> Unit
 ) {
-    val isSelected = (id == selectedId)
+    val isSelected = id == selectedId
 
     Row(
         modifier = Modifier
@@ -279,10 +267,7 @@ fun QuizOption(
             )
             .border(
                 1.dp,
-                if (isSelected)
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                else
-                    MaterialTheme.colorScheme.onTertiaryContainer,
+                MaterialTheme.colorScheme.onPrimaryContainer,
                 RoundedCornerShape(8.dp)
             )
             .clickable { onSelect() }
@@ -291,18 +276,14 @@ fun QuizOption(
     ) {
         RadioButton(
             selected = isSelected,
-            onClick = { onSelect() },
-            colors = RadioButtonDefaults.colors(
-                selectedColor = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+            onClick = onSelect
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
             text = stringResource(id = textResId),
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.tertiary
+            fontSize = 16.sp
         )
     }
 }
