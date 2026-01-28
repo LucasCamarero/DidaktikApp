@@ -1,6 +1,5 @@
 package com.lucascamarero.didaktikapp.screens.activities.finalactivity
 
-import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,6 +23,18 @@ import com.lucascamarero.didaktikapp.components.CreateTitle2
 import com.lucascamarero.didaktikapp.ui.theme.Typography3
 import com.lucascamarero.didaktikapp.viewmodels.FinalGameViewModel
 
+/**
+ * Pantalla de la actividad final "Join the Photos".
+ *
+ * El usuario debe asociar correctamente las imágenes presentadas en una cuadrícula.
+ * La lógica de selección, emparejamiento y validación se delega al [FinalGameViewModel].
+ *
+ * Cuando todas las imágenes han sido emparejadas correctamente,
+ * se navega automáticamente a la pantalla de escritura de frase.
+ *
+ * @param navController Controlador de navegación utilizado para avanzar a la siguiente pantalla.
+ * @param viewModel ViewModel que gestiona el estado del juego final (selecciones y emparejamientos).
+ */
 @Composable
 fun JoinThePhotos(
     navController: NavController,
@@ -42,10 +53,12 @@ fun JoinThePhotos(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
+            // Título principal de la actividad
             CreateTitle2(stringResource(R.string.asocia))
 
             Spacer(modifier = Modifier.height(25.dp))
 
+            // Mensaje informativo o de feedback mostrado al usuario (si existe)
             if (viewModel.messageResId != null) {
                 Text(
                     text = stringResource(viewModel.messageResId!!),
@@ -56,6 +69,7 @@ fun JoinThePhotos(
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
+            // Cuadrícula de imágenes que el usuario debe asociar
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -66,6 +80,7 @@ fun JoinThePhotos(
                 items(viewModel.photos.size) { index ->
                     val photo = viewModel.photos[index]
 
+                    // Color del borde según el estado de la imagen
                     val borderColor = when {
                         viewModel.isMatched(photo) -> Color.Green
                         viewModel.isSelected(photo) -> Color.Yellow
@@ -79,9 +94,13 @@ fun JoinThePhotos(
                             .size(140.dp)
                             .border(4.dp, borderColor)
                             .clickable(
+                                // Se deshabilita el click si la imagen ya está emparejada
                                 enabled = !viewModel.isMatched(photo)
                             ) {
+                                // Gestiona la lógica de selección/emparejamiento
                                 val finished = viewModel.onPhotoClicked(photo)
+
+                                // Si el juego ha finalizado, navega a la siguiente pantalla
                                 if (finished) {
                                     navController.navigate("writesentence")
                                 }

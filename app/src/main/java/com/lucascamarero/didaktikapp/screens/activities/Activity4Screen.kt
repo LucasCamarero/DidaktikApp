@@ -115,7 +115,7 @@ fun Activity4Screen(
      */
     if (uiState.isGameWon) {
         LaunchedEffect(Unit) {
-            delay(1500)
+            delay(3500)
             showSuccessModal = true
         }
     }

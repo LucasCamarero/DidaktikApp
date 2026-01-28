@@ -133,9 +133,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
         val route = backStackEntry?.destination?.route
 
         activity?.requestedOrientation = when {
-            /*
-            route == "map" ->
-                ActivityInfo.SCREEN_ORIENTATION_SENSOR*/
 
             route?.startsWith("startactivity") == true ->
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -238,19 +235,10 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                             text = stringResource(id = R.string.final_name),
                             icon = Icons.Filled.SportsEsports,
                             onClick = {
-                                // TIENE QUE SER count == 7
-                                if (count == 0) {
+                                if (count >= 7) {
                                     scope.launch {
                                         drawerState.close()
                                         navController.navigate("startactivity/8")
-                                    }
-                                } else if (count == 8){
-                                    scope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message = snackbarMessage1,
-                                            duration = SnackbarDuration.Short
-                                        )
-                                        drawerState.close()
                                     }
                                 } else {
                                     scope.launch {
@@ -295,8 +283,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                             text = stringResource(id = R.string.diploma_name),
                             icon = Icons.Filled.School,
                             onClick = {
-                                // TIENE QUE SER count == 8
-                                if (count == 0) {
+                                if (count >= 8) {
                                     scope.launch {
                                         drawerState.close()
                                         navController.navigate("diploma")
@@ -475,7 +462,7 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
 
                     /** Actividad final */
                     composable("jointhephotos") { JoinThePhotos(navController, finalGameViewModel) }
-                    composable("writesentence") { WriteSentence(navController, finalGameViewModel) }
+                    composable("writesentence") { WriteSentence(navController, finalGameViewModel, counterViewModel) }
 
                     /** Diploma final */
                     composable("diploma") { Diploma(navController, finalGameViewModel) }
