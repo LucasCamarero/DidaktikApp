@@ -256,7 +256,6 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     item {
                         SnackbarHost(
                             hostState = snackbarHostState,
-                            //modifier = Modifier.padding(8.dp)
                         ) { snackbarData ->
                             Snackbar(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -302,11 +301,19 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                     }
 
                     item {
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
+                    }
+
+                    item {
                         Divider(
                             thickness = 1.dp,
                             color = MaterialTheme.colorScheme.scrim,
                             modifier = Modifier.padding(vertical = 2.dp)
                         )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
                     }
 
                     item {
@@ -321,29 +328,21 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
                             }
                         )
                     }
-                    /*
+
                     item {
-                        /**
-                         * Opción para reiniciar el juego.
-                         */
-                        CreateNavigationDrawerItem(
-                            text = stringResource(id = R.string.restart),
-                            icon = Icons.Filled.Refresh,
-                            onClick = {
-                                // a desarrollar
-                                scope.launch {
-                                    drawerState.close()
-                                }
-                            }
-                        )
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
                     }
-                    */
+
                     item {
                         Divider(
                             thickness = 1.dp,
                             color = MaterialTheme.colorScheme.scrim,
                             modifier = Modifier.padding(vertical = 2.dp)
                         )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.padding(vertical = 5.dp))
                     }
 
                     item {
