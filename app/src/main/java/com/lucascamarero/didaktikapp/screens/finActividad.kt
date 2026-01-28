@@ -1,4 +1,4 @@
-package com.lucascamarero.didaktikapp.screens.activities
+package com.lucascamarero.didaktikapp.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

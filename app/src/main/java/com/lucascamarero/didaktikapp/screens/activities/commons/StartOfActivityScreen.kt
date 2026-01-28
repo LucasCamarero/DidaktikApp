@@ -1,6 +1,5 @@
 package com.lucascamarero.didaktikapp.screens.activities.commons
 
-import android.content.pm.ActivityInfo
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -93,7 +92,7 @@ fun StartOfActivityScreen(
         else -> listOf(data.imageResId)
     }
 
-    BoxWithConstraints(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primaryContainer)

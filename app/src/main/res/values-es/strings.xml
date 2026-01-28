@@ -30,6 +30,12 @@
         espera una sorpresa y un diploma por convertiros en verdaderos exploradores barakaldeses!
 
         ¿Listos? ¡Pues venga! ¡Vamos a descubrir Barakaldo, de lo rural a lo moderno!</string>
+    <!-- Pantalla común final -->
+    <string name="textocf1">¡NIVEL COMPLETADO!</string>
+    <string name="textocf2">Has desbloqueado dos imágenes</string>
+    <string name="textocf3">ANTES</string>
+    <string name="textocf4">AHORA</string>
+    <string name="textocf5">FINALIZAR RUTA</string>
     <!-- Juego 1 -->
     <string name="title1">La Ermita de Santa Agueda</string>
     <string name="texto1_intro">Hace muchos años, Barakaldo era un pueblo rodeado de campos,
@@ -38,6 +44,20 @@
         muy importante para la gente del pueblo, porque allí se reunían para cantar, comer y
         compartir momentos juntos. Con el tiempo, Barakaldo fue cambiando, pero la ermita todavía
         nos recuerda cómo empezó todo.</string>
+    <string name="texto11">Arrastra los elementos a su posición original</string>
+    <string name="texto12">¡MUY BIEN! Has completado el paisaje.</string>
+    <string name="texto13">FALTAN ÍTEMS O ESTÁN MAL COLOCADOS.</string>
+    <string name="texto14">¿Qué cosas crees que todavía siguen igual?</string>
+    <string name="texto15">¡FELICIDADES! Has desbloqueado el recuerdo.</string>
+    <string name="texto16">Respuesta incorrecta. Inténtalo de nuevo.</string>
+    <string name="texto17">COMPROBAR RESPUESTA</string>
+    <string name="texto18">CONTINUAR</string>
+    <string name="texto19">a) La ermita sigue en pie</string>
+    <string name="texto20">b) Ya no hay montes</string>
+    <string name="texto21">c) No hay fiestas</string>
+    <string name="texto22">¡MUY BIEN!</string>
+    <string name="texto23">Has completado la actividad de la Ermita de Santa Águeda correctamente.</string>
+    <string name="texto24">VER RECOMPENSA</string>
     <string name="pregunta1">¿Qué cosas crees que todavía siguen igual?</string>
     <string name="respuesta1_a">a) La ermita sigue en pie</string>
     <string name="respuesta1_b">b) Ya no hay montes</string>
@@ -50,6 +70,28 @@
         forman: el Coro, el Altar, el Vía Crucis, el Sagrario, la Puerta Principal, la Nave
         Central… Cada uno tiene su función y nos ayuda a conocer cómo era la vida en aquel
         tiempo.</string>
+    <string name="texto25">Cuestionario sobre la Iglesia de San Vicente</string>
+    <string name="texto26">Altar</string>
+    <string name="texto27">Coro</string>
+    <string name="texto28">Sagrario</string>
+    <string name="texto29">Via Crucis</string>
+    <string name="texto30">Púlpito</string>
+    <string name="texto31">Banco</string>
+    <string name="texto32">Confesionario</string>
+    <string name="texto33">Caliz</string>
+    <string name="texto34">Vela</string>
+    <string name="texto35">Cruz</string>
+    <string name="texto36">Cuadro</string>
+    <string name="texto37">Estatua</string>
+    <string name="texto38">Arrastra la palabra correcta a la imagen.</string>
+    <string name="texto39">¡Correcto! Muy bien.</string>
+    <string name="texto40">¡Incorrecto! Inténtalo de nuevo.</string>
+    <string name="texto41">Incorrecto</string>
+    <string name="texto42">Suelta aquí la palabra</string>
+    <string name="texto43">SIGUIENTE</string>
+    <string name="texto44">¡EXCELENTE!</string>
+    <string name="texto45">Has completado el quiz sobre la Iglesia de San Vicente correctamente.</string>
+    <string name="texto46">VER RECOMPENSA</string>
     <!-- Juego 3 -->
     <string name="title3">El acertijo del puente</string>
     <string name="texto3_intro">En el mercado de Barakaldo la gente compraba alimentos y se
@@ -65,6 +107,11 @@
     <string name="respuesta3_2">TALOS</string>
     <string name="respuesta3_3">BACALAO</string>
     <string name="respuesta3_4">PASTEL</string>
+    <string name="texto47">Sopa de Letras: Sabores de Barakaldo</string>
+    <string name="texto48">¡SABROSO!</string>
+    <string name="texto49">Has encontrado todos los productos típicos de la gastronomía local.</string>
+    <string name="texto50">VER RECOMPENSA</string>
+    <string name="texto51">PISTAS</string>
     <!-- Juego 4 -->
     <string name="title4">El edificio Ilgner</string>
     <string name="texto4_intro">El edificio Ilgner fue muy importante para Barakaldo. Aquí se
@@ -72,6 +119,16 @@
         podían funcionar y la ciudad creció mucho. En este lugar trabajaban ingenieros, mecánicos
         y electricistas. El edificio sigue en pie y nos recuerda cómo empezó la industria
         moderna.</string>
+    <string name="texto52">Elige los objetos que puedan encender el edificio Ilgner.</string>
+    <string name="texto53">"¡Correcto! El sistema eléctrico está funcionando."</string>
+    <string name="texto54">Objeto incorrecto o faltan herramientas, vuelva a intentarlo.</string>
+    <string name="texto55">incorrecto</string>
+    <string name="texto56">faltan</string>
+    <string name="texto57">¡CONECTADO!</string>
+    <string name="texto58">ENCENDER</string>
+    <string name="texto59">¡ENERGÍA RESTAURADA!</string>
+    <string name="texto60">Has conectado correctamente el sistema eléctrico del Edificio Ilgner.</string>
+    <string name="texto61">VER RESULTADO</string>
     <!-- Juego 5 -->
     <string name="title5">Rompecabezas</string>
     <string name="texto5_intro">Hace muchos años, Barakaldo era un lugar lleno de fábricas y
@@ -82,20 +139,46 @@
     <string name="mensaje5_1">Por aquí llegaban los trenes con el hierro.</string>
     <string name="mensaje5_2">El hierro se cargaba en los barcos que iban a otros países.</string>
     <string name="mensaje5_3">Los cargaderos ayudaron a que Barakaldo creciera mucho.</string>
+    <string name="texto62">¡PUZZLE COMPLETADO!</string>
+    <string name="texto63">Has reconstruido el Cargadero de Minas correctamente.</string>
+    <string name="texto64">VER HISTORIA</string>
+    <string name="texto65">Por qué: En esta foto se ve muy bien la estructura alargada que conecta
+        la tierra con el cargadero. Los trenes circulaban por esa parte superior para descargar
+        el mineral directamente desde los vagones</string>
+    <string name="texto66">Por qué: Al ser una toma desde arriba, se ve claramente la posición del
+        cargadero dentro del río (la Ría del Nervión). Imagina un gran barco atracado junto a la
+        estructura de madera esperando a ser llenado de hierro para viajar a Inglaterra o
+        Francia</string>
+    <string name="texto67">Por qué: Esta imagen muestra la fuerza y la magnitud de la construcción
+        de madera y hierro. Representa el corazón de la industria que trajo trabajo, personas y
+        riqueza, convirtiendo a Barakaldo en la gran ciudad que es hoy</string>
+    <string name="texto68">Ventana final</string>
     <!-- Juego 6 -->
     <string name="title6">El ferrocarril</string>
     <string name="texto6_intro">En el Barakaldo industrial, los trenes transportaban el hierro
         desde las minas hasta los cargaderos, donde se subía a los barcos. Gracias al ferrocarril,
         muchas fábricas podían trabajar sin parar, y los trabajadores viajaban cada día en estos
         trenes. El tren fue uno de los motores que hizo crecer a Barakaldo.</string>
+    <string name="texto69">Orden incorrecto. Inténtalo de nuevo.</string>
+    <string name="texto70">¡MUY BIEN!</string>
+    <string name="texto71">Has completado la secuencia del transporte de mineral correctamente.</string>
+    <string name="texto72">FINALIZAR</string>
     <!-- Juego 7 -->
     <string name="title7">Palacio Munoa</string>
     <string name="texto7_intro">El Palacio Munoa fue la casa de una familia muy rica. Mientras
         muchas personas trabajaban en las fábricas, aquí se celebraban fiestas y bailes. Tenía
         jardines, cuadros y muebles elegantes. Hoy el Palacio Munoa es un parque abierto para
         todos, donde podemos pasear y disfrutar de la historia de Barakaldo.</string>
-    <string name="titulo5_columna1">Obreros</string>
-    <string name="titulo5_columna2">Burgueses</string>
+    <string name="titulo5_columna1">OBREROS</string>
+    <string name="titulo5_columna2">BURGUESES</string>
+    <string name="texto73">CLASIFICACIÓN SOCIAL</string>
+    <string name="texto74">¡COMPROBAR!</string>
+    <string name="texto75">¡EXCELENTE!</string>
+    <string name="texto76">Has clasificado correctamente los elementos de las clases sociales del Barakaldo industrial.</string>
+    <string name="texto77">VER RECOMPENSA</string>
+    <string name="texto78">¡Faltan objetos por clasificar!</string>
+    <string name="texto79">¡EXCELENTE! TODO CORRECTO!</string>
+    <string name="texto80">¡UPS! HAY ERRORES. CORRÍGELOS</string>
     <!-- Juego final -->
     <string name="final_name">Juego final</string>
     <string name="asocia">Empareja las imágenes</string>

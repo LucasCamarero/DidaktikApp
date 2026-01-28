@@ -1,5 +1,6 @@
 package com.lucascamarero.didaktikapp.viewmodels
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.screens.activities.ToolItem
@@ -10,27 +11,86 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-// Estado de la pantalla: Define todo lo que se ve en la UI
+/**
+ * Estado de la pantalla de la Actividad 4.
+ *
+ * Contiene toda la información necesaria para renderizar la UI:
+ * - Herramientas disponibles
+ * - Selección actual del usuario
+ * - Estado de victoria del juego
+ * - Mensaje a mostrar (referencia a recurso de string)
+ */
 data class GameUiState(
+    /**
+     * Lista de herramientas que se muestran en el grid.
+     */
     val tools: List<ToolItem> = emptyList(),
-    val selectedIds: Set<Int> = emptySet(), // INICIO: Conjunto vacío, nada seleccionado
+
+    /**
+     * Conjunto de IDs de herramientas actualmente seleccionadas.
+     */
+    val selectedIds: Set<Int> = emptySet(),
+
+    /**
+     * Indica si el jugador ha completado correctamente el reto.
+     */
     val isGameWon: Boolean = false,
-    val message: String = "Elige los objetos que puedan encender el edificio Ilgner."
+
+    /**
+     * Recurso de texto que representa el mensaje actual de la UI.
+     *
+     * Debe apuntar siempre a un string válido definido en `strings.xml`.
+     */
+    @StringRes val messageRes: Int = R.string.texto52
 )
 
+/**
+ * ViewModel encargado de gestionar la lógica de la Actividad 4.
+ *
+ * Responsabilidades:
+ * - Inicializar la lista de herramientas
+ * - Gestionar la selección/deselección de objetos
+ * - Comprobar si la selección del usuario es correcta
+ * - Exponer el estado de la UI mediante un `StateFlow`
+ */
 @HiltViewModel
 class Game4ViewModel @Inject constructor() : ViewModel() {
 
+    /**
+     * Estado interno mutable de la pantalla.
+     *
+     * No debe exponerse directamente fuera del ViewModel.
+     */
     private val _uiState = MutableStateFlow(GameUiState())
+
+    /**
+     * Estado observable e inmutable de la pantalla.
+     *
+     * Es consumido por la UI mediante `collectAsState()`.
+     */
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
 
-    // SOLUCIÓN: Bombilla(1), Cables(3), Generador(5), Llave(6)
+    /**
+     * Conjunto de IDs de herramientas que constituyen la solución correcta.
+     *
+     * SOLUCIÓN:
+     * - Bombilla (1)
+     * - Cables (3)
+     * - Generador (5)
+     * - Llave (6)
+     */
     private val correctToolIds = setOf(1, 3, 5, 6)
 
+    /**
+     * Inicializa el ViewModel cargando las herramientas disponibles.
+     */
     init {
         loadTools()
     }
 
+    /**
+     * Carga la lista inicial de herramientas y la publica en el estado de la UI.
+     */
     private fun loadTools() {
         val toolsList = listOf(
             ToolItem(1, "Bombilla", R.drawable.activ4_bombilla),
@@ -40,13 +100,19 @@ class Game4ViewModel @Inject constructor() : ViewModel() {
             ToolItem(5, "Generador", R.drawable.activ4_generador),
             ToolItem(6, "Llave", R.drawable.activ4_llave)
         )
-        // Inicializamos la lista de herramientas
         _uiState.update { it.copy(tools = toolsList) }
     }
 
-    // Lógica para marcar/desmarcar
+    /**
+     * Marca o desmarca una herramienta al ser pulsada por el usuario.
+     *
+     * Si el juego ya ha sido ganado, la acción se ignora.
+     * Al modificar la selección, el mensaje vuelve al estado inicial.
+     *
+     * @param id Identificador de la herramienta pulsada
+     */
     fun toggleSelection(id: Int) {
-        if (_uiState.value.isGameWon) return // Bloqueamos si ya ganó
+        if (_uiState.value.isGameWon) return
 
         _uiState.update { currentState ->
             val currentSelection = currentState.selectedIds.toMutableSet()
@@ -56,31 +122,35 @@ class Game4ViewModel @Inject constructor() : ViewModel() {
                 currentSelection.add(id)
             }
 
-            // Al tocar algo, reseteamos el mensaje de error al mensaje original
             currentState.copy(
                 selectedIds = currentSelection,
-                message = "Elige los objetos que puedan encender el edificio Ilgner."
+                messageRes = R.string.texto52
             )
         }
     }
 
-    // Lógica del botón ENCENDER
+    /**
+     * Comprueba si la selección actual del usuario coincide exactamente
+     * con la solución correcta.
+     *
+     * - Si es correcta, marca el juego como ganado y muestra el mensaje de éxito.
+     * - Si es incorrecta, muestra un mensaje de error.
+     */
     fun checkAnswer() {
         val currentSelection = _uiState.value.selectedIds
 
-        // Comparamos si la selección es EXACTAMENTE igual a la correcta
         if (currentSelection == correctToolIds) {
             _uiState.update {
                 it.copy(
                     isGameWon = true,
-                    message = "¡Correcto! El sistema eléctrico está funcionando."
+                    messageRes = R.string.texto53
                 )
             }
         } else {
             _uiState.update {
                 it.copy(
                     isGameWon = false,
-                    message = "Objeto incorrecto o faltan herramientas, vuelva a intentarlo."
+                    messageRes = R.string.texto54
                 )
             }
         }

@@ -1,8 +1,6 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.pm.ActivityInfo
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -13,7 +11,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,13 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -37,8 +32,12 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.lucascamarero.didaktikapp.R
 import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
+/**
+ * Enum que representa las animaciones disponibles en la actividad.
+ * Cada valor corresponde a un elemento interactivo del juego.
+ */
 enum class AnimacionSelecionada {
     Mima,
     Tren,
@@ -46,6 +45,10 @@ enum class AnimacionSelecionada {
     Cargadero
 }
 
+/**
+ * Define el orden correcto en el que el usuario debe activar
+ * las animaciones para completar la actividad con éxito.
+ */
 val ordenCorrecto = listOf(
     AnimacionSelecionada.Mima,
     AnimacionSelecionada.Tren,
@@ -53,52 +56,75 @@ val ordenCorrecto = listOf(
     AnimacionSelecionada.Barco
 )
 
+/**
+ * Pantalla principal de la Actividad 6.
+ *
+ * Gestiona la lógica del juego basada en secuencia,
+ * la reproducción de animaciones Lottie,
+ * la gestión de errores y el mensaje final de éxito.
+ *
+ * @param navController controlador de navegación para avanzar a la siguiente pantalla
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Activity6Screen(navController: NavController) {
 
-    // --- ESTADOS ---
+    // --- ESTADOS DEL JUEGO ---
+
+    /** Conjunto de animaciones activadas correctamente */
     var animacionActual by remember { mutableStateOf(setOf<AnimacionSelecionada>()) }
+
+    /** Índice del paso actual dentro del orden correcto */
     var pasoActual by remember { mutableStateOf(0) }
+
+    /** Indica si debe mostrarse el mensaje de error */
     var mensajeError by remember { mutableStateOf(false) }
-    var juegoTerminado by remember { mutableStateOf(false) } // 💡 NUEVO ESTADO
+
+    /** Indica que el juego se ha completado correctamente (estado lógico) */
+    var juegoTerminado by remember { mutableStateOf(false) }
+
+    /** Controla la visualización diferida del mensaje final (estado visual) */
+    var mostrarMensajeFinal by remember { mutableStateOf(false) }
+
+    // --- CONTROL DEL DELAY VISUAL ---
+    if (juegoTerminado) {
+        LaunchedEffect(Unit) {
+            delay(3500)
+            mostrarMensajeFinal = true
+        }
+    }
 
     // --- LÓGICA DEL JUEGO ---
+    /**
+     * Gestiona la pulsación de los botones.
+     *
+     * Verifica si la animación seleccionada coincide con
+     * el paso esperado del orden correcto.
+     * En caso de error, reinicia el estado del juego.
+     *
+     * @param animacion animación seleccionada por el usuario
+     */
     fun manejoBotones(animacion: AnimacionSelecionada) {
         if (ordenCorrecto[pasoActual] == animacion) {
-            // Acierto
             animacionActual = animacionActual + animacion
             pasoActual++
             mensajeError = false
 
-            // Verificar si completó la secuencia
             if (pasoActual == ordenCorrecto.size) {
-                juegoTerminado = true // 💡 ACTIVAMOS EL FINAL
+                juegoTerminado = true
             }
         } else {
-            // Error: Reiniciar
             animacionActual = emptySet()
             pasoActual = 0
             mensajeError = true
             juegoTerminado = false
-        }
-    }
-
-    // ===================================================================
-    // EVITA QUE GIRE HORIZONTALMENTE
-    // ===================================================================
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val activity = context as? Activity
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        onDispose {
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            mostrarMensajeFinal = false
         }
     }
 
     Scaffold(
         bottomBar = {
-            // BARRA DE BOTONES (Solo visible si no ha terminado el juego para evitar clics extra)
+            // Barra de botones (oculta tras finalizar el juego)
             if (!juegoTerminado) {
                 Row(
                     Modifier
@@ -107,21 +133,38 @@ fun Activity6Screen(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton({ manejoBotones(AnimacionSelecionada.Barco) }) {
-                        Icon(painter = painterResource(R.drawable.boton_barco), contentDescription = "Barco", tint = Color.Unspecified)
+                        Icon(
+                            painter = painterResource(R.drawable.boton_barco),
+                            contentDescription = "Barco",
+                            tint = Color.Unspecified
+                        )
                     }
                     IconButton({ manejoBotones(AnimacionSelecionada.Mima) }) {
-                        Icon(painter = painterResource(R.drawable.boton_mina), contentDescription = "Mina", tint = Color.Unspecified)
+                        Icon(
+                            painter = painterResource(R.drawable.boton_mina),
+                            contentDescription = "Mina",
+                            tint = Color.Unspecified
+                        )
                     }
                     IconButton({ manejoBotones(AnimacionSelecionada.Cargadero) }) {
-                        Icon(painter = painterResource(R.drawable.boton_cargadero), contentDescription = "Cargadero", tint = Color.Unspecified)
+                        Icon(
+                            painter = painterResource(R.drawable.boton_cargadero),
+                            contentDescription = "Cargadero",
+                            tint = Color.Unspecified
+                        )
                     }
                     IconButton({ manejoBotones(AnimacionSelecionada.Tren) }) {
-                        Icon(painter = painterResource(R.drawable.boton_tren), contentDescription = "Tren", tint = Color.Unspecified)
+                        Icon(
+                            painter = painterResource(R.drawable.boton_tren),
+                            contentDescription = "Tren",
+                            tint = Color.Unspecified
+                        )
                     }
                 }
             }
         }
     ) {
+
         // --- RECURSOS LOTTIE ---
         val lottieTren by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.trenv9))
         val lottieCagradero by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.cargaderoanimacion))
@@ -144,7 +187,7 @@ fun Activity6Screen(navController: NavController) {
 
         Box(modifier = Modifier.fillMaxSize()) {
 
-            // 1. FONDO
+            // Fondo
             Image(
                 painter = painterResource(R.drawable.fondof2),
                 contentDescription = null,
@@ -152,20 +195,25 @@ fun Activity6Screen(navController: NavController) {
                 contentScale = ContentScale.FillBounds
             )
 
-            // 2. MENSAJE DE ERROR
+            // Mensaje de error
             if (mensajeError) {
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .background(Color.Red.copy(0.8f))
+                        .background(MaterialTheme.colorScheme.error.copy(0.8f))
                         .padding(8.dp)
                         .align(Alignment.TopCenter)
                 ) {
-                    Text("Orden incorrecto. Inténtalo de nuevo.", color = Color.White, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                    Text(
+                        stringResource(id = R.string.texto69),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
 
-            // 3. ANIMACIONES (Lógica original)
+            // Animaciones
             if (animacionActual.contains(AnimacionSelecionada.Mima)) {
                 LottieAnimation(
                     composition = lottieMina,
@@ -176,6 +224,7 @@ fun Activity6Screen(navController: NavController) {
                         .offset(x = (-50).dp)
                 )
             }
+
             if (animacionActual.contains(AnimacionSelecionada.Tren)) {
                 DosLineasDiagonalParalelas(maxX)
                 LottieAnimation(
@@ -184,12 +233,11 @@ fun Activity6Screen(navController: NavController) {
                     modifier = Modifier
                         .width(450.dp)
                         .graphicsLayer {
-                            translationX = (offsetAnim.value)
-                            translationY = (offsetAnim.value)
+                            translationX = offsetAnim.value
+                            translationY = offsetAnim.value
                             rotationZ = 15f
                         }
                 )
-                // Superposición Mina
                 Image(
                     painter = painterResource(id = R.drawable.minaf2),
                     contentDescription = null,
@@ -199,6 +247,7 @@ fun Activity6Screen(navController: NavController) {
                     contentScale = ContentScale.FillHeight
                 )
             }
+
             if (animacionActual.contains(AnimacionSelecionada.Cargadero)) {
                 LottieAnimation(
                     composition = lottieCagradero,
@@ -208,6 +257,7 @@ fun Activity6Screen(navController: NavController) {
                         .align(Alignment.BottomEnd)
                 )
             }
+
             if (animacionActual.contains(AnimacionSelecionada.Barco)) {
                 LottieAnimation(
                     composition = lottieBarco,
@@ -218,17 +268,14 @@ fun Activity6Screen(navController: NavController) {
                 )
             }
 
-            // ===================================================================
-            // 4. MENSAJE DE ÉXITO Y BOTÓN FINALIZAR (Superpuesto)
-            // ===================================================================
-            if (juegoTerminado) {
+            // Mensaje final con retardo
+            if (mostrarMensajeFinal) {
                 MensajeFinalActivity(
-                    titulo = "¡MUY BIEN!",
-                    mensaje = "Has completado la secuencia del transporte de mineral correctamente.",
-                    botonText = "FINALIZAR",
+                    titulo = stringResource(id = R.string.texto70),
+                    mensaje = stringResource(id = R.string.texto71),
+                    botonText = stringResource(id = R.string.texto72),
                     onButtonClick = {
-                        // Aquí defines qué hace el botón específicamente para ESTA actividad
-                        val ruta = "endactivity/6/${R.drawable.cargaderos_antigua}/${R.drawable.cargaderos_antigua}"
+                        val ruta = "endactivity/6/${R.drawable.premio61}/${R.drawable.premio52}"
                         navController.navigate(ruta) {
                             popUpTo("activity6") { inclusive = true }
                         }
@@ -239,11 +286,14 @@ fun Activity6Screen(navController: NavController) {
     }
 }
 
+/**
+ * Dibuja dos líneas diagonales paralelas que simulan las vías del tren.
+ *
+ * @param maxX valor máximo del eje X para adaptar el dibujo al ancho de pantalla
+ */
 @Composable
 fun DosLineasDiagonalParalelas(maxX: Float) {
-    Canvas(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Canvas(modifier = Modifier.fillMaxSize()) {
         drawLine(
             color = Color.Black,
             start = Offset(-900f, -900f),

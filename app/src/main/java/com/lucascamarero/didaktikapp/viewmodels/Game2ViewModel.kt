@@ -1,5 +1,6 @@
 package com.lucascamarero.didaktikapp.viewmodels
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,57 +9,144 @@ import com.lucascamarero.didaktikapp.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-// Modelo de datos para cada fase
+/**
+ * Modelo de datos que representa una fase del juego.
+ *
+ * @property id Identificador único de la fase.
+ * @property imageRes Recurso drawable de la imagen asociada a la fase.
+ * @property correctWordRes Recurso string de la palabra correcta.
+ * @property optionsRes Lista de recursos string que representan las opciones disponibles.
+ */
 data class PhaseData(
     val id: Int,
     val imageRes: Int,
-    val correctWord: String,
-    val options: List<String>
+    @StringRes val correctWordRes: Int,
+    val optionsRes: List<Int>
 )
 
+/**
+ * ViewModel que gestiona la lógica del juego de la Actividad 2.
+ *
+ * Se encarga de:
+ * - Mantener el estado de la fase actual
+ * - Validar las respuestas del usuario
+ * - Controlar el avance entre fases
+ * - Exponer mensajes de feedback a la UI
+ */
 @HiltViewModel
 class Game2ViewModel @Inject constructor() : ViewModel() {
 
-    // --- DATOS DEL JUEGO ---
+    /**
+     * Lista de fases que componen el juego.
+     *
+     * Cada fase define:
+     * - Imagen a mostrar
+     * - Palabra correcta
+     * - Opciones disponibles (mezcladas)
+     */
     private val phases = listOf(
-        PhaseData(1, R.drawable.activ2_img_altar, "Altar", listOf("Altar", "Coro", "Sagrario", "Vía Crucis").shuffled()),
-        PhaseData(2, R.drawable.activ2_img_coro, "Coro", listOf("Púlpito", "Coro", "Banco", "Confesionario").shuffled()),
-        PhaseData(3, R.drawable.activ2_img_sagrario, "Sagrario", listOf("Sagrario", "Cáliz", "Vela", "Altar").shuffled()),
-        PhaseData(4, R.drawable.activ2_img_via_crucis, "Vía Crucis", listOf("Cruz", "Vía Crucis", "Cuadro", "Estatua").shuffled())
+        PhaseData(
+            1,
+            R.drawable.activ2_img_altar,
+            R.string.texto26,
+            listOf(
+                R.string.texto26,
+                R.string.texto27,
+                R.string.texto28,
+                R.string.texto29
+            ).shuffled()
+        ),
+        PhaseData(
+            2,
+            R.drawable.activ2_img_coro,
+            R.string.texto27,
+            listOf(
+                R.string.texto30,
+                R.string.texto27,
+                R.string.texto31,
+                R.string.texto32
+            ).shuffled()
+        ),
+        PhaseData(
+            3,
+            R.drawable.activ2_img_sagrario,
+            R.string.texto28,
+            listOf(
+                R.string.texto28,
+                R.string.texto33,
+                R.string.texto34,
+                R.string.texto26
+            ).shuffled()
+        ),
+        PhaseData(
+            4,
+            R.drawable.activ2_img_via_crucis,
+            R.string.texto29,
+            listOf(
+                R.string.texto35,
+                R.string.texto29,
+                R.string.texto36,
+                R.string.texto37
+            ).shuffled()
+        )
     )
 
-    // --- ESTADOS (Observables por la UI) ---
+    /**
+     * Índice de la fase actual dentro de la lista de fases.
+     */
     var currentPhaseIndex by mutableStateOf(0)
         private set
 
-    var droppedWord by mutableStateOf<String?>(null)
+    /**
+     * Recurso string de la palabra soltada correctamente por el usuario.
+     * Será null mientras no haya una respuesta correcta.
+     */
+    var droppedWordRes by mutableStateOf<Int?>(null)
         private set
 
-    var feedbackMessage by mutableStateOf("Arrastra la palabra correcta a la imagen.")
+    /**
+     * Recurso string que representa el mensaje de feedback mostrado al usuario.
+     */
+    var feedbackMessageRes by mutableStateOf(R.string.texto38)
         private set
 
+    /**
+     * Indica si la respuesta actual es correcta.
+     */
     var isCorrectAnswer by mutableStateOf(false)
         private set
 
+    /**
+     * Indica si el juego ha finalizado (última fase completada).
+     */
     var isGameFinished by mutableStateOf(false)
         private set
 
-    // Obtener la fase actual de forma segura
+    /**
+     * Devuelve la fase actual de forma segura.
+     */
     val currentPhase: PhaseData
         get() = if (currentPhaseIndex < phases.size) phases[currentPhaseIndex] else phases[0]
 
-    // --- LÓGICA ---
-
-    fun checkAnswer(word: String) {
-        if (word == currentPhase.correctWord) {
-            droppedWord = word
+    /**
+     * Comprueba si la palabra seleccionada es correcta para la fase actual.
+     *
+     * @param selectedWordRes Recurso string de la palabra seleccionada por el usuario.
+     */
+    fun checkAnswer(selectedWordRes: Int) {
+        if (selectedWordRes == currentPhase.correctWordRes) {
+            droppedWordRes = selectedWordRes
             isCorrectAnswer = true
-            feedbackMessage = "¡Correcto! Muy bien."
+            feedbackMessageRes = R.string.texto39
         } else {
-            feedbackMessage = "¡Incorrecto! Inténtalo de nuevo."
+            feedbackMessageRes = R.string.texto40
         }
     }
 
+    /**
+     * Avanza a la siguiente fase si existe.
+     * Si no hay más fases, marca el juego como finalizado.
+     */
     fun nextPhase() {
         if (currentPhaseIndex < phases.size - 1) {
             currentPhaseIndex++
@@ -68,15 +156,21 @@ class Game2ViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    /**
+     * Reinicia el juego desde la primera fase.
+     */
     fun restartGame() {
         currentPhaseIndex = 0
         isGameFinished = false
         resetPhaseState()
     }
 
+    /**
+     * Restablece el estado de la fase actual.
+     */
     private fun resetPhaseState() {
-        droppedWord = null
+        droppedWordRes = null
         isCorrectAnswer = false
-        feedbackMessage = "Arrastra la palabra correcta a la imagen."
+        feedbackMessageRes = R.string.texto38
     }
 }

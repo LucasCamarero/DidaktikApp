@@ -30,6 +30,12 @@
         bat eta diploma bat zain dituzu benetako Barakaldoko esploratzaile bihurtzeagatik!
 
         Prest? Goazen! Ezagutu dezagun Barakaldo, landa-eremutik modernora!</string>
+    <!-- Pantalla común final -->
+    <string name="textocf1">MAILA OSATUTA!</string>
+    <string name="textocf2">Bi irudi desblokeatu dituzu</string>
+    <string name="textocf3">AURRETIK</string>
+    <string name="textocf4">ORAIN</string>
+    <string name="textocf5">AMAITU IBILBIDEA</string>
     <!-- Juego 1 -->
     <string name="title1">Santa Agatearen ermita</string>
     <string name="texto1_intro">Duela urte asko, Barakaldo zelai, baserri eta mendiz inguratutako
@@ -38,6 +44,20 @@
         zen herritarrentzat, bertan biltzen baitziren abesteko, jateko eta uneak elkarrekin
         partekatzeko. Denborarekin, Barakaldo aldatu egin zen, baina ermitak oraindik ere
         gogorarazten digu nola hasi zen dena.</string>
+    <string name="texto11">Arrastatu elementuak jatorrizko posiziora itzuli</string>
+    <string name="texto12">OSO ONA! Paisaia osatu duzu.</string>
+    <string name="texto13">ELEMENTUAK FALTA DAUDE EDO GAIZKI JARRI DAUDE.</string>
+    <string name="texto14">Zein gauza uste duzu berdin jarraitzen dutela?</string>
+    <string name="texto15">ZORIONAK! Oroitzapena desblokeatu duzu.</string>
+    <string name="texto16">Erantzun okerra. Saiatu berriro.</string>
+    <string name="texto17">EGIAZTATU ERANTZUNA</string>
+    <string name="texto18">JARRAITU</string>
+    <string name="texto19">a) Ermita zutik dago oraindik</string>
+    <string name="texto20">b) Ez dago mendi gehiago</string>
+    <string name="texto21">c) Ez dago alderdirik</string>
+    <string name="texto22">OSO ONDO!</string>
+    <string name="texto23">Santa Águedako ermitako jarduera arrakastaz burutu duzu.</string>
+    <string name="texto24">IKUSI SARIA</string>
     <string name="pregunta1">Zein gauza uste duzu berdin jarraitzen dutela?</string>
     <string name="respuesta1_a">a) Ermita zutik dago oraindik</string>
     <string name="respuesta1_b">b) Ez dago mendi gehiago</string>
@@ -49,21 +69,48 @@
         arretaz elizaren argazkiari eta erreparatu hura osatzen duten elementuei: Korua, Aldarea,
         Gurutz-bidea, Sagrarioa, Ate Nagusia, Nabe Nagusia… Bakoitzak bere funtzioa du eta garai
         hartako bizitza nolakoa zen ulertzen laguntzen digu.</string>
+    <string name="texto25">San Bizente elizari buruzko galdetegia</string>
+    <string name="texto26">Aldarea</string>
+    <string name="texto27">Abesbatza</string>
+    <string name="texto28">Santutegia</string>
+    <string name="texto29">Gurutze Bidea</string>
+    <string name="texto30">Pulpitoa</string>
+    <string name="texto31">Bankua</string>
+    <string name="texto32">Konfesionala</string>
+    <string name="texto33">kaliza</string>
+    <string name="texto34">Kandela</string>
+    <string name="texto35">Gurutzea</string>
+    <string name="texto36">Taula</string>
+    <string name="texto37">Estatua</string>
+    <string name="texto38">Arrastatu hitz zuzena irudira.</string>
+    <string name="texto39">Bai, bai! Oso ondo.</string>
+    <string name="texto40">Okerra! Saiatu berriro.</string>
+    <string name="texto41">Okerra</string>
+    <string name="texto42">Jarri hitza hemen</string>
+    <string name="texto43">JARRAITZEN</string>
+    <string name="texto44">BIKAINA!</string>
+    <string name="texto45">San Bizente elizari buruzko galdetegia arrakastaz bete duzu.</string>
+    <string name="texto46">IKUSI SARIA</string>
     <!-- Juego 3 -->
     <string name="title3">Zubiaren enigma</string>
     <string name="texto3_intro">Barakaldoko merkatuan, jendeak janaria erosten zuen eta
         bizilagunekin elkartzen zen. Produktu tipikoak saltzen ziren bertan: Barakaldoko
         babarrunak, taloak (arto tortillak), pil-pil saltsan egindako bakailaoa eta etxeko gozoak.
         Merkatua usain, kolore eta soinuz betetako lekua zen. Begiratu hitz-bilaketako pistak eta
-        aurkitu janari hauei dagozkien hitzak.</string>
+        aurkitu janari hauei dagozkien hitzak (hitzak erderaz).</string>
     <string name="pista3_1">Barakaldoko lekale tipikoa da, gisatuetan jaten dena.</string>
     <string name="pista3_2">Festetan jaten da eta artoz egiten da.</string>
     <string name="pista3_3">Arraina pil-pil saltsan prestatua</string>
     <string name="pista3_4">Barakaldoko gozo tipikoa</string>
-    <string name="respuesta3_1">BABARRUNAK</string>
-    <string name="respuesta3_2">TALOAK</string>
-    <string name="respuesta3_3">BAKAILAOA</string>
-    <string name="respuesta3_4">TARTA</string>
+    <string name="respuesta3_1">ALUBIAS</string>
+    <string name="respuesta3_2">TALOS</string>
+    <string name="respuesta3_3">BACALAO</string>
+    <string name="respuesta3_4">PASTEL</string>
+    <string name="texto47">Hitz Bilaketa: Barakaldoko Zaporeak</string>
+    <string name="texto48">GOGORUA!</string>
+    <string name="texto49">Bertako gastronomiaren produktu tipiko guztiak aurkitu dituzu.</string>
+    <string name="texto50">IKUSI SARIA</string>
+    <string name="texto51">PISTAK</string>
     <!-- Juego 4 -->
     <string name="title4">Ilgner eraikina</string>
     <string name="texto4_intro">Ilgner eraikina oso garrantzitsua izan zen Barakaldorentzat.
@@ -71,6 +118,16 @@
         funtziona zezaketen, eta hiria nabarmen hazi zen. Ingeniariek, mekanikariek eta
         elektrizistek lan egin zuten hemen. Eraikinak zutik dirau oraindik eta gogorarazten digu
         nola hasi zen industria modernoa.</string>
+    <string name="texto52">Aukeratu Ilgner eraikina argitu dezaketen objektuak.</string>
+    <string name="texto53">"Hori bai! Sistema elektrikoa funtzionatzen ari da."</string>
+    <string name="texto54">Elementu okerra edo tresnak falta dira, saiatu berriro.</string>
+    <string name="texto55">okerra</string>
+    <string name="texto56">falta</string>
+    <string name="texto57">KONEKTATUTA!</string>
+    <string name="texto58">PIZTU</string>
+    <string name="texto59">ENERGIA BERRESKURATUTA!</string>
+    <string name="texto60">Ilgner eraikinaren sistema elektrikoa behar bezala konektatu duzu.</string>
+    <string name="texto61">IKUSI EMAITZA</string>
     <!-- Juego 5 -->
     <string name="title5">Puzzlea</string>
     <string name="texto5_intro">Duela urte asko, Barakaldo fabrika eta trenez betetako lekua zen.
@@ -81,20 +138,46 @@
     <string name="mensaje5_1">Hona iristen ziren burdina zeramaten trenak.</string>
     <string name="mensaje5_2">Burdina beste herrialde batzuetara zihoazen itsasontzietan kargatzen zen.</string>
     <string name="mensaje5_3">Kargalekuek Barakaldo asko hazten lagundu zuten.</string>
+    <string name="texto62">PUZZLEA OSATUTA!</string>
+    <string name="texto63">Meategiko kargamentu-kaia behar bezala berreraiki duzu.</string>
+    <string name="texto64">IKUSI HISTORIA</string>
+    <string name="texto65">Zergatik: Argazki honek argi erakusten du lurra kargatzeko kaiarekin
+        lotzen duen egitura luzanga. Trenak goiko atal honetatik zehar ibiltzen ziren mea zuzenean
+        bagoietatik deskargatzeko.</string>
+    <string name="texto66">Zergatik: Goiko planoa denez, ibaiaren barruko karga-kaiaren kokapena
+        (Nerbioiko itsasadarra) argi ikusten da. Imajinatu itsasontzi handi bat zurezko egituraren
+        ondoan atrakatuta, burdin mineralarekin kargatzeko zain, Ingalaterrara edo Frantziara
+        bidaiatzeko.</string>
+    <string name="texto67">Zergatik: Irudi honek egurrezko eta burdinazko eraikuntzaren indarra
+        eta eskala erakusten ditu. Lanpostuak, jendea eta aberastasuna ekarri zituen industriaren
+        bihotza irudikatzen du, Barakaldo gaur egun den hiri handi bihurtuz.</string>
+    <string name="texto68">Amaiera leihoa</string>
     <!-- Juego 6 -->
     <string name="title6">Trenbidea</string>
     <string name="texto6_intro">Barakaldo industrialaren erdigunean, trenek burdin mea meategietatik
         kargalekuetara garraiatzen zuten, eta handik itsasontzietan kargatzen zuten. Trenbideari
         esker, fabrika askok etengabe funtziona zezaketen, eta langileak egunero bidaiatzen zuten
         tren horietan. Trenbidea izan zen Barakaldoren hazkundearen eragile nagusietako bat.</string>
+    <string name="texto69">Ordena okerra. Saiatu berriro.</string>
+    <string name="texto70">OSO ONDO!</string>
+    <string name="texto71">Mineralaren garraio sekuentzia arrakastaz burutu duzu.</string>
+    <string name="texto72">AMAITU</string>
     <!-- Juego 7 -->
     <string name="title7">Munoa jauregia</string>
     <string name="texto7_intro">Munoa Jauregia familia oso aberats baten etxea izan zen. Jende
         askok lan egiten zuen bitartean lantegietan, festak eta dantzaldiak egiten ziren bertan.
         Lorategiak, margolanak eta altzari dotoreak zituen. Gaur egun, Munoa Jauregia guztiontzat
         irekitako parke bat da, non paseatu eta Barakaldoko historiaz gozatu dezakegun.</string>
-    <string name="titulo5_columna1">Langileak</string>
-    <string name="titulo5_columna2">Burgesa</string>
+    <string name="titulo5_columna1">LANGILEAK</string>
+    <string name="titulo5_columna2">BURGESA</string>
+    <string name="texto73">GIZARTE SAILKAPENA</string>
+    <string name="texto74">EZAGUTU!</string>
+    <string name="texto75">BIKAINA!</string>
+    <string name="texto76">Barakaldo industrialaren gizarte-klaseen elementuak zuzen sailkatu dituzu.</string>
+    <string name="texto77">IKUSI SARIA</string>
+    <string name="texto78">Oraindik sailkatu beharreko elementuak daude!</string>
+    <string name="texto79">BIKAIN! DENA ZUZENA DA!</string>
+    <string name="texto80">UPS! BADAGO ERROREAK. ZUZENDU ITZAZU</string>
     <!-- Juego final -->
     <string name="final_name">Amaiera jokoa</string>
     <string name="asocia">Bat etortzea irudiekin</string>

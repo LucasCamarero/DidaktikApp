@@ -1,7 +1,5 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
-import android.app.Activity
-import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,12 +10,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -27,60 +24,56 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lucascamarero.didaktikapp.R
-// 1. IMPORTAMOS EL COMPONENTE
 import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import com.lucascamarero.didaktikapp.viewmodels.Game2ViewModel
 import kotlin.math.roundToInt
 
+/**
+ * Pantalla principal de la Actividad 2.
+ *
+ * Muestra un juego de arrastrar y soltar donde el usuario debe asociar
+ * correctamente una palabra con la imagen correspondiente.
+ *
+ * @param navController Controlador de navegación.
+ * @param viewModel ViewModel que gestiona la lógica y el estado del juego.
+ */
 @Composable
 fun Activity2Screen(
     navController: NavController,
     viewModel: Game2ViewModel = hiltViewModel()
 ) {
-    // ===================================================================
-    // 1. CONFIGURACIÓN DE PANTALLA (BLOQUEO VERTICAL)
-    // ===================================================================
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val activity = context as? Activity
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        onDispose {
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-    }
-
-    // Usamos un Box para superponer el mensaje sobre el juego
     Box(modifier = Modifier.fillMaxSize()) {
 
-        // ===================================================================
-        // CAPA 1: INTERFAZ DEL JUEGO (SIEMPRE VISIBLE)
-        // ===================================================================
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF0F2F5))
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            // TÍTULO
+            // Título de la actividad
             Text(
-                text = "Quiz sobre la Iglesia de San Vicente (${viewModel.currentPhaseIndex + 1}/4)",
+                text = stringResource(id = R.string.texto25) +
+                        "(${viewModel.currentPhaseIndex + 1}/4)",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp),
                 textAlign = TextAlign.Center
             )
 
-            // --- PARTE 1: IMAGEN (ZONA DE DROP) ---
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Tarjeta que contiene la imagen de la fase actual y la zona de drop para
+            // la palabra seleccionada.
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(3f)
                     .padding(vertical = 8.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
             ) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Image(
@@ -92,30 +85,38 @@ fun Activity2Screen(
                             .padding(bottom = 60.dp)
                     )
 
-                    // Zona visual donde aparece la palabra soltada
+                    // Zona inferior donde se muestra la palabra soltada o el mensaje de instrucción.
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .fillMaxWidth()
                             .height(60.dp)
-                            .background(if (viewModel.isCorrectAnswer) Color(0xAA4CAF50) else Color(0xDDFFFFFF)),
+                            .background(
+                                if (viewModel.isCorrectAnswer)
+                                    MaterialTheme.colorScheme.scrim
+                                else
+                                    MaterialTheme.colorScheme.background
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (viewModel.droppedWord != null) {
+                        if (viewModel.droppedWordRes != null) {
                             Text(
-                                text = viewModel.droppedWord!!,
+                                text = stringResource(viewModel.droppedWordRes!!),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.tertiary
                             )
                         } else {
-                            Text("Suelta aquí la palabra", color = Color.Gray)
+                            Text(
+                                stringResource(id = R.string.texto42),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     }
                 }
             }
 
-            // --- PARTE 2: MENSAJE Y BOTONES ---
+            // Sección inferior con mensaje de feedback y controles.
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -124,47 +125,53 @@ fun Activity2Screen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Mensaje de feedback
+                // Mensaje de feedback que informa si la respuesta es correcta o incorrecta.
                 Text(
-                    text = viewModel.feedbackMessage,
-                    fontSize = 18.sp,
+                    text = stringResource(viewModel.feedbackMessageRes),
+                    fontSize = 20.sp,
                     textAlign = TextAlign.Center,
                     color = when {
-                        viewModel.isCorrectAnswer -> Color(0xFF2E7D32)
-                        viewModel.feedbackMessage.contains("Incorrecto") -> Color.Red
-                        else -> Color.Black
+                        viewModel.isCorrectAnswer -> MaterialTheme.colorScheme.scrim
+                        viewModel.feedbackMessageRes == R.string.texto40 -> MaterialTheme.colorScheme.error
+                        else -> MaterialTheme.colorScheme.tertiary
                     },
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
 
-                // Lógica de visualización: Botón Siguiente o Palabras
+                // Botón para avanzar a la siguiente fase si la respuesta es correcta,
+                // o listado de opciones arrastrables en caso contrario.
                 if (viewModel.isCorrectAnswer) {
                     Button(
                         onClick = { viewModel.nextPhase() },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF154c79))
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     ) {
-                        Text("SIGUIENTE")
+                        Text(
+                            stringResource(id = R.string.texto43),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 } else {
-                    // Grid de opciones arrastrables
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        val rows = viewModel.currentPhase.options.chunked(2)
+                        val rows = viewModel.currentPhase.optionsRes.chunked(2)
                         rows.forEach { rowWords ->
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                rowWords.forEach { word ->
+                                rowWords.forEach { wordRes ->
                                     DraggableOption(
-                                        text = word,
-                                        onDrop = { droppedText ->
-                                            viewModel.checkAnswer(droppedText)
+                                        textRes = wordRes,
+                                        onDrop = { droppedRes ->
+                                            viewModel.checkAnswer(droppedRes)
                                         }
                                     )
                                 }
@@ -175,18 +182,15 @@ fun Activity2Screen(
             }
         }
 
-        // ===================================================================
-        // CAPA 2: MENSAJE FINAL (SUPERPUESTO)
-        // ===================================================================
+        // Mensaje final que se muestra al completar todas las fases del juego.
         if (viewModel.isGameFinished) {
             MensajeFinalActivity(
-                titulo = "¡EXCELENTE!",
-                mensaje = "Has completado el quiz sobre la Iglesia de San Vicente correctamente.",
-                botonText = "VER RECOMPENSA",
+                titulo = stringResource(id = R.string.texto44),
+                mensaje = stringResource(id = R.string.texto45),
+                botonText = stringResource(id = R.string.texto46),
                 onButtonClick = {
-                    // Navegamos a la pantalla final de la actividad 2
-                    // RECUERDA: Cambiar los R.drawable por las fotos correctas de San Vicente
-                    val ruta = "endactivity/2/${R.drawable.act1_premio1}/${R.drawable.act1_premio2}"
+                    val ruta =
+                        "endactivity/2/${R.drawable.premio11}/${R.drawable.premio62}"
                     navController.navigate(ruta) {
                         popUpTo("activity2") { inclusive = true }
                     }
@@ -196,11 +200,19 @@ fun Activity2Screen(
     }
 }
 
-// --- COMPONENTE ARRASTRABLE (Se mantiene igual) ---
+/**
+ * Composable que representa una opción arrastrable.
+ *
+ * Permite al usuario arrastrar una palabra y soltarla sobre la imagen
+ * para comprobar si es la opción correcta.
+ *
+ * @param textRes Recurso string de la palabra a mostrar.
+ * @param onDrop Callback que se ejecuta cuando la palabra es soltada.
+ */
 @Composable
 fun DraggableOption(
-    text: String,
-    onDrop: (String) -> Unit
+    textRes: Int,
+    onDrop: (Int) -> Unit
 ) {
     var offsetX by remember { mutableStateOf(0f) }
     var offsetY by remember { mutableStateOf(0f) }
@@ -222,11 +234,9 @@ fun DraggableOption(
                     onDragStart = { isDragging = true },
                     onDragEnd = {
                         isDragging = false
-                        // Ajusta -100 según la distancia necesaria en tu pantalla
                         if (offsetY < -100) {
-                            onDrop(text)
+                            onDrop(textRes)
                         }
-                        // Efecto resorte
                         offsetX = 0f
                         offsetY = 0f
                     },
@@ -237,10 +247,19 @@ fun DraggableOption(
                     }
                 )
             }
-            .background(Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
-            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp)),
+            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
+            .border(
+                1.dp,
+                MaterialTheme.colorScheme.onSurfaceVariant,
+                RoundedCornerShape(8.dp)
+            ),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = text, fontWeight = FontWeight.Bold, color = Color.Black)
+        Text(
+            text = stringResource(textRes),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.tertiary
+        )
     }
 }

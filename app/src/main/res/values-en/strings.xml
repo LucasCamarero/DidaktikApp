@@ -30,6 +30,12 @@
         surprise and a diploma await you for becoming true Barakaldo explorers!
 
         Ready? Let´s go! Let´s discover Barakaldo, from rural to modern!</string>
+    <!-- Pantalla común final -->
+    <string name="textocf1">LEVEL COMPLETED!</string>
+    <string name="textocf2">You have unlocked two images</string>
+    <string name="textocf3">BEFORE</string>
+    <string name="textocf4">NOW</string>
+    <string name="textocf5">FINISH ROUTE</string>
     <!-- Juego 1 -->
     <string name="title1">The hermitage of Saint Agatha</string>
     <string name="texto1_intro">Many years ago, Barakaldo was a town surrounded by fields,
@@ -38,6 +44,20 @@
         was a very important place for the townspeople, because they gathered there to sing, eat,
         and share moments together. Over time, Barakaldo changed, but the hermitage still reminds
         us how it all began.</string>
+    <string name="texto11">Drag the elements back to their original position</string>
+    <string name="texto12">VERY GOOD! You have completed the landscape.</string>
+    <string name="texto13">ITEMS ARE MISSING OR INCORRECTLY PLACED.</string>
+    <string name="texto14">What things do you think are still the same?</string>
+    <string name="texto15">CONGRATULATIONS! You have unlocked the memory.</string>
+    <string name="texto16">Incorrect answer. Try again.</string>
+    <string name="texto17">CHECK ANSWER</string>
+    <string name="texto18">CONTINUE</string>
+    <string name="texto19">a) The hermitage is still standing</string>
+    <string name="texto20">b) There are no more mountains</string>
+    <string name="texto21">c) There are no parties</string>
+    <string name="texto22">VERY GOOD!</string>
+    <string name="texto23">You have successfully completed the activity at the Hermitage of Santa Águeda.</string>
+    <string name="texto24">VIEW REWARD</string>
     <string name="pregunta1">What things do you think are still the same?</string>
     <string name="respuesta1_a">a) The hermitage is still standing</string>
     <string name="respuesta1_b">b) There are no more mountains</string>
@@ -50,21 +70,48 @@
         it up: the Choir, the Altar, the Stations of the Cross, the Tabernacle, the Main Door,
         the Central Nave… Each one has its function and helps us understand what life was like
         in that time.</string>
+    <string name="texto25">Quiz about the Church of San Vicente</string>
+    <string name="texto26">Altar</string>
+    <string name="texto27">Choir</string>
+    <string name="texto28">Sanctuary</string>
+    <string name="texto29">Way of the Cross</string>
+    <string name="texto30">Pulpit</string>
+    <string name="texto31">Bench</string>
+    <string name="texto32">Confessional</string>
+    <string name="texto33">Chalice</string>
+    <string name="texto34">Candle</string>
+    <string name="texto35">Cross</string>
+    <string name="texto36">Picture</string>
+    <string name="texto37">Statue</string>
+    <string name="texto38">Drag the correct word to the image.</string>
+    <string name="texto39">Correct! Very good.</string>
+    <string name="texto40">Incorrect! Try again.</string>
+    <string name="texto41">Incorrect</string>
+    <string name="texto42">Drop the word here</string>
+    <string name="texto43">NEXT</string>
+    <string name="texto44">EXCELLENT!</string>
+    <string name="texto45">You have successfully completed the quiz about the Church of San Vicente.</string>
+    <string name="texto46">VIEW REWARD</string>
     <!-- Juego 3 -->
     <string name="title3">The riddle of the bridge</string>
     <string name="texto3_intro">In the Barakaldo market, people bought food and met their
         neighbors. Typical products were sold here: Barakaldo beans, talos (corn tortillas), cod
         in pil-pil sauce, and homemade sweets. The market was a place full of smells, colors, and
         sounds. Look at the clues in the word search and find the words that correspond to these
-        foods.</string>
+        foods (words in Spanish).</string>
     <string name="pista3_1">A very typical legume from Barakaldo, it is eaten in stews</string>
     <string name="pista3_2">It is eaten at parties and is made from corn.</string>
     <string name="pista3_3">Fish cooked in pil-pil sauce</string>
     <string name="pista3_4">Typical sweet pastry from Barakaldo</string>
-    <string name="respuesta3_1">BEANS</string>
+    <string name="respuesta3_1">ALUBIAS</string>
     <string name="respuesta3_2">TALOS</string>
-    <string name="respuesta3_3">COD</string>
-    <string name="respuesta3_4">CAKE</string>
+    <string name="respuesta3_3">BACALAO</string>
+    <string name="respuesta3_4">PASTEL</string>
+    <string name="texto47">Word Search: Flavors of Barakaldo</string>
+    <string name="texto48">TASTY!</string>
+    <string name="texto49">You have found all the typical products of the local gastronomy.</string>
+    <string name="texto50">VIEW REWARD</string>
+    <string name="texto51">CLUES</string>
     <!-- Juego 4 -->
     <string name="title4">The Ilgner building</string>
     <string name="texto4_intro">The Ilgner building was very important for Barakaldo. Here,
@@ -72,6 +119,16 @@
         machines could operate, and the city grew considerably. Engineers, mechanics, and
         electricians worked here. The building still stands and reminds us how modern industry
         began.</string>
+    <string name="texto52">Choose the objects that can light up the Ilgner building.</string>
+    <string name="texto53">"That's right! The electrical system is working."</string>
+    <string name="texto54">Incorrect item or missing tools, please try again.</string>
+    <string name="texto55">incorrect</string>
+    <string name="texto56">missing</string>
+    <string name="texto57">CONNECTED!</string>
+    <string name="texto58">TURN ON</string>
+    <string name="texto59">POWER RESTORED!</string>
+    <string name="texto60">You have correctly connected the electrical system of the Ilgner Building.</string>
+    <string name="texto61">SEE RESULT</string>
     <!-- Juego 5 -->
     <string name="title5">Puzzle</string>
     <string name="texto5_intro">Many years ago, Barakaldo was a place full of factories and
@@ -82,20 +139,46 @@
     <string name="mensaje5_1">This is where the trains carrying the iron arrived.</string>
     <string name="mensaje5_2">The iron was loaded onto ships that went to other countries.</string>
     <string name="mensaje5_3">The loading docks helped Barakaldo to grow a lot.</string>
+    <string name="texto62">¡PUZZLE COMPLETED!</string>
+    <string name="texto63">You have rebuilt the Mine Loading Dock correctly.</string>
+    <string name="texto64">SEE HISTORY</string>
+    <string name="texto65">Why: This photo clearly shows the elongated structure that connects the
+        ground to the loading dock. Trains ran along this upper section to unload the ore directly
+        from the wagons.</string>
+    <string name="texto66">Why: Because it is an overhead shot, the position of the loading dock
+        within the river (the Nervion Estuary) is clearly visible. Imagine a large ship docked next
+        to the wooden structure, waiting to be loaded with iron ore for its voyage to England or
+        France</string>
+    <string name="texto67">Why: This image shows the strength and scale of the wood and iron
+        construction. It represents the heart of the industry that brought jobs, people, and
+        wealth, transforming Barakaldo into the great city it is today.</string>
+    <string name="texto68">End window</string>
     <!-- Juego 6 -->
     <string name="title6">The railway</string>
     <string name="texto6_intro">In industrial Barakaldo, trains transported iron ore from the
         mines to the loading docks, where it was loaded onto ships. Thanks to the railway, many
         factories could operate continuously, and workers traveled daily on these trains.
-        The railway was one of the driving forces behind Barakaldo´s growth.</string>
+        The railway was one of the driving forces behind Barakaldo s growth.</string>
+    <string name="texto69">Incorrect order. Please try again.</string>
+    <string name="texto70">VERY GOOD!</string>
+    <string name="texto71">You have successfully completed the ore transport sequence.</string>
+    <string name="texto72">FINISH</string>
     <!-- Juego 7 -->
     <string name="title7">Munoa Palace</string>
     <string name="texto7_intro">The Munoa Palace was the home of a very wealthy family. While many
         people worked in the factories, parties and dances were held here. It had gardens,
         paintings, and elegant furniture. Today, the Munoa Palace is a park open to everyone,
         where we can stroll and enjoy the history of Barakaldo.</string>
-    <string name="titulo5_columna1">Workers</string>
-    <string name="titulo5_columna2">Bourgeois</string>
+    <string name="titulo5_columna1">WORKERS</string>
+    <string name="titulo5_columna2">BOURGEOIS</string>
+    <string name="texto73">SOCIAL CLASSIFICATION</string>
+    <string name="texto74">FIND OUT!</string>
+    <string name="texto75">EXCELLENT!</string>
+    <string name="texto76">You have correctly classified the elements of the social classes of industrial Barakaldo.</string>
+    <string name="texto77">VIEW REWARD</string>
+    <string name="texto78">There are still items to be classified!</string>
+    <string name="texto79">EXCELLENT! EVERYTHING IS CORRECT!</string>
+    <string name="texto80">¡UPS! THERE ARE ERRORS. CORRECT THEM</string>
     <!-- Juego final -->
     <string name="final_name">Last game</string>
     <string name="asocia">Match the photos</string>
