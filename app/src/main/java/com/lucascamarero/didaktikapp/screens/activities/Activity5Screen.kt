@@ -531,9 +531,11 @@ fun ventanaInfo(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(
-                        "finActividad/${R.drawable.premio71}/${R.drawable.premio22}"
-                    )
+                    val ruta =
+                        "endactivity/5/${R.drawable.premio71}/${R.drawable.premio22}"
+                    navController.navigate(ruta) {
+                        popUpTo("activity5") { inclusive = true }
+                    }
                 }
             ) {
                 Text(stringResource(id = R.string.texto68))

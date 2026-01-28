@@ -133,8 +133,9 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
         val route = backStackEntry?.destination?.route
 
         activity?.requestedOrientation = when {
+            /*
             route == "map" ->
-                ActivityInfo.SCREEN_ORIENTATION_SENSOR
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR*/
 
             route?.startsWith("startactivity") == true ->
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -147,7 +148,8 @@ fun ScreenManager(languageViewModel: LanguageViewModel) {
 
             route in listOf(
                 "jointhephotos",
-                "writesentence"
+                "writesentence",
+                "EJ5Info"
             ) ->
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
