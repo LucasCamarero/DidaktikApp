@@ -159,6 +159,10 @@
         desde las minas hasta los cargaderos, donde se subía a los barcos. Gracias al ferrocarril,
         muchas fábricas podían trabajar sin parar, y los trabajadores viajaban cada día en estos
         trenes. El tren fue uno de los motores que hizo crecer a Barakaldo.</string>
+    <string name="texto69">Orden incorrecto. Inténtalo de nuevo.</string>
+    <string name="texto70">¡MUY BIEN!</string>
+    <string name="texto71">Has completado la secuencia del transporte de mineral correctamente.</string>
+    <string name="texto72">FINALIZAR</string>
     <!-- Juego 7 -->
     <string name="title7">Palacio Munoa</string>
     <string name="texto7_intro">El Palacio Munoa fue la casa de una familia muy rica. Mientras

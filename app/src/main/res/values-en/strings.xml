@@ -158,7 +158,11 @@
     <string name="texto6_intro">In industrial Barakaldo, trains transported iron ore from the
         mines to the loading docks, where it was loaded onto ships. Thanks to the railway, many
         factories could operate continuously, and workers traveled daily on these trains.
-        The railway was one of the driving forces behind Barakaldo´s growth.</string>
+        The railway was one of the driving forces behind Barakaldo s growth.</string>
+    <string name="texto69">Incorrect order. Please try again.</string>
+    <string name="texto70">VERY GOOD!</string>
+    <string name="texto71">You have successfully completed the ore transport sequence.</string>
+    <string name="texto72">FINISH</string>
     <!-- Juego 7 -->
     <string name="title7">Munoa Palace</string>
     <string name="texto7_intro">The Munoa Palace was the home of a very wealthy family. While many
