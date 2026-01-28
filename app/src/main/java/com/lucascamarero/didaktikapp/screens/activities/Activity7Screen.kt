@@ -24,25 +24,26 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.lucascamarero.didaktikapp.R
+import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 import com.lucascamarero.didaktikapp.viewmodels.Game7Item
 import com.lucascamarero.didaktikapp.viewmodels.Game7ViewModel
 import com.lucascamarero.didaktikapp.viewmodels.SocialClass
 import kotlin.math.roundToInt
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
-import com.lucascamarero.didaktikapp.R
-import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 
 /**
  * Pantalla principal de la Actividad 7.
@@ -61,29 +62,21 @@ fun Activity7Screen(
     // Recolectamos el estado del ViewModel
     val uiState by viewModel.uiState.collectAsState()
 
-    // Variables de UI (Coordenadas de zonas)
-    /** Límites de la zona de Obreros */
+    // Coordenadas de las zonas de drop
     var obrerosZoneBounds by remember { mutableStateOf(Rect.Zero) }
-
-    /** Límites de la zona de Burgueses */
     var burguesesZoneBounds by remember { mutableStateOf(Rect.Zero) }
 
-    // Estado del arrastre (Visual / Fantasma)
-    /** Elemento que está siendo arrastrado actualmente */
+    // Estado del arrastre
     var draggedItem by remember { mutableStateOf<Game7Item?>(null) }
-
-    /** Posición actual del elemento arrastrado */
     var dragPosition by remember { mutableStateOf(Offset.Zero) }
 
-    // --- UI PRINCIPAL ---
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primary)
     ) {
-        // ===================================================================
-        // CAPA 1: JUEGO (FONDO)
-        // ===================================================================
+
+        // ===================== CAPA 1: JUEGO =====================
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -91,12 +84,13 @@ fun Activity7Screen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // A. ENCABEZADO
+
+            // ENCABEZADO
             Text(
                 text = stringResource(id = R.string.texto73),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFFF7043), shape = RoundedCornerShape(12.dp))
+                    .background(Color(0xFFFF7043), RoundedCornerShape(12.dp))
                     .padding(12.dp),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
@@ -104,7 +98,7 @@ fun Activity7Screen(
                 color = MaterialTheme.colorScheme.onPrimary
             )
 
-            // B. ZONA CENTRAL (COLUMNAS)
+            // COLUMNAS
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -112,12 +106,10 @@ fun Activity7Screen(
                     .zIndex(1f),
                 horizontalArrangement = Arrangement.Center
             ) {
-                // Columna OBREROS
+
                 DropZone(
                     title = stringResource(id = R.string.titulo5_columna1),
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .fillMaxHeight(),
+                    modifier = Modifier.weight(0.5f).fillMaxHeight(),
                     titleStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.Black,
                         color = MaterialTheme.colorScheme.onPrimary
@@ -126,17 +118,14 @@ fun Activity7Screen(
                     borderColor = Color(0xFF1565C0),
                     items = uiState.items.filter { it.currentClass == SocialClass.OBREROS },
                     onPositioned = { obrerosZoneBounds = it },
-                    onRemoveItem = { item -> viewModel.onItemRemoved(item.id) }
+                    onRemoveItem = { viewModel.onItemRemoved(it.id) }
                 )
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(Modifier.width(16.dp))
 
-                // Columna BURGUESES
                 DropZone(
                     title = stringResource(id = R.string.titulo5_columna2),
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .fillMaxHeight(),
+                    modifier = Modifier.weight(0.5f).fillMaxHeight(),
                     titleStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.Black,
                         color = MaterialTheme.colorScheme.onPrimary
@@ -145,43 +134,46 @@ fun Activity7Screen(
                     borderColor = Color(0xFF6A1B9A),
                     items = uiState.items.filter { it.currentClass == SocialClass.BURGUESES },
                     onPositioned = { burguesesZoneBounds = it },
-                    onRemoveItem = { item -> viewModel.onItemRemoved(item.id) }
+                    onRemoveItem = { viewModel.onItemRemoved(it.id) }
                 )
             }
 
-            // --- ZONA DE MENSAJES ---
+            // FEEDBACK
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxWidth().height(40.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 AnimatedVisibility(
                     visible = uiState.showFeedback,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    Text(
-                        text = uiState.feedbackMessage,
-                        color = uiState.feedbackColor,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center
-                    )
+                    uiState.feedbackMessageResId?.let { resId ->
+                        Text(
+                            text = stringResource(
+                                id = resId,
+                                formatArgs = uiState.feedbackMessageArgs.toTypedArray()
+                            ),
+                            color = uiState.feedbackColor,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 12.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
 
-            // C. CINTA TRANSPORTADORA
+            // CINTA TRANSPORTADORA
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
                     .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(Color(0xFFFFCA28), Color(0xFFFFA000))
+                        Brush.verticalGradient(
+                            listOf(Color(0xFFFFCA28), Color(0xFFFFA000))
                         ),
-                        shape = RoundedCornerShape(16.dp)
+                        RoundedCornerShape(16.dp)
                     )
                     .border(4.dp, Color(0xFFFF6F00), RoundedCornerShape(16.dp))
                     .zIndex(2f),
@@ -192,7 +184,7 @@ fun Activity7Screen(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
                         .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     uiState.items.forEach { item ->
@@ -200,18 +192,17 @@ fun Activity7Screen(
                             DraggableItemSource(
                                 item = item,
                                 isHidden = draggedItem?.id == item.id,
-                                onDragStart = { startPosition ->
+                                onDragStart = {
                                     draggedItem = item
-                                    dragPosition = startPosition
+                                    dragPosition = it
                                 },
-                                onDrag = { dragAmount ->
-                                    dragPosition += dragAmount
-                                },
+                                onDrag = { dragPosition += it },
                                 onDragEnd = {
-                                    if (obrerosZoneBounds.contains(dragPosition)) {
-                                        viewModel.onItemDropped(item.id, SocialClass.OBREROS)
-                                    } else if (burguesesZoneBounds.contains(dragPosition)) {
-                                        viewModel.onItemDropped(item.id, SocialClass.BURGUESES)
+                                    when {
+                                        obrerosZoneBounds.contains(dragPosition) ->
+                                            viewModel.onItemDropped(item.id, SocialClass.OBREROS)
+                                        burguesesZoneBounds.contains(dragPosition) ->
+                                            viewModel.onItemDropped(item.id, SocialClass.BURGUESES)
                                     }
                                     draggedItem = null
                                 }
@@ -221,46 +212,36 @@ fun Activity7Screen(
                 }
             }
 
-            // D. BOTÓN COMPROBAR
+            // BOTÓN COMPROBAR
             Button(
                 onClick = { viewModel.checkGame() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.scrim),
+                modifier = Modifier.fillMaxWidth().height(60.dp),
                 shape = RoundedCornerShape(20.dp),
                 elevation = ButtonDefaults.buttonElevation(8.dp)
             ) {
                 Text(
-                    stringResource(id = R.string.texto74),
+                    text = stringResource(id = R.string.texto74),
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
 
-        // --- E. CAPA FLOTANTE (FANTASMA) ---
-        if (draggedItem != null) {
-            FloatingItemToken(
-                item = draggedItem!!,
-                position = dragPosition
-            )
+        // ELEMENTO FLOTANTE
+        draggedItem?.let {
+            FloatingItemToken(item = it, position = dragPosition)
         }
 
-        // ===================================================================
-        // CAPA 2: MENSAJE FINAL (POP-UP)
-        // ===================================================================
+        // MENSAJE FINAL
         if (uiState.isGameWon) {
             MensajeFinalActivity(
                 titulo = stringResource(id = R.string.texto75),
                 mensaje = stringResource(id = R.string.texto76),
                 botonText = stringResource(id = R.string.texto77),
                 onButtonClick = {
-                    // ID = 7
-                    // Asegúrate de usar las fotos correctas para el Palacio Munoa
-                    val ruta = "endactivity/7/${R.drawable.premio51}/${R.drawable.premio42}"
-                    navController.navigate(ruta) {
+                    navController.navigate(
+                        "endactivity/7/${R.drawable.premio51}/${R.drawable.premio42}"
+                    ) {
                         popUpTo("activity7") { inclusive = true }
                     }
                 }
@@ -269,17 +250,8 @@ fun Activity7Screen(
     }
 }
 
-// --- 3. COMPONENTES AUXILIARES (Sin cambios) ---
+// ================= COMPONENTES AUXILIARES =================
 
-/**
- * Elemento origen que puede ser arrastrado desde la cinta transportadora.
- *
- * @param item elemento del juego
- * @param isHidden indica si debe ocultarse mientras se arrastra
- * @param onDragStart callback al iniciar el arrastre
- * @param onDrag callback durante el arrastre
- * @param onDragEnd callback al finalizar el arrastre
- */
 @Composable
 fun DraggableItemSource(
     item: Game7Item,
@@ -292,8 +264,8 @@ fun DraggableItemSource(
 
     Box(
         modifier = Modifier
-            .onGloballyPositioned { coordinates ->
-                currentPosition = coordinates.boundsInWindow().center
+            .onGloballyPositioned {
+                currentPosition = it.boundsInWindow().center
             }
             .pointerInput(Unit) {
                 detectDragGestures(
@@ -307,47 +279,27 @@ fun DraggableItemSource(
                 )
             }
     ) {
-        Box(modifier = Modifier.alpha(if (isHidden) 0f else 1f)) {
+        Box(Modifier.alpha(if (isHidden) 0f else 1f)) {
             ItemToken(item = item, size = 100.dp)
         }
     }
 }
 
-/**
- * Representación flotante del elemento mientras se arrastra.
- *
- * @param item elemento del juego
- * @param position posición actual en pantalla
- */
 @Composable
 fun FloatingItemToken(item: Game7Item, position: Offset) {
     Box(
-        modifier = Modifier
-            .offset {
-                IntOffset(
-                    (position.x - 50.dp.toPx()).roundToInt(),
-                    (position.y - 50.dp.toPx()).roundToInt()
-                )
-            }
-            .zIndex(100f),
+        modifier = Modifier.offset {
+            IntOffset(
+                (position.x - 50.dp.toPx()).roundToInt(),
+                (position.y - 50.dp.toPx()).roundToInt()
+            )
+        }.zIndex(100f),
         contentAlignment = Alignment.Center
     ) {
         ItemToken(item = item, size = 110.dp)
     }
 }
 
-/**
- * Zona de destino donde se pueden soltar los elementos.
- *
- * @param title título de la zona
- * @param modifier modificador de layout
- * @param titleStyle estilo del texto del título
- * @param backgroundColor color de fondo
- * @param borderColor color del borde
- * @param items lista de elementos contenidos
- * @param onPositioned callback para obtener los límites de la zona
- * @param onRemoveItem callback al retirar un elemento
- */
 @Composable
 fun DropZone(
     title: String,
@@ -363,16 +315,14 @@ fun DropZone(
         modifier = modifier
             .border(4.dp, borderColor, RoundedCornerShape(16.dp))
             .background(backgroundColor, RoundedCornerShape(16.dp))
-            .onGloballyPositioned { coordinates ->
-                onPositioned(coordinates.boundsInWindow())
-            }
+            .onGloballyPositioned { onPositioned(it.boundsInWindow()) }
             .padding(8.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            Text(text = title, style = titleStyle, modifier = Modifier.padding(bottom = 12.dp))
+            Text(title, style = titleStyle, modifier = Modifier.padding(bottom = 12.dp))
 
             FlowRowLikeColumn(items) { item ->
                 Box(
@@ -386,7 +336,7 @@ fun DropZone(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(id = item.icon),
+                        painter = painterResource(item.icon),
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Fit
@@ -397,20 +347,11 @@ fun DropZone(
     }
 }
 
-/**
- * Representación visual de un elemento del juego.
- *
- * @param item elemento del juego
- * @param size tamaño del token
- */
 @Composable
-fun ItemToken(item: Game7Item, size: androidx.compose.ui.unit.Dp) {
-    Box(
-        modifier = Modifier.size(size),
-        contentAlignment = Alignment.Center
-    ) {
+fun ItemToken(item: Game7Item, size: Dp) {
+    Box(modifier = Modifier.size(size), contentAlignment = Alignment.Center) {
         Image(
-            painter = painterResource(id = item.icon),
+            painter = painterResource(item.icon),
             contentDescription = item.name,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit
@@ -418,36 +359,22 @@ fun ItemToken(item: Game7Item, size: androidx.compose.ui.unit.Dp) {
     }
 }
 
-/**
- * Implementación simple de disposición tipo FlowRow usando Column y Row.
- *
- * @param items lista de elementos
- * @param content contenido composable por elemento
- */
 @Composable
-fun FlowRowLikeColumn(items: List<Game7Item>, content: @Composable (Game7Item) -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        items.chunked(1).forEach { rowItems ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                rowItems.forEach { item -> content(item) }
+fun FlowRowLikeColumn(
+    items: List<Game7Item>,
+    content: @Composable (Game7Item) -> Unit
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        items.chunked(1).forEach { row ->
+            Row(horizontalArrangement = Arrangement.Center) {
+                row.forEach { content(it) }
             }
         }
     }
 }
 
-/**
- * Extensión para convertir Dp a píxeles usando la densidad actual.
- *
- * @return valor en píxeles
- */
 @Composable
-fun androidx.compose.ui.unit.Dp.toPx(): Float {
+fun Dp.toPx(): Float {
     val density = androidx.compose.ui.platform.LocalDensity.current
     return with(density) { this@toPx.toPx() }
 }

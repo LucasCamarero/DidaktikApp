@@ -175,6 +175,9 @@
     <string name="texto75">BIKAINA!</string>
     <string name="texto76">Barakaldo industrialaren gizarte-klaseen elementuak zuzen sailkatu dituzu.</string>
     <string name="texto77">IKUSI SARIA</string>
+    <string name="texto78">Oraindik sailkatu beharreko elementuak daude!</string>
+    <string name="texto79">BIKAIN! DENA ZUZENA DA!</string>
+    <string name="texto80">UPS! BADAGO ERROREAK. ZUZENDU ITZAZU</string>
     <!-- Juego final -->
     <string name="final_name">Amaiera jokoa</string>
     <string name="asocia">Bat etortzea irudiekin</string>

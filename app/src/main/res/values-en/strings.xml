@@ -176,6 +176,9 @@
     <string name="texto75">EXCELLENT!</string>
     <string name="texto76">You have correctly classified the elements of the social classes of industrial Barakaldo.</string>
     <string name="texto77">VIEW REWARD</string>
+    <string name="texto78">There are still items to be classified!</string>
+    <string name="texto79">EXCELLENT! EVERYTHING IS CORRECT!</string>
+    <string name="texto80">¡UPS! THERE ARE ERRORS. CORRECT THEM</string>
     <!-- Juego final -->
     <string name="final_name">Last game</string>
     <string name="asocia">Match the photos</string>

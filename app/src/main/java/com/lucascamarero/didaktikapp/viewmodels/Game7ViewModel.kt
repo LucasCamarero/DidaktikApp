@@ -43,17 +43,19 @@ data class Game7Item(
  * y el estado de finalización del juego.
  *
  * @param items lista actual de elementos
- * @param feedbackMessage mensaje de feedback mostrado al usuario
+ * @param feedbackMessageResId id del string resource del mensaje de feedback
+ * @param feedbackMessageArgs argumentos dinámicos para el string (ej. número de errores)
  * @param feedbackColor color del mensaje de feedback
  * @param showFeedback indica si debe mostrarse el feedback
  * @param isGameWon indica si el juego ha sido completado correctamente
  */
 data class Game7UiState(
     val items: List<Game7Item> = emptyList(),
-    val feedbackMessage: String = "",
+    val feedbackMessageResId: Int? = null,
+    val feedbackMessageArgs: List<Any> = emptyList(),
     val feedbackColor: Color = Color.Transparent,
     val showFeedback: Boolean = false,
-    val isGameWon: Boolean = false // Para saber cuándo navegar
+    val isGameWon: Boolean = false
 )
 
 /**
@@ -64,6 +66,9 @@ data class Game7UiState(
  * - el estado de clasificación de cada objeto
  * - la validación del juego
  * - el feedback visual para el usuario
+ *
+ * ⚠️ El ViewModel NO construye textos finales.
+ * Solo expone identificadores de recursos y argumentos.
  */
 @HiltViewModel
 class Game7ViewModel @Inject constructor() : ViewModel() {
@@ -117,7 +122,7 @@ class Game7ViewModel @Inject constructor() : ViewModel() {
             }
             state.copy(
                 items = updatedList,
-                showFeedback = false // Ocultamos feedback previo al mover ficha
+                showFeedback = false
             )
         }
     }
@@ -144,23 +149,35 @@ class Game7ViewModel @Inject constructor() : ViewModel() {
     fun checkGame() {
         val currentItems = _uiState.value.items
 
-        // 1. Verificar si faltan objetos
+        // 1. Verificar si faltan objetos por clasificar
         val isComplete = currentItems.none { it.currentClass == SocialClass.NONE }
         if (!isComplete) {
-            updateFeedback("¡Faltan objetos por clasificar! 👇", Color(0xFFE65100))
+            updateFeedback(
+                messageResId = R.string.texto78,
+                args = emptyList(),
+                color = Color(0xFFE65100)
+            )
             return
         }
 
-        // 2. Verificar errores
+        // 2. Verificar errores de clasificación
         val errors = currentItems.filter { it.currentClass != it.correctClass }
 
         if (errors.isEmpty()) {
             // ÉXITO
-            updateFeedback("¡EXCELENTE! TODO CORRECTO 🎉", Color(0xFF2E7D32))
+            updateFeedback(
+                messageResId = R.string.texto79,
+                args = emptyList(),
+                color = Color(0xFF2E7D32)
+            )
             _uiState.update { it.copy(isGameWon = true) }
         } else {
             // ERRORES
-            updateFeedback("¡UPS! HAY ${errors.size} ERRORES. CORRÍGELOS 🧐", Color(0xFFC62828))
+            updateFeedback(
+                messageResId = R.string.texto80,
+                args = listOf(errors.size),
+                color = Color(0xFFC62828)
+            )
 
             // Devolver automáticamente los erróneos a la cinta
             val fixedList = currentItems.map { item ->
@@ -176,13 +193,19 @@ class Game7ViewModel @Inject constructor() : ViewModel() {
     /**
      * Actualiza el mensaje de feedback mostrado al usuario.
      *
-     * @param message texto del mensaje
+     * @param messageResId identificador del recurso string
+     * @param args argumentos dinámicos del mensaje
      * @param color color asociado al mensaje
      */
-    private fun updateFeedback(message: String, color: Color) {
+    private fun updateFeedback(
+        messageResId: Int,
+        args: List<Any>,
+        color: Color
+    ) {
         _uiState.update {
             it.copy(
-                feedbackMessage = message,
+                feedbackMessageResId = messageResId,
+                feedbackMessageArgs = args,
                 feedbackColor = color,
                 showFeedback = true
             )

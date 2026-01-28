@@ -176,6 +176,9 @@
     <string name="texto75">¡EXCELENTE!</string>
     <string name="texto76">Has clasificado correctamente los elementos de las clases sociales del Barakaldo industrial.</string>
     <string name="texto77">VER RECOMPENSA</string>
+    <string name="texto78">¡Faltan objetos por clasificar!</string>
+    <string name="texto79">¡EXCELENTE! TODO CORRECTO!</string>
+    <string name="texto80">¡UPS! HAY ERRORES. CORRÍGELOS</string>
     <!-- Juego final -->
     <string name="final_name">Juego final</string>
     <string name="asocia">Empareja las imágenes</string>
