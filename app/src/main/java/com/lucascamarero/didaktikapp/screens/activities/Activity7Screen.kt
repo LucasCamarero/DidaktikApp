@@ -1,7 +1,5 @@
 package com.lucascamarero.didaktikapp.screens.activities
 
-import android.app.Activity
-import android.content.pm.ActivityInfo
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -42,11 +40,19 @@ import com.lucascamarero.didaktikapp.viewmodels.Game7ViewModel
 import com.lucascamarero.didaktikapp.viewmodels.SocialClass
 import kotlin.math.roundToInt
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.lucascamarero.didaktikapp.R
-// 1. IMPORTAMOS TU COMPONENTE
 import com.lucascamarero.didaktikapp.components.MensajeFinalActivity
 
+/**
+ * Pantalla principal de la Actividad 7.
+ *
+ * Implementa un juego de clasificación por arrastre (drag & drop),
+ * donde el usuario debe asignar elementos a su clase social correcta.
+ *
+ * @param navController controlador de navegación
+ * @param viewModel ViewModel que gestiona el estado y la lógica del juego
+ */
 @Composable
 fun Activity7Screen(
     navController: NavController,
@@ -56,34 +62,25 @@ fun Activity7Screen(
     val uiState by viewModel.uiState.collectAsState()
 
     // Variables de UI (Coordenadas de zonas)
+    /** Límites de la zona de Obreros */
     var obrerosZoneBounds by remember { mutableStateOf(Rect.Zero) }
+
+    /** Límites de la zona de Burgueses */
     var burguesesZoneBounds by remember { mutableStateOf(Rect.Zero) }
 
     // Estado del arrastre (Visual / Fantasma)
+    /** Elemento que está siendo arrastrado actualmente */
     var draggedItem by remember { mutableStateOf<Game7Item?>(null) }
-    var dragPosition by remember { mutableStateOf(Offset.Zero) }
 
-    // ===================================================================
-    // EVITA QUE GIRE HORIZONTALMENTE
-    // ===================================================================
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val activity = context as? Activity
-        // Forzamos vertical al entrar
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        onDispose {
-            // Al salir de esta pantalla, permitimos que el sensor decida (vuelve a ser rotatorio)
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-    }
+    /** Posición actual del elemento arrastrado */
+    var dragPosition by remember { mutableStateOf(Offset.Zero) }
 
     // --- UI PRINCIPAL ---
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F2F5))
+            .background(MaterialTheme.colorScheme.primary)
     ) {
-
         // ===================================================================
         // CAPA 1: JUEGO (FONDO)
         // ===================================================================
@@ -96,7 +93,7 @@ fun Activity7Screen(
         ) {
             // A. ENCABEZADO
             Text(
-                text = "CLASIFICACIÓN SOCIAL",
+                text = stringResource(id = R.string.texto73),
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(0xFFFF7043), shape = RoundedCornerShape(12.dp))
@@ -104,7 +101,7 @@ fun Activity7Screen(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp,
-                color = Color.White
+                color = MaterialTheme.colorScheme.onPrimary
             )
 
             // B. ZONA CENTRAL (COLUMNAS)
@@ -117,13 +114,13 @@ fun Activity7Screen(
             ) {
                 // Columna OBREROS
                 DropZone(
-                    title = "OBREROS",
+                    title = stringResource(id = R.string.titulo5_columna1),
                     modifier = Modifier
                         .weight(0.5f)
                         .fillMaxHeight(),
                     titleStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.Black,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     ),
                     backgroundColor = Color(0xFF42A5F5),
                     borderColor = Color(0xFF1565C0),
@@ -136,13 +133,13 @@ fun Activity7Screen(
 
                 // Columna BURGUESES
                 DropZone(
-                    title = "BURGUESES",
+                    title = stringResource(id = R.string.titulo5_columna2),
                     modifier = Modifier
                         .weight(0.5f)
                         .fillMaxHeight(),
                     titleStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontWeight = FontWeight.Black,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     ),
                     backgroundColor = Color(0xFFAB47BC),
                     borderColor = Color(0xFF6A1B9A),
@@ -230,11 +227,16 @@ fun Activity7Screen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF66BB6A)),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.scrim),
                 shape = RoundedCornerShape(20.dp),
                 elevation = ButtonDefaults.buttonElevation(8.dp)
             ) {
-                Text("¡COMPROBAR!", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                Text(
+                    stringResource(id = R.string.texto74),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
 
@@ -251,13 +253,13 @@ fun Activity7Screen(
         // ===================================================================
         if (uiState.isGameWon) {
             MensajeFinalActivity(
-                titulo = "¡EXCELENTE!",
-                mensaje = "Has clasificado correctamente los elementos de las clases sociales del Barakaldo industrial.",
-                botonText = "VER RECOMPENSA",
+                titulo = stringResource(id = R.string.texto75),
+                mensaje = stringResource(id = R.string.texto76),
+                botonText = stringResource(id = R.string.texto77),
                 onButtonClick = {
                     // ID = 7
                     // Asegúrate de usar las fotos correctas para el Palacio Munoa
-                    val ruta = "endactivity/7/${R.drawable.act1_premio1}/${R.drawable.act1_premio2}"
+                    val ruta = "endactivity/7/${R.drawable.premio51}/${R.drawable.premio42}"
                     navController.navigate(ruta) {
                         popUpTo("activity7") { inclusive = true }
                     }
@@ -269,6 +271,15 @@ fun Activity7Screen(
 
 // --- 3. COMPONENTES AUXILIARES (Sin cambios) ---
 
+/**
+ * Elemento origen que puede ser arrastrado desde la cinta transportadora.
+ *
+ * @param item elemento del juego
+ * @param isHidden indica si debe ocultarse mientras se arrastra
+ * @param onDragStart callback al iniciar el arrastre
+ * @param onDrag callback durante el arrastre
+ * @param onDragEnd callback al finalizar el arrastre
+ */
 @Composable
 fun DraggableItemSource(
     item: Game7Item,
@@ -302,6 +313,12 @@ fun DraggableItemSource(
     }
 }
 
+/**
+ * Representación flotante del elemento mientras se arrastra.
+ *
+ * @param item elemento del juego
+ * @param position posición actual en pantalla
+ */
 @Composable
 fun FloatingItemToken(item: Game7Item, position: Offset) {
     Box(
@@ -319,6 +336,18 @@ fun FloatingItemToken(item: Game7Item, position: Offset) {
     }
 }
 
+/**
+ * Zona de destino donde se pueden soltar los elementos.
+ *
+ * @param title título de la zona
+ * @param modifier modificador de layout
+ * @param titleStyle estilo del texto del título
+ * @param backgroundColor color de fondo
+ * @param borderColor color del borde
+ * @param items lista de elementos contenidos
+ * @param onPositioned callback para obtener los límites de la zona
+ * @param onRemoveItem callback al retirar un elemento
+ */
 @Composable
 fun DropZone(
     title: String,
@@ -368,6 +397,12 @@ fun DropZone(
     }
 }
 
+/**
+ * Representación visual de un elemento del juego.
+ *
+ * @param item elemento del juego
+ * @param size tamaño del token
+ */
 @Composable
 fun ItemToken(item: Game7Item, size: androidx.compose.ui.unit.Dp) {
     Box(
@@ -383,6 +418,12 @@ fun ItemToken(item: Game7Item, size: androidx.compose.ui.unit.Dp) {
     }
 }
 
+/**
+ * Implementación simple de disposición tipo FlowRow usando Column y Row.
+ *
+ * @param items lista de elementos
+ * @param content contenido composable por elemento
+ */
 @Composable
 fun FlowRowLikeColumn(items: List<Game7Item>, content: @Composable (Game7Item) -> Unit) {
     Column(
@@ -400,6 +441,11 @@ fun FlowRowLikeColumn(items: List<Game7Item>, content: @Composable (Game7Item) -
     }
 }
 
+/**
+ * Extensión para convertir Dp a píxeles usando la densidad actual.
+ *
+ * @return valor en píxeles
+ */
 @Composable
 fun androidx.compose.ui.unit.Dp.toPx(): Float {
     val density = androidx.compose.ui.platform.LocalDensity.current

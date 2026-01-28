@@ -169,8 +169,13 @@
         muchas personas trabajaban en las fábricas, aquí se celebraban fiestas y bailes. Tenía
         jardines, cuadros y muebles elegantes. Hoy el Palacio Munoa es un parque abierto para
         todos, donde podemos pasear y disfrutar de la historia de Barakaldo.</string>
-    <string name="titulo5_columna1">Obreros</string>
-    <string name="titulo5_columna2">Burgueses</string>
+    <string name="titulo5_columna1">OBREROS</string>
+    <string name="titulo5_columna2">BURGUESES</string>
+    <string name="texto73">CLASIFICACIÓN SOCIAL</string>
+    <string name="texto74">¡COMPROBAR!</string>
+    <string name="texto75">¡EXCELENTE!</string>
+    <string name="texto76">Has clasificado correctamente los elementos de las clases sociales del Barakaldo industrial.</string>
+    <string name="texto77">VER RECOMPENSA</string>
     <!-- Juego final -->
     <string name="final_name">Juego final</string>
     <string name="asocia">Empareja las imágenes</string>

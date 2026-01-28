@@ -168,8 +168,13 @@
         askok lan egiten zuen bitartean lantegietan, festak eta dantzaldiak egiten ziren bertan.
         Lorategiak, margolanak eta altzari dotoreak zituen. Gaur egun, Munoa Jauregia guztiontzat
         irekitako parke bat da, non paseatu eta Barakaldoko historiaz gozatu dezakegun.</string>
-    <string name="titulo5_columna1">Langileak</string>
-    <string name="titulo5_columna2">Burgesa</string>
+    <string name="titulo5_columna1">LANGILEAK</string>
+    <string name="titulo5_columna2">BURGESA</string>
+    <string name="texto73">GIZARTE SAILKAPENA</string>
+    <string name="texto74">EZAGUTU!</string>
+    <string name="texto75">BIKAINA!</string>
+    <string name="texto76">Barakaldo industrialaren gizarte-klaseen elementuak zuzen sailkatu dituzu.</string>
+    <string name="texto77">IKUSI SARIA</string>
     <!-- Juego final -->
     <string name="final_name">Amaiera jokoa</string>
     <string name="asocia">Bat etortzea irudiekin</string>
