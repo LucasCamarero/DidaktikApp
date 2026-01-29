@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.dokka")
     id("com.google.devtools.ksp")
     id ("com.google.dagger.hilt.android")
     id ("kotlin-kapt")
@@ -101,4 +102,13 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
     implementation("com.google.firebase:firebase-ai")
+}
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(buildDir.resolve("dokka"))
+
+    dokkaSourceSets.configureEach {
+        skipDeprecated.set(false)
+        reportUndocumented.set(false)
+    }
 }

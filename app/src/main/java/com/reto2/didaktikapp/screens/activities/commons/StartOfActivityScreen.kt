@@ -83,7 +83,7 @@ fun StartOfActivityScreen(
         1 -> listOf(R.drawable.juego11_inicio, R.drawable.juego12_inicio)
         2 -> listOf(R.drawable.juego21_inicio)
         3 -> listOf(R.drawable.juego31_inicio)
-        4 -> listOf(R.drawable.juego41_inicio)
+        4 -> listOf(R.drawable.premio42)
         5 -> listOf(R.drawable.juego51_inicio)
         6 -> listOf(R.drawable.juego61_inicio)
         7 -> listOf(R.drawable.juego71_inicio)

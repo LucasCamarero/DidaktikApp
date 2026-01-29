@@ -81,7 +81,7 @@ object ActivityDataSource {
                 id = 4,
                 title = stringResource(R.string.title4),
                 description = stringResource(id = R.string.texto4_intro),
-                imageResId = R.drawable.juego41_inicio,
+                imageResId = R.drawable.premio42,
                 imageDescription = "Fotografia 4",
                 gameRoute = "activity4"
             )
