@@ -270,14 +270,14 @@ fun InfoSectionAI(
         try {
             // Intentamos llamar a la IA
             val model = Firebase.ai(backend = GenerativeBackend.googleAI())
-                .generativeModel("gemini-2.5-flash") // O tu modelo preferido
+                .generativeModel("gemini-2.5-flash")
 
             val response = model.generateContent(promptIA)
 
-            // Si tiene éxito, usamos el texto de la IA
+            // Mostramos el texto obtenido de la IA
             textoAMostrar = response.text.toString()
         } catch (e: Exception) {
-            // ESTO TE DIRÁ EL ERROR EXACTO EN EL LOGCAT
+            // ESTO ME DIRÁ EL ERROR EXACTO EN EL LOGCAT
             Log.e("ERROR_IA", "La IA falló por: ${e.message}")
             e.printStackTrace()
 
@@ -289,7 +289,7 @@ fun InfoSectionAI(
 
     // Renderizado del Texto
     if (isLoading) {
-        // Mientras carga, mostramos un indicador
+        // Mientras carga, mostramos un icono pre-loader
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(modifier = Modifier.size(30.dp), color = MaterialTheme.colorScheme.primary)
         }
