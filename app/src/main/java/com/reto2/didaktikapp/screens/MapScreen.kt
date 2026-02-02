@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ import com.reto2.didaktikapp.utils.createNumberedMarker
 import com.reto2.didaktikapp.viewmodels.CounterViewModel
 import com.reto2.didaktikapp.viewmodels.MapViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -193,7 +195,6 @@ fun MapScreen(
                      * Gestión de la interacción con el marcador.
                      */
                     marker.setOnMarkerClickListener { _, _ ->
-                        /*
                         when {
                             // Navegar a la actividad actual
                             point.id == nextActivity -> {
@@ -217,10 +218,6 @@ fun MapScreen(
                                 }
                             }
                         }
-                        */
-
-                        // NUEVA LÓGICA (TEMPORAL): Navegar directamente
-                        navController.navigate("startactivity/${point.id}")
 
                         true
                     }
