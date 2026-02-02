@@ -9,6 +9,25 @@
       "client_info": {
         "mobilesdk_app_id": "1:190305722552:android:d7fa4636be8c078f31144d",
         "android_client_info": {
+          "package_name": "com.lucascamarero.didaktikapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiDYYvzIGtK8mBnrfh9Hz5WLti8b0pILY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190305722552:android:389b0eea37ef5d0531144d",
+        "android_client_info": {
           "package_name": "com.reto2.didaktikapp"
         }
       },
